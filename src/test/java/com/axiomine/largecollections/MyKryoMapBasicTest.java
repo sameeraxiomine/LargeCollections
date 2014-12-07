@@ -8,7 +8,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.IntegerIntegerMap;
 import com.axiomine.largecollections.utils.KryoUtils;
 
 public class MyKryoMapBasicTest {
