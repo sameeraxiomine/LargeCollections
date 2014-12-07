@@ -1,6 +1,7 @@
 LargeCollections
 ================
-LargeCollections is an improved version of Large Collections. It support java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use heap memory.
+
+LargeCollections supports java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use heap memory.
 
 Currently only the java.util.Map is supported. The support is complete, in that it supports the underlying iterators as well.
 
