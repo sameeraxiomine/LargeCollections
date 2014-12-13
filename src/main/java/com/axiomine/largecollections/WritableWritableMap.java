@@ -262,6 +262,8 @@ public class WritableWritableMap extends LargeCollection implements   Map<Writab
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
+        stream.writeObject(this.keyClass);
+        stream.writeObject(this.valueClass);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
