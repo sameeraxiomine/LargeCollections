@@ -15,7 +15,7 @@ public class WritableSerDeTest {
         WritableSerDe.WritableSerFunction ser = new WritableSerDe.WritableSerFunction();
         Text t = new Text();
         WritableSerDe.WritableDeSerFunction deser = new WritableSerDe.WritableDeSerFunction(Text.class);
-        WritableSerDe.TextWritableDeSerFunction deser2 = new WritableSerDe.TextWritableDeSerFunction();
+        WritableSerDe.TextDeSerFunction deser2 = new WritableSerDe.TextDeSerFunction();
         Text s = new Text("This is a test");
         byte[] sba = ser.apply(s);
         Writable ss = deser.apply(sba);

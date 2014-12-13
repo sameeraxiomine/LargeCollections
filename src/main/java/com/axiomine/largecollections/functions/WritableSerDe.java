@@ -48,7 +48,7 @@ public class WritableSerDe {
 
     }
     
-    public static class TextWritableDeSerFunction implements Function<byte[],Text>{
+    public static class TextDeSerFunction implements Function<byte[],Text>{
         public Text apply(byte[] arg) {
             if (arg == null) {
                 return null;

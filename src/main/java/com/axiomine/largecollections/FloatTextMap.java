@@ -1,5 +1,5 @@
 /*
-* Copyright 2014 Axiomine
+ * Copyright 2014 Axiomine
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.axiomine.largecollections;
+import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -22,35 +23,39 @@ import java.util.Set;
 
 import org.iq80.leveldb.WriteBatch;
 
-import com.axiomine.largecollections.functions.StringSerDe;
 import com.google.common.base.Function;
-import com.google.common.base.Throwables;
 
-public class StringStringCacheMap extends LargeCollection implements
-        Map<String,String>, Serializable{
+
+import com.axiomine.largecollections.*;
+
+import com.axiomine.largecollections.functions.FloatSerDe;
+import com.axiomine.largecollections.functions.WritableSerDe;
+import org.apache.hadoop.io.*;
+
+public class FloatTextMap extends LargeCollection implements   Map<Float,Text>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<String, byte[]> keySerFunc       = new StringSerDe.StringSerFunction();
-    private transient Function<String, byte[]> valSerFunc       = new StringSerDe.StringSerFunction();
-    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDe.StringDeSerFunction();
-    private transient Function<byte[], String> valDeSerFunc     = new StringSerDe.StringDeSerFunction();
+    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDe.FloatSerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.WritableSerFunction();
+    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDe.FloatDeSerFunction();
+    private transient Function<byte[], Text> valDeSerFunc     = new WritableSerDe.TextDeSerFunction();
     
-    public StringStringCacheMap() {
+    public FloatTextMap() {
         super();
     }
     
-    public StringStringCacheMap(String dbName) {
+    public FloatTextMap(String dbName) {
         super(dbName);
     }
     
-    public StringStringCacheMap(String dbPath, String dbName) {
+    public FloatTextMap(String dbPath, String dbName) {
         super(dbPath, dbName);
     }
     
-    public StringStringCacheMap(String dbPath, String dbName, int cacheSize) {
+    public FloatTextMap(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
     }
     
-    public StringStringCacheMap(String dbPath, String dbName, int cacheSize,
+    public FloatTextMap(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
     }
@@ -59,7 +64,7 @@ public class StringStringCacheMap extends LargeCollection implements
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<String, String> entry : this.entrySet()) {
+            for (Entry<Float, Text> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -71,7 +76,7 @@ public class StringStringCacheMap extends LargeCollection implements
     public boolean containsKey(Object key) {
         byte[] valBytes = null;
         if (key != null) {
-            String ki = (String) key;
+            Float ki = (Float) key;
             if (this.bloomFilter.mightContain(ki)) {
                 byte[] keyBytes = keySerFunc.apply(ki);
                 valBytes = db.get(keyBytes);
@@ -89,13 +94,13 @@ public class StringStringCacheMap extends LargeCollection implements
     }
     
     @Override
-    public String get(Object key) {
+    public Text get(Object key) {
         byte[] vbytes = null;
         if (key == null) {
             return null;
         }
-        String ki = (String) key;
-        if (bloomFilter.mightContain((String) key)) {
+        Float ki = (Float) key;
+        if (bloomFilter.mightContain((Float) key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -120,7 +125,7 @@ public class StringStringCacheMap extends LargeCollection implements
     
     /* Putting null values is not allowed for this map */
     @Override
-    public String put(String key, String value) {
+    public Text put(Float key, Text value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -138,16 +143,16 @@ public class StringStringCacheMap extends LargeCollection implements
     }
     
     @Override
-    public String remove(Object key) {
-        String v = null;
+    public Text remove(Object key) {
+        Text v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((String) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((Float) key)) {
             v = this.get(key);
         }
         
         if (v != null) {
-            byte[] fullKeyArr = keySerFunc.apply((String) key);
+            byte[] fullKeyArr = keySerFunc.apply((Float) key);
             db.delete(fullKeyArr);
             size--;
         }
@@ -155,15 +160,15 @@ public class StringStringCacheMap extends LargeCollection implements
     }
     
     @Override
-    public void putAll(Map<? extends String, ? extends String> m) {
+    public void putAll(Map<? extends Float, ? extends Text> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends String, ? extends String> e : m
+            for (Map.Entry<? extends Float, ? extends Text> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
-                String v = null;
-                String k = e.getKey();
+                Text v = null;
+                Float k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
                 }
@@ -195,19 +200,19 @@ public class StringStringCacheMap extends LargeCollection implements
     
     /* Iterators and Collections based on this Map */
     @Override
-    public Set<String> keySet() {
-        return new MapKeySet<String>(this, keyDeSerFunc);
+    public Set<Float> keySet() {
+        return new MapKeySet<Float>(this, keyDeSerFunc);
     }
     
     @Override
-    public Collection<String> values() {
-        return new ValueCollection<String>(this, this.getDB(),
+    public Collection<Text> values() {
+        return new ValueCollection<Text>(this, this.getDB(),
                 this.valDeSerFunc);
     }
     
     @Override
-    public Set<java.util.Map.Entry<String, String>> entrySet() {
-        return new MapEntrySet<String, String>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<Float, Text>> entrySet() {
+        return new MapEntrySet<Float, Text>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -221,10 +226,10 @@ public class StringStringCacheMap extends LargeCollection implements
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new StringSerDe.StringSerFunction();
-        valSerFunc = new StringSerDe.StringSerFunction();
-        keyDeSerFunc = new StringSerDe.StringDeSerFunction();
-        valDeSerFunc = new StringSerDe.StringDeSerFunction();
+        keySerFunc       = new FloatSerDe.FloatSerFunction();
+        valSerFunc  = new WritableSerDe.WritableSerFunction();
+        keyDeSerFunc     = new FloatSerDe.FloatDeSerFunction();
+        valDeSerFunc     = new WritableSerDe.TextDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */
