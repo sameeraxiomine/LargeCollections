@@ -188,7 +188,7 @@ public class IntWritableIntWritableMap extends LargeCollection implements   Map<
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

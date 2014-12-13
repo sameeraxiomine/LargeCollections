@@ -187,7 +187,7 @@ public class IntegerTextMap extends LargeCollection implements   Map<Integer,Tex
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

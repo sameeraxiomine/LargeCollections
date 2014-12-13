@@ -187,7 +187,7 @@ public class KLongMap<K> extends LargeCollection implements   Map<K,Long>, Seria
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

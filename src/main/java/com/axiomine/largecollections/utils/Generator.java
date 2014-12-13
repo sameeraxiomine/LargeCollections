@@ -38,7 +38,7 @@ public class Generator {
         if(outFile.exists()){
             System.out.println(outFile.getAbsolutePath() +" already exists. Please delete it and try again");
         }
-        else{
+        {
             String[] imports = CUSTOM_IMPORTS.split(":");
             String importStr = "";
             for(String s:imports){

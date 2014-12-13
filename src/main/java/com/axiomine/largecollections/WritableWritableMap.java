@@ -28,43 +28,83 @@ import com.google.common.base.Function;
 
 import com.axiomine.largecollections.*;
 
-import com.axiomine.largecollections.functions.IntegerSerDe;
+
 import com.axiomine.largecollections.functions.WritableSerDe;
 import org.apache.hadoop.io.*;
 
-public class IntegerIntWritableMap extends LargeCollection implements   Map<Integer,IntWritable>, Serializable{
+public class WritableWritableMap extends LargeCollection implements   Map<Writable,Writable>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDe.IntegerSerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.WritableSerFunction();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDe.IntegerDeSerFunction();
-    private transient Function<byte[], IntWritable> valDeSerFunc     = new WritableSerDe.IntWritableDeSerFunction();
     
-    public IntegerIntWritableMap() {
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.WritableSerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.WritableSerFunction();    
+    private transient Function<byte[], ? extends Writable> keyDeSerFunc     = null;
+    private transient Function<byte[], ? extends Writable> valDeSerFunc     = null;
+    private String keyClass=null;
+    private String valueClass=null;
+    
+    private static Function<byte[], ? extends Writable> getWritableDeSerFunction(String cls){
+        Function<byte[], ? extends Writable> func = null;
+        try{
+            Writable cObj = (Writable) Class.forName(cls).newInstance();
+            func = new WritableSerDe.WritableDeSerFunction(cObj.getClass());
+
+        }
+        catch(Exception ex){
+            throw Throwables.propagate(ex);
+        }
+        return func;        
+    }
+    
+    public WritableWritableMap(String keyClass,String valueClass) {
         super();
+        this.keyClass = keyClass;
+        this.valueClass = valueClass;
+        this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+        this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
     }
     
-    public IntegerIntWritableMap(String dbName) {
+    public WritableWritableMap(String dbName,String keyClass,String valueClass) {
         super(dbName);
+        this.keyClass = keyClass;
+        this.valueClass = valueClass;
+        this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+        this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
+
     }
     
-    public IntegerIntWritableMap(String dbPath, String dbName) {
+    public WritableWritableMap(String dbPath, String dbName,String keyClass,String valueClass) {
         super(dbPath, dbName);
+        this.keyClass = keyClass;
+        this.valueClass = valueClass;
+        this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+        this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
+
     }
     
-    public IntegerIntWritableMap(String dbPath, String dbName, int cacheSize) {
+    public WritableWritableMap(String dbPath, String dbName, int cacheSize,String keyClass,String valueClass) {
         super(dbPath, dbName, cacheSize);
+        this.keyClass = keyClass;
+        this.valueClass = valueClass;
+        this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+        this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
+
     }
     
-    public IntegerIntWritableMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize) {
+    public WritableWritableMap(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize,String keyClass,String valueClass) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
+        this.keyClass = keyClass;
+        this.valueClass = valueClass;
+        this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+        this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
+
     }
     
     @Override
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<Integer, IntWritable> entry : this.entrySet()) {
+            for (Entry<Writable, Writable> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -76,7 +116,7 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     public boolean containsKey(Object key) {
         byte[] valBytes = null;
         if (key != null) {
-            Integer ki = (Integer) key;
+            Writable ki = (Writable) key;
             if (this.bloomFilter.mightContain(ki)) {
                 byte[] keyBytes = keySerFunc.apply(ki);
                 valBytes = db.get(keyBytes);
@@ -94,13 +134,13 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     }
     
     @Override
-    public IntWritable get(Object key) {
+    public Writable get(Object key) {
         byte[] vbytes = null;
         if (key == null) {
             return null;
         }
-        Integer ki = (Integer) key;
-        if (bloomFilter.mightContain((Integer) key)) {
+        Writable ki = (Writable) key;
+        if (bloomFilter.mightContain((Writable) key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -125,7 +165,7 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     
     /* Putting null values is not allowed for this map */
     @Override
-    public IntWritable put(Integer key, IntWritable value) {
+    public Writable put(Writable key, Writable value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -143,16 +183,16 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     }
     
     @Override
-    public IntWritable remove(Object key) {
-        IntWritable v = null;
+    public Writable remove(Object key) {
+        Writable v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((Integer) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((Writable) key)) {
             v = this.get(key);
         }
         
         if (v != null) {
-            byte[] fullKeyArr = keySerFunc.apply((Integer) key);
+            byte[] fullKeyArr = keySerFunc.apply((Writable) key);
             db.delete(fullKeyArr);
             size--;
         }
@@ -160,15 +200,15 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     }
     
     @Override
-    public void putAll(Map<? extends Integer, ? extends IntWritable> m) {
+    public void putAll(Map<? extends Writable, ? extends Writable> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends Integer, ? extends IntWritable> e : m
+            for (Map.Entry<? extends Writable, ? extends Writable> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
-                IntWritable v = null;
-                Integer k = e.getKey();
+                Writable v = null;
+                Writable k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
                 }
@@ -200,19 +240,19 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     
     /* Iterators and Collections based on this Map */
     @Override
-    public Set<Integer> keySet() {
-        return new MapKeySet<Integer>(this, keyDeSerFunc);
+    public Set<Writable> keySet() {
+        return new MapKeySet<Writable>(this, keyDeSerFunc);
     }
     
     @Override
-    public Collection<IntWritable> values() {
-        return new ValueCollection<IntWritable>(this, this.getDB(),
+    public Collection<Writable> values() {
+        return new ValueCollection<Writable>(this, this.getDB(),
                 this.valDeSerFunc);
     }
     
     @Override
-    public Set<java.util.Map.Entry<Integer, IntWritable>> entrySet() {
-        return new MapEntrySet<Integer, IntWritable>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<Writable, Writable>> entrySet() {
+        return new MapEntrySet<Writable, Writable>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -226,10 +266,19 @@ public class IntegerIntWritableMap extends LargeCollection implements   Map<Inte
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new IntegerSerDe.IntegerSerFunction();
-        valSerFunc  = new WritableSerDe.WritableSerFunction();
-        keyDeSerFunc     = new IntegerSerDe.IntegerDeSerFunction();
-        valDeSerFunc     = new WritableSerDe.IntWritableDeSerFunction();
+        keySerFunc  = new WritableSerDe.WritableSerFunction();
+        valSerFunc  = new WritableSerDe.WritableSerFunction();    
+        try{
+            Writable key = (Writable) Class.forName(this.keyClass).newInstance();
+            Writable val = (Writable) Class.forName(this.valueClass).newInstance();
+            this.keyClass = keyClass;
+            this.valueClass = valueClass;
+            this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
+            this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
+        }
+        catch(Exception ex){
+            throw Throwables.propagate(ex);
+        }
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

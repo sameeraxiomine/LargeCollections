@@ -186,7 +186,7 @@ public class DoubleLongMap extends LargeCollection implements   Map<Double,Long>
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

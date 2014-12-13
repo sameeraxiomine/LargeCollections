@@ -186,7 +186,7 @@ public class LongLongMap extends LargeCollection implements   Map<Long,Long>, Se
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

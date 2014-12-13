@@ -187,7 +187,7 @@ public class KStringMap<K> extends LargeCollection implements   Map<K,String>, S
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

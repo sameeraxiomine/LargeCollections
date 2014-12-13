@@ -188,7 +188,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

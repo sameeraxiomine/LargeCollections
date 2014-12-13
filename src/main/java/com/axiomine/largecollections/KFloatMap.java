@@ -187,7 +187,7 @@ public class KFloatMap<K> extends LargeCollection implements   Map<K,Float>, Ser
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

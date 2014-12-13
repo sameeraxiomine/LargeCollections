@@ -187,7 +187,7 @@ public class DoubleTextMap extends LargeCollection implements   Map<Double,Text>
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

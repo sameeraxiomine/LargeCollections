@@ -188,7 +188,7 @@ public class TextTextMap extends LargeCollection implements   Map<Text,Text>, Se
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

@@ -187,7 +187,7 @@ public class LongIntWritableMap extends LargeCollection implements   Map<Long,In
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

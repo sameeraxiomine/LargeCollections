@@ -187,7 +187,7 @@ public class DoubleVMap<V> extends LargeCollection implements   Map<Double,V>, S
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

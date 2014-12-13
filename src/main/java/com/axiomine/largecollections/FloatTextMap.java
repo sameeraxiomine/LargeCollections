@@ -187,7 +187,7 @@ public class FloatTextMap extends LargeCollection implements   Map<Float,Text>, 
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

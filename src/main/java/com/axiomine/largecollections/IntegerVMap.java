@@ -25,10 +25,11 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
-import com.axiomine.largecollections.functions.*;
 
-import com.axiomine.largecollections.functions.IntegerSerDe;
+import com.axiomine.largecollections.*;
 import com.axiomine.largecollections.functions.KryoSerDe;
+import com.axiomine.largecollections.functions.IntegerSerDe;
+
 
 
 public class IntegerVMap<V> extends LargeCollection implements   Map<Integer,V>, Serializable{
@@ -186,7 +187,7 @@ public class IntegerVMap<V> extends LargeCollection implements   Map<Integer,V>,
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

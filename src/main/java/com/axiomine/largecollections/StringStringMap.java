@@ -186,7 +186,7 @@ public class StringStringMap extends LargeCollection implements   Map<String,Str
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

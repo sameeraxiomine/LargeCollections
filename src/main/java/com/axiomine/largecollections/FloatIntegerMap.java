@@ -186,7 +186,7 @@ public class FloatIntegerMap extends LargeCollection implements   Map<Float,Inte
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

@@ -186,7 +186,7 @@ public class LongFloatMap extends LargeCollection implements   Map<Long,Float>, 
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

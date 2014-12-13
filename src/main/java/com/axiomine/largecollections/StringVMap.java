@@ -187,7 +187,7 @@ public class StringVMap<V> extends LargeCollection implements   Map<String,V>, S
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

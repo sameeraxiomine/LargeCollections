@@ -186,7 +186,7 @@ public class FloatDoubleMap extends LargeCollection implements   Map<Float,Doubl
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }

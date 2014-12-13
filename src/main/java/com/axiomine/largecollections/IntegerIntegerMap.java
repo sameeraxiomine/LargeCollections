@@ -25,6 +25,8 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 
+
+import com.axiomine.largecollections.*;
 import com.axiomine.largecollections.functions.IntegerSerDe;
 import com.axiomine.largecollections.functions.IntegerSerDe;
 
@@ -184,7 +186,7 @@ public class IntegerIntegerMap extends LargeCollection implements   Map<Integer,
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            throw Throwables.propagate(ex);
         }
         
     }
