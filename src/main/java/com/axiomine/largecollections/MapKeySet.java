@@ -19,7 +19,7 @@ public  class MapKeySet<K> implements Set<K> {
     private Function<byte[],? extends K> deSerFunc = null;
     private int DELETE_EVERY_N_RECORDS=1000000;
 
-    protected MapKeySet(Map<K,?> map,Function<byte[],? extends K> deSerFunc) {
+    public MapKeySet(Map<K,?> map,Function<byte[],? extends K> deSerFunc) {
         this.map = map;
         this.db = ((IDb)this.map).getDB();
         this.deSerFunc = deSerFunc;

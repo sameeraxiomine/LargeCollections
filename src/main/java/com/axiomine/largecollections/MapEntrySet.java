@@ -25,7 +25,7 @@ public class MapEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
     private MapEntryIterator<K, V> iterator = null;
     private Map<K, V> map = null;
 
-    protected MapEntrySet(Map map,Function<byte[],? extends K> keyDeSerFunc,Function<byte[],? extends V> valDeSerFunc) {
+    public MapEntrySet(Map map,Function<byte[],? extends K> keyDeSerFunc,Function<byte[],? extends V> valDeSerFunc) {
         this.iterator = new MapEntryIterator(((IDb)map).getDB(),keyDeSerFunc,valDeSerFunc);
         this.map = map;
     }

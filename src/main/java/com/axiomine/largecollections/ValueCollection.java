@@ -27,7 +27,7 @@ public  class ValueCollection<V> implements Collection<V> {
     private Map<?,V> map = null;
     private DB db = null;
     private Function<byte[],? extends V> valDeSerFunc = null; 
-    protected ValueCollection(Map<?,V> map, DB db, Function<byte[],? extends V> valDeSerFunc) {
+    public ValueCollection(Map<?,V> map, DB db, Function<byte[],? extends V> valDeSerFunc) {
         this.map = map;
         this.db = db;
         this.valDeSerFunc = valDeSerFunc;
