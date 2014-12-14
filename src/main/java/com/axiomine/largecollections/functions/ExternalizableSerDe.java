@@ -2,7 +2,7 @@ package com.axiomine.largecollections.functions;
 
 import java.io.Externalizable;
 
-import com.axiomine.largecollections.utils.SerDeUtils;
+import com.axiomine.largecollections.utilities.SerDeUtils;
 import com.google.common.base.Function;
 
 public class ExternalizableSerDe {

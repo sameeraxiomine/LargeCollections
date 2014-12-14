@@ -4,8 +4,8 @@ import com.axiomine.largecollections.generator.GeneratorPrimitivePrimitive;
 
 public class GeneratePrimitiveMaps {
     public static void main(String[] args) throws Exception{
-        String[] keys={"Character","String","Integer","Long","Double","Float","Byte","byte[]"};
-        String[] vals={"Character","String","Integer","Long","Double","Float","Byte","byte[]"};
+        String[] keys={"String","Integer","Long","Double","Float","Byte","Character","byte[]"};
+        String[] vals={"String","Integer","Long","Double","Float","Byte","Character","byte[]"};
         String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
         String kPackage = "com.axiomine.largecollections.functions";

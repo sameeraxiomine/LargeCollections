@@ -6,9 +6,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.functions.KryoSerDe;
-import com.axiomine.largecollections.utils.KryoUtils;
-
 public class KryoSerDeTest {
     
     @Test
