@@ -7,8 +7,9 @@ import com.axiomine.largecollections.generator.GeneratorPrimitiveKeyWritableValu
 public class GeneratePrimitiveKeyWritableValueMaps {
     public static void main(String[] args) throws Exception{
         String[] keys={"String","Integer","Long","Double","Float","Byte","Character","byte[]"};;
-        String[] vals={"Text","IntWritable"};
-        String[] vwcls={"org.apache.hadoop.io.Text","org.apache.hadoop.io.IntWritable"};
+        String[] vals={"ArrayPrimitiveWritable","BooleanWritable","BytesWritable","ByteWritable","DoubleWritable","FloatWritable","IntWritable","LongWritable","MapWritable","ShortWritable","Text",};
+        String writablePackage = "org.apache.hadoop.io";
+        //String[] vwcls={"org.apache.hadoop.io.Text","org.apache.hadoop.io.IntWritable"};
         Text t = null;
         //String[] keys={"String"};
         //String[] vals={"Text"};
@@ -24,7 +25,7 @@ public class GeneratePrimitiveKeyWritableValueMaps {
             int i = 0;
             for(String v:vals){
                 vClass=v;
-                String[] myArgs = {myPackage,customImports,kPackage,vPackage,kClass,vClass,vwcls[i]};
+                String[] myArgs = {myPackage,customImports,kPackage,vPackage,kClass,vClass,writablePackage+"."+v};
                 GeneratorPrimitiveKeyWritableValue.main(myArgs);
                 i++;
             }

@@ -4,8 +4,8 @@ import com.axiomine.largecollections.generator.GeneratorWritableKeyWritableValue
 
 public class GenerateWritableKeyWritableValueMaps {
     public static void main(String[] args) throws Exception{
-        String[] keys={"Text","IntWritable"};
-        String[] vals={"Text","IntWritable"};
+        String[] keys={"ArrayPrimitiveWritable","BooleanWritable","BytesWritable","ByteWritable","DoubleWritable","FloatWritable","IntWritable","LongWritable","MapWritable","ShortWritable","Text"};
+        String[] vals={"ArrayPrimitiveWritable","BooleanWritable","BytesWritable","ByteWritable","DoubleWritable","FloatWritable","IntWritable","LongWritable","MapWritable","ShortWritable","Text"};
         //String[] keys={"String"};
         //String[] vals={"Text"};
 

@@ -7,7 +7,7 @@ public class GenerateWritableKeyPrimitiveValueMaps {
         //String[] keys={"Text","IntWritable"};
         //String[] vals={"String","Integer","Long","Double","Float"};
         //
-        String[] keys={"Text"};
+        String[] keys={"ArrayPrimitiveWritable","BooleanWritable","BytesWritable","ByteWritable","DoubleWritable","FloatWritable","IntWritable","LongWritable","MapWritable","ShortWritable","Text",};
         String[] vals={"String","Integer","Long","Double","Float","Byte","Character","byte[]"};;
         
         String myPackage = "com.axiomine.largecollections.turboutil";
