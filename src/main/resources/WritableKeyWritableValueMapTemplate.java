@@ -195,8 +195,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     @Override
     public void clear() {
-        this.initialize();
-        this.initializeBloomFilter();
+        this.clearDB();
     }
     
     /* Iterators and Collections based on this Map */

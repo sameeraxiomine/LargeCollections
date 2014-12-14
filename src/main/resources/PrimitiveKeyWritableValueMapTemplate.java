@@ -28,16 +28,15 @@ import com.google.common.base.Function;
 #CUSTOM_IMPORTS#
 import com.axiomine.largecollections.*;
 
-import #KPACKAGE#.#K#SerDe;
-import com.axiomine.largecollections.functions.WritableSerDe;
+import com.axiomine.largecollections.functions.*;
 import org.apache.hadoop.io.*;
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new #K#SerDe.#K#SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.WritableSerFunction();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new #K#SerDe.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new WritableSerDe.#V#DeSerFunction();
+    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDe.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();
+    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
+    private transient Function<byte[], #VCLS#> valDeSerFunc     = new WritableSerDe.#VCLS#DeSerFunction();
     
     public #CLASS_NAME#() {
         super();
@@ -194,8 +193,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     @Override
     public void clear() {
-        this.initialize();
-        this.initializeBloomFilter();
+        this.clearDB();
     }
     
     /* Iterators and Collections based on this Map */
@@ -226,10 +224,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new #K#SerDe.#K#SerFunction();
-        valSerFunc  = new WritableSerDe.WritableSerFunction();
-        keyDeSerFunc     = new #K#SerDe.#K#DeSerFunction();
-        valDeSerFunc     = new WritableSerDe.#V#DeSerFunction();
+        keySerFunc       = new #KCLS#SerDe.SerFunction();
+        valSerFunc  = new WritableSerDe.SerFunction();
+        keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
+        valDeSerFunc     = new WritableSerDe.#VCLS#DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

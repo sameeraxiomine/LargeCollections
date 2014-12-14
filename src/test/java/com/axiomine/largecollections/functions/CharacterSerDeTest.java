@@ -11,8 +11,8 @@ public class CharacterSerDeTest {
     
     @Test
     public void test() {
-        CharacterSerDe.CharacterSerFunction cser = new CharacterSerDe.CharacterSerFunction();
-        CharacterSerDe.CharacterDeSerFunction cdeser = new CharacterSerDe.CharacterDeSerFunction();
+        CharacterSerDe.SerFunction cser = new CharacterSerDe.SerFunction();
+        CharacterSerDe.DeSerFunction cdeser = new CharacterSerDe.DeSerFunction();
         
         char c1 = 'a';
         byte[] cba = cser.apply(c1);

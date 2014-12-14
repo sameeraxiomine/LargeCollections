@@ -11,8 +11,8 @@ public class DoubleSerDeTest {
     
     @Test
     public void test() {
-        DoubleSerDe.DoubleSerFunction ser = new DoubleSerDe.DoubleSerFunction();
-        DoubleSerDe.DoubleDeSerFunction deser = new DoubleSerDe.DoubleDeSerFunction();
+        DoubleSerDe.SerFunction ser = new DoubleSerDe.SerFunction();
+        DoubleSerDe.DeSerFunction deser = new DoubleSerDe.DeSerFunction();
         
         double d = 1d;
         byte[] ba = ser.apply(d);

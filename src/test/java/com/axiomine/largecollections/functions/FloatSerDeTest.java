@@ -11,8 +11,8 @@ public class FloatSerDeTest {
     
     @Test
     public void test() {
-        FloatSerDe.FloatSerFunction ser = new FloatSerDe.FloatSerFunction();
-        FloatSerDe.FloatDeSerFunction deser = new FloatSerDe.FloatDeSerFunction();
+        FloatSerDe.SerFunction ser = new FloatSerDe.SerFunction();
+        FloatSerDe.DeSerFunction deser = new FloatSerDe.DeSerFunction();
         
         Float f = 1f;
         byte[] ba = ser.apply(f);

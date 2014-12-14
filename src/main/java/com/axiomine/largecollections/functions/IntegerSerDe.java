@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.primitives.Ints;
 
 public class IntegerSerDe {
-    public static class IntegerSerFunction implements Function<Integer, byte[]> {
+    public static class SerFunction implements Function<Integer, byte[]> {
         public byte[] apply(Integer arg) {
             if (arg == null) {
                 return null;
@@ -14,7 +14,7 @@ public class IntegerSerDe {
         }
     }
     
-    public static class IntegerDeSerFunction implements
+    public static class DeSerFunction implements
             Function<byte[], Integer> {
         public Integer apply(byte[] arg) {
             if(arg==null){

@@ -6,7 +6,7 @@ import com.google.common.base.Function;
 import com.google.common.primitives.Longs;
 
 public class SerializableSerDe {
-    public static class SerializableSerFunction implements Function<Serializable, byte[]> {
+    public static class SerFunction implements Function<Serializable, byte[]> {
         public byte[] apply(Serializable arg) {
             if(arg==null){
                 return null;
@@ -20,7 +20,7 @@ public class SerializableSerDe {
         }
     }
 
-    public static class SerializableDeSerFunction implements Function<byte[],Serializable>{
+    public static class DeSerFunction implements Function<byte[],Serializable>{
         public Serializable apply(byte[] arg) {
             if(arg==null){
                 return null;

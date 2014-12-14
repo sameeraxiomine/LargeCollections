@@ -12,9 +12,9 @@ public class WritableSerDeTest {
     
     @Test
     public void test() {
-        WritableSerDe.WritableSerFunction ser = new WritableSerDe.WritableSerFunction();
+        WritableSerDe.SerFunction ser = new WritableSerDe.SerFunction();
         Text t = new Text();
-        WritableSerDe.WritableDeSerFunction deser = new WritableSerDe.WritableDeSerFunction(Text.class);
+        WritableSerDe.DeSerFunction deser = new WritableSerDe.DeSerFunction(Text.class);
         WritableSerDe.TextDeSerFunction deser2 = new WritableSerDe.TextDeSerFunction();
         Text s = new Text("This is a test");
         byte[] sba = ser.apply(s);

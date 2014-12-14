@@ -27,35 +27,35 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 #CUSTOM_IMPORTS#
-import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.functions.KryoSerDe;
-import #VPACKAGE#.#V#SerDe;
+import com.axiomine.largecollections.utilities.*;
+import com.axiomine.largecollections.util.*;
+import com.axiomine.largecollections.functions.*;
 
 
-public class K#V#Map<K> extends LargeCollection implements   Map<K,#V#>, Serializable{
+public class #CLASS_NAME#<K> extends LargeCollection implements   Map<K,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.KryoSerFunction<K>();
-    private transient Function<#V#, byte[]> valSerFunc       = new #V#SerDe.#V#SerFunction();
-    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.KryoDeSerFunction<K>();
-    private transient Function<byte[], #V#> valDeSerFunc     = new #V#SerDe.#V#DeSerFunction();
+    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
+    private transient Function<#V#, byte[]> valSerFunc       = new #VCLS#SerDe.SerFunction();
+    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
+    private transient Function<byte[], #V#> valDeSerFunc     = new #VCLS#SerDe.DeSerFunction();
     
-    public K#V#Map() {
+    public #CLASS_NAME#() {
         super();
     }
     
-    public K#V#Map(String dbName) {
+    public #CLASS_NAME#(String dbName) {
         super(dbName);
     }
     
-    public K#V#Map(String dbPath, String dbName) {
+    public #CLASS_NAME#(String dbPath, String dbName) {
         super(dbPath, dbName);
     }
     
-    public K#V#Map(String dbPath, String dbName, int cacheSize) {
+    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
     }
     
-    public K#V#Map(String dbPath, String dbName, int cacheSize,
+    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
     }
@@ -194,8 +194,7 @@ public class K#V#Map<K> extends LargeCollection implements   Map<K,#V#>, Seriali
     
     @Override
     public void clear() {
-        this.initialize();
-        this.initializeBloomFilter();
+        this.clearDB();
     }
     
     /* Iterators and Collections based on this Map */
@@ -226,10 +225,10 @@ public class K#V#Map<K> extends LargeCollection implements   Map<K,#V#>, Seriali
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.KryoSerFunction<K>();
-        valSerFunc       = new KryoSerDe.KryoSerFunction<#V#>();
-        keyDeSerFunc     = new KryoSerDe.KryoDeSerFunction<K>();
-        valDeSerFunc     = new KryoSerDe.KryoDeSerFunction<#V#>();
+        keySerFunc       = new KryoSerDe.SerFunction<K>();
+        valSerFunc       = new #VCLS#SerDe.SerFunction();
+        keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
+        valDeSerFunc     = new #VCLS#SerDe.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

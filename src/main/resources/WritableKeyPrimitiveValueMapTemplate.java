@@ -35,10 +35,10 @@ import org.apache.hadoop.io.*;
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.WritableSerFunction();
-    private transient Function<#V#, byte[]> valSerFunc       = new #V#SerDe.#V#SerFunction();    
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
+    private transient Function<#V#, byte[]> valSerFunc       = new #V#SerDe.SerFunction();    
     private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new #V#SerDe.#V#DeSerFunction();
+    private transient Function<byte[], #V#> valDeSerFunc     = new #V#SerDe.DeSerFunction();
     
     public #CLASS_NAME#() {
         super();
@@ -195,8 +195,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     @Override
     public void clear() {
-        this.initialize();
-        this.initializeBloomFilter();
+        this.clearDB();
     }
     
     /* Iterators and Collections based on this Map */
@@ -227,10 +226,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDe.WritableSerFunction();
-        valSerFunc       = new #V#SerDe.#V#SerFunction();    
+        keySerFunc  = new WritableSerDe.SerFunction();
+        valSerFunc       = new #V#SerDe.SerFunction();    
         keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-        valDeSerFunc     = new #V#SerDe.#V#DeSerFunction();
+        valDeSerFunc     = new #V#SerDe.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

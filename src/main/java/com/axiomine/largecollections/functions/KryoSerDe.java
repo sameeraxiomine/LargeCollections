@@ -2,7 +2,7 @@ package com.axiomine.largecollections.functions;
 
 import java.io.ByteArrayOutputStream;
 
-import com.axiomine.largecollections.utils.KryoUtils;
+import com.axiomine.largecollections.utilities.KryoUtils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
@@ -10,9 +10,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public class KryoSerDe {
-    public static class KryoSerFunction<K> implements Function<K, byte[]> {        
+    public static class SerFunction<K> implements Function<K, byte[]> {        
         private final ThreadLocal<Kryo> kryos;        
-        public KryoSerFunction(){
+        public SerFunction(){
             this.kryos = KryoUtils.getThreadLocalKryos();
         }       
         
@@ -44,9 +44,9 @@ public class KryoSerDe {
         }
     }
     
-    public static class KryoDeSerFunction<K> implements Function<byte[],K>{
+    public static class DeSerFunction<K> implements Function<byte[],K>{
         private final ThreadLocal<Kryo> kryos; 
-        public KryoDeSerFunction(){
+        public DeSerFunction(){
             this.kryos = KryoUtils.getThreadLocalKryos();
         }
         

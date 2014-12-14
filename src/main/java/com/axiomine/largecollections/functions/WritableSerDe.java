@@ -4,12 +4,12 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
-import com.axiomine.largecollections.utils.SerDeUtils;
+import com.axiomine.largecollections.utilities.*;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public class WritableSerDe {
-    public static class WritableSerFunction implements Function<Writable,byte[]>{
+    public static class SerFunction implements Function<Writable,byte[]>{
         public byte[] apply(Writable arg) {
             if (arg == null) {
                 return null;
@@ -20,10 +20,19 @@ public class WritableSerDe {
         }    
     }
     
-    public static class WritableDeSerFunction implements Function<byte[],Writable>{
+    public static class DeSerFunction implements Function<byte[],Writable>{
         private Class<? extends Writable> writableCls = null; 
-        public WritableDeSerFunction(Class<? extends Writable> wCls){
+        public DeSerFunction(Class<? extends Writable> wCls){
             this.writableCls = wCls;
+        }
+        public DeSerFunction(String sCls){
+            try{
+                this.writableCls = (Class<? extends Writable>) Class.forName(sCls);    
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }
+            
         }
         public Writable apply(byte[] arg) {
             if (arg == null) {

@@ -6,7 +6,7 @@ import com.axiomine.largecollections.utils.SerDeUtils;
 import com.google.common.base.Function;
 
 public class ExternalizableSerDe {
-    public static class ExternalizableSerFunction implements Function<Externalizable, byte[]> {
+    public static class SerFunction implements Function<Externalizable, byte[]> {
         public byte[] apply(Externalizable arg) {
             if(arg==null){
                 return null;
@@ -19,7 +19,7 @@ public class ExternalizableSerDe {
         }
     }
 
-    public static class ExternalizableDeSerFunction implements Function<byte[],Externalizable>{        
+    public static class DeSerFunction implements Function<byte[],Externalizable>{        
         public Externalizable apply(byte[] arg) {
             if(arg==null){
                 return null;

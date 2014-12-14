@@ -10,8 +10,8 @@ public class LongSerDeTest {
     
     @Test
     public void test() {
-        LongSerDe.LongSerFunction ser = new LongSerDe.LongSerFunction();
-        LongSerDe.LongDeSerFunction deser = new LongSerDe.LongDeSerFunction();
+        LongSerDe.SerFunction ser = new LongSerDe.SerFunction();
+        LongSerDe.DeSerFunction deser = new LongSerDe.DeSerFunction();
         
         Long l = 1l;
         byte[] ba = ser.apply(l);

@@ -3,7 +3,7 @@ package com.axiomine.largecollections.functions;
 import com.google.common.base.Function;
 
 public class CharacterSerDe {
-    public static class CharacterSerFunction implements Function<Character,byte[]>{
+    public static class SerFunction implements Function<Character,byte[]>{
         public byte[] apply(Character arg) {  
             if(arg==null){
                 return null;
@@ -18,7 +18,7 @@ public class CharacterSerDe {
         }    
     }
     
-    public static class CharacterDeSerFunction implements Function<byte[],Character>{
+    public static class DeSerFunction implements Function<byte[],Character>{
         public Character apply(byte[] arg) {
             if(arg==null){
                 return null;

@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import com.google.common.base.Function;
 
 public class DoubleSerDe {
-    public static class DoubleSerFunction implements Function<Double,byte[]>{
+    public static class SerFunction implements Function<Double,byte[]>{
         public byte[] apply(Double arg) {
             if(arg==null){
                 return null;
@@ -18,7 +18,7 @@ public class DoubleSerDe {
     }
 
     
-    public static class DoubleDeSerFunction implements Function<byte[],Double>{
+    public static class DeSerFunction implements Function<byte[],Double>{
         public Double apply(byte[] arg) {
             if(arg==null){
                 return null;

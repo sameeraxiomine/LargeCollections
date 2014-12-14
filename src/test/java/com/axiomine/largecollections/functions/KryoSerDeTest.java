@@ -13,9 +13,9 @@ public class KryoSerDeTest {
     
     @Test
     public void test() {
-        KryoSerDe.KryoSerFunction<String> ser = new KryoSerDe.KryoSerFunction<String>();
+        KryoSerDe.SerFunction<String> ser = new KryoSerDe.SerFunction<String>();
        
-        KryoSerDe.KryoDeSerFunction<String> deser = new KryoSerDe.KryoDeSerFunction<String>();
+        KryoSerDe.DeSerFunction<String> deser = new KryoSerDe.DeSerFunction<String>();
         String s = "This is a test";
         byte[] sba = ser.apply(s);
         String ss = (String) deser.apply(sba);

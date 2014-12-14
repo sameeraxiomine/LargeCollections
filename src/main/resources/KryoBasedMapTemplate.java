@@ -34,10 +34,10 @@ import #VPACKAGE#.#V#SerDe;
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new KryoSerDe.KryoSerFunction<#K#>();
-    private transient Function<#V#, byte[]> valSerFunc       = new KryoSerDe.KryoSerFunction<#V#>();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new KryoSerDe.KryoDeSerFunction<#K#>();
-    private transient Function<byte[], #V#> valDeSerFunc     = new KryoSerDe.KryoDeSerFunction<#V#>();
+    private transient Function<#K#, byte[]> keySerFunc       = new KryoSerDe.SerFunction<#K#>();
+    private transient Function<#V#, byte[]> valSerFunc       = new KryoSerDe.SerFunction<#V#>();
+    private transient Function<byte[], #K#> keyDeSerFunc     = new KryoSerDe.DeSerFunction<#K#>();
+    private transient Function<byte[], #V#> valDeSerFunc     = new KryoSerDe.DeSerFunction<#V#>();
     
     public #CLASS_NAME#() {
         super();
@@ -194,8 +194,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     @Override
     public void clear() {
-        this.initialize();
-        this.initializeBloomFilter();
+        this.clearDB();
     }
     
     /* Iterators and Collections based on this Map */
@@ -226,10 +225,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.KryoSerFunction<#K#>();
-        valSerFunc       = new KryoSerDe.KryoSerFunction<#V#>();
-        keyDeSerFunc     = new KryoSerDe.KryoDeSerFunction<#K#>();
-        valDeSerFunc     = new KryoSerDe.KryoDeSerFunction<#V#>();
+        keySerFunc       = new KryoSerDe.SerFunction<#K#>();
+        valSerFunc       = new KryoSerDe.SerFunction<#V#>();
+        keyDeSerFunc     = new KryoSerDe.DeSerFunction<#K#>();
+        valDeSerFunc     = new KryoSerDe.DeSerFunction<#V#>();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

@@ -10,8 +10,8 @@ public class BytesArraySerDeTest {
     
     @Test
     public void test() {
-        BytesArraySerDe.BytesArraySerFunction ser = new BytesArraySerDe.BytesArraySerFunction();
-        BytesArraySerDe.BytesArrayDeSerFunction deser = new BytesArraySerDe.BytesArrayDeSerFunction();
+        BytesArraySerDe.SerFunction ser = new BytesArraySerDe.SerFunction();
+        BytesArraySerDe.DeSerFunction deser = new BytesArraySerDe.DeSerFunction();
         
         String s = "This is a test";
         byte[] sba = ser.apply(s.getBytes());

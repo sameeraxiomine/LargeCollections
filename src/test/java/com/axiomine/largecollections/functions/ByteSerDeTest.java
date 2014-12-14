@@ -10,8 +10,8 @@ public class ByteSerDeTest {
     
     @Test
     public void test() {
-        ByteSerDe.ByteSerFunction ser = new ByteSerDe.ByteSerFunction();
-        ByteSerDe.ByteDeSerFunction deser = new ByteSerDe.ByteDeSerFunction();
+        ByteSerDe.SerFunction ser = new ByteSerDe.SerFunction();
+        ByteSerDe.DeSerFunction deser = new ByteSerDe.DeSerFunction();
         
         byte b = 1;
         byte[] sba = ser.apply(b);

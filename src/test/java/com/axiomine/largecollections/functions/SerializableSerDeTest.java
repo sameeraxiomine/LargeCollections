@@ -13,9 +13,9 @@ public class SerializableSerDeTest {
     
     @Test
     public void test() {
-        SerializableSerDe.SerializableSerFunction ser = new SerializableSerDe.SerializableSerFunction();
+        SerializableSerDe.SerFunction ser = new SerializableSerDe.SerFunction();
         Text t = new Text();
-        SerializableSerDe.SerializableDeSerFunction deser = new SerializableSerDe.SerializableDeSerFunction();
+        SerializableSerDe.DeSerFunction deser = new SerializableSerDe.DeSerFunction();
         String s = "This is a test";
         byte[] sba = ser.apply(s);
         Serializable ss = deser.apply(sba);

@@ -10,8 +10,8 @@ public class IntegerSerDeTest {
     
     @Test
     public void test() {
-        IntegerSerDe.IntegerSerFunction ser = new IntegerSerDe.IntegerSerFunction();
-        IntegerSerDe.IntegerDeSerFunction deser = new IntegerSerDe.IntegerDeSerFunction();
+        IntegerSerDe.SerFunction ser = new IntegerSerDe.SerFunction();
+        IntegerSerDe.DeSerFunction deser = new IntegerSerDe.DeSerFunction();
         
         Integer i = 1;
         byte[] ba = ser.apply(i);
