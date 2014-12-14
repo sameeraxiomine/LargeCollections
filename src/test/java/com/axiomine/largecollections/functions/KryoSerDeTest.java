@@ -10,6 +10,7 @@ public class KryoSerDeTest {
     
     @Test
     public void test() {
+        
         KryoSerDe.SerFunction<String> ser = new KryoSerDe.SerFunction<String>();
        
         KryoSerDe.DeSerFunction<String> deser = new KryoSerDe.DeSerFunction<String>();

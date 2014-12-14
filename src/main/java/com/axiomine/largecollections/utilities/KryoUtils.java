@@ -63,7 +63,8 @@ public class KryoUtils {
             registerDefaultKryoClasses(kryo);
             Map<String,String> m = new HashMap<String,String>();
             String propFile = System.getProperty(KRYO_REGISTRATION_PROP_FILE);
-            registerKryoClasses(kryo,propFile);
+            if(StringUtils.isNotBlank(propFile))
+                registerKryoClasses(kryo,propFile);
         }
         catch(Exception ex){
             Throwables.propagate(ex);
