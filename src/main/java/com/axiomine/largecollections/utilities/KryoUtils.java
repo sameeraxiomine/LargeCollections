@@ -32,22 +32,38 @@ import com.google.common.base.Throwables;
 
 public class KryoUtils {
     public static final String KRYO_REGISTRATION_PROP_FILE = "KRYO_REG_PROP_FILE";
-    
+
+    public static void registerDefaultKryoClasses(Kryo kryo) throws Exception{
+        final Properties props = new Properties();
+        props.load(KryoUtils.class.getClassLoader().getResourceAsStream("KryoRegistration.properties"));       
+        Set ks =  props.keySet();
+        for(Object k:ks){
+//            System.out.println(k);
+            Class c = Class.forName((String)k);
+            Class s = Class.forName(props.getProperty((String)k));            
+            kryo.register(c, (Serializer)s.newInstance());
+        }           
+
+    }
+
+    public static void registerKryoClasses(Kryo kryo,String propFile) throws Exception{
+        FileReader fReader = new FileReader(new File(propFile));
+        Properties props = new Properties();
+        props.load(fReader);
+        Set ks =  props.keySet();
+        for(Object k:ks){
+            Class c = Class.forName((String)k);
+            Class s = Class.forName(props.getProperty((String)k));            
+            kryo.register(c, (Serializer)s.newInstance());
+        }           
+
+    }
     public static void registerKryoClasses(Kryo kryo){
         try{
+            registerDefaultKryoClasses(kryo);
             Map<String,String> m = new HashMap<String,String>();
             String propFile = System.getProperty(KRYO_REGISTRATION_PROP_FILE);
-            if(StringUtils.isNotBlank(propFile)){
-                FileReader fReader = new FileReader(new File(propFile));
-                Properties props = new Properties();
-                props.load(fReader);
-                Set ks =  props.keySet();
-                for(Object k:ks){
-                    Class c = Class.forName((String)k);
-                    Class s = Class.forName(props.getProperty((String)k));            
-                    kryo.register(c, (Serializer)s.newInstance());
-                }            
-            }
+            registerKryoClasses(kryo,propFile);
         }
         catch(Exception ex){
             Throwables.propagate(ex);

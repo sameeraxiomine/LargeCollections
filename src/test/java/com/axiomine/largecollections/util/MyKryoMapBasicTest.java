@@ -17,7 +17,7 @@ public class MyKryoMapBasicTest {
     public void test00BasicTest() {
         File root = new File("");
         File p = new File(root.getAbsolutePath()+"/");
-        System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
+        System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistrationCustom.properties");
         MyKryoTestMap map = null;
         try {
             map = new MyKryoTestMap("c:/tmp/", "cacheMap");
