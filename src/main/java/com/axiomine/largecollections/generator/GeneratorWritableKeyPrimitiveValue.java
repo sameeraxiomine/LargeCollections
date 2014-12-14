@@ -26,7 +26,17 @@ public class GeneratorWritableKeyPrimitiveValue {
         String K = args[4];
         //Class name (no packages) of the value class Ex. Integer
         String V = args[5];
-        String CLASS_NAME = K+V+"Map"; //Default
+        String kCls = K;
+        String vCls = V;
+        
+        if(kCls.equals("byte[]")){
+            kCls = "BytesArray";
+        }
+        if(vCls.equals("byte[]")){
+            vCls = "BytesArray";
+        }
+        
+        String CLASS_NAME = kCls+vCls+"Map"; //Default
     
         
         
@@ -56,6 +66,9 @@ public class GeneratorWritableKeyPrimitiveValue {
             program = program.replaceAll("#CLASS_NAME#", CLASS_NAME);
             program = program.replaceAll("#K#", K);
             program = program.replaceAll("#V#", V);
+            program = program.replaceAll("#KCLS#", kCls);
+            program = program.replaceAll("#VCLS#", vCls);
+
             program = program.replaceAll("#KPACKAGE#", KPACKAGE);
             program = program.replaceAll("#VPACKAGE#", VPACKAGE);
             System.out.println(outFile.getAbsolutePath());

@@ -9,7 +9,7 @@ public class GenerateWritableKeyWritableValueMaps {
         //String[] keys={"String"};
         //String[] vals={"Text"};
 
-        String myPackage = "com.axiomine.largecollections";
+        String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
         String kPackage = "com.axiomine.largecollections.functions";
         String vPackage = "com.axiomine.largecollections.functions";

@@ -6,14 +6,14 @@ import com.axiomine.largecollections.generator.GeneratorPrimitiveKeyWritableValu
 
 public class GeneratePrimitiveKeyWritableValueMaps {
     public static void main(String[] args) throws Exception{
-        String[] keys={"String","Integer","Long","Double","Float","Byte","byte[]"};
+        String[] keys={"String","byte[]"};
         String[] vals={"Text","IntWritable"};
         String[] vwcls={"org.apache.hadoop.io.Text","org.apache.hadoop.io.IntWritable"};
         Text t = null;
         //String[] keys={"String"};
         //String[] vals={"Text"};
 
-        String myPackage = "com.axiomine.largecollections";
+        String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
         String kPackage = "com.axiomine.largecollections.functions";
         String vPackage = "com.axiomine.largecollections.functions";

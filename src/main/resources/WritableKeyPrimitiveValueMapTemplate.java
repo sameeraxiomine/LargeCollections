@@ -26,19 +26,18 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 #CUSTOM_IMPORTS#
-import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.util.*;
+import com.axiomine.largecollections.functions.*;
 
-import #VPACKAGE#.#V#SerDe;
-import com.axiomine.largecollections.functions.WritableSerDe;
 import org.apache.hadoop.io.*;
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     
     private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<#V#, byte[]> valSerFunc       = new #V#SerDe.SerFunction();    
+    private transient Function<#V#, byte[]> valSerFunc       = new #VCLS#SerDe.SerFunction();    
     private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new #V#SerDe.DeSerFunction();
+    private transient Function<byte[], #V#> valDeSerFunc     = new #VCLS#SerDe.DeSerFunction();
     
     public #CLASS_NAME#() {
         super();
@@ -227,9 +226,9 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
         keySerFunc  = new WritableSerDe.SerFunction();
-        valSerFunc       = new #V#SerDe.SerFunction();    
+        valSerFunc       = new #VCLS#SerDe.SerFunction();    
         keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-        valDeSerFunc     = new #V#SerDe.DeSerFunction();
+        valDeSerFunc     = new #VCLS#SerDe.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

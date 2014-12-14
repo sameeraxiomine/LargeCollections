@@ -8,7 +8,7 @@ public class GenerateWritableKeyPrimitiveValueMaps {
         //String[] vals={"String","Integer","Long","Double","Float"};
         //
         String[] keys={"Text"};
-        String[] vals={"String"};
+        String[] vals={"String","byte[]"};
         
         String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
