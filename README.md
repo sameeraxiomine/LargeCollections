@@ -1,10 +1,27 @@
 # LargeCollections #
+
 LargeCollections supports java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use the JVM heap memory.
 
 Currently only the java.util.Map is supported. The support is complete, in that it supports the underlying iterators as well.
 
 #Key Differentiator wrt to other Libraries#
+
 What makes this java.util.Map different? It is hard to provide a general implementation for LevelDB back store. We had tried to do that with LargeCollections. However if we depend on Java Serialization to convert objects to/from bytes the overall throughput of the collection API drops. Hence we used a new approach. Instead of providing pre-developed collections like FastUtil does we provide you Collection Generation templates. You can develop your own serialization plugins if you do not like the ones provided. Using these serialization plugins you can simply generate your own java.util collections which are ultra-fast. 
+
+#Key Design Principles#
+The underlying java.util.Map implementations are backed by [https://github.com/google/leveldb](https://github.com/google/leveldb "LevelDB"). LevelDB is a fast key-value storage library written at Google that provides an ordered mapping from byte array keys to byte array values.
+
+While LargeCollections supports any Serializable/Externalizable/Writable/Kryo-Serializable Key and Value classes, the underlying implementations stores everything as byte-array key value store (similar to HBase). Thus every key/value instance needs to be converted to a byte array to write to the LevelDB backing store and convert back from byte array to a Java instance.
+
+To support the to-fro byte-array conversions, every java.util.Map sub-class provided by LargeCollections library needs to have Serializer-Deserializer (SerDes) pair, one each for Key and Value class. 
+
+You are unlikely to use this library unless your Map's are so large that that you cannot hold them in your JVM Heap nor are they so large that you need a No-SQL database. Hence it was important to select the fasted possible serialization/deserialization mechanisms. The default java serialization is support but we have done considerably better. Below is a list of various mechanisms used for SerDes-
+1. Kryo - This offers better control over serialization. Also the interface is considerably simpler and non-intrusive from the Key/Value class design. It support the default java serialization via the Serializable and Externalizable interface
+2. Custom SerDes for primitive types - Where possible we will utilize highly customized mechanisms. For example Google Guava supports a ultra-fast conversions from int to byte-array and back. Likewise it is lot simpler to invoke `String.getBytes()` and new String(byte[]) to serialize and deserialize strings. 
+3. For basic `org.apache.hadoop.io.Writable` types we provide very fast Kryo SerDes
+
+We will discuss all the above methods and how to utilize them in detail in the subsequent sections.  
+
 
 
 Out of box SerDes
