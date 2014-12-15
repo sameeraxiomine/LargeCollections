@@ -1,11 +1,11 @@
-LargeCollections
+# LargeCollections #
 ================
 
-LargeCollections supports java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use heap memory.
+LargeCollections supports java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use the JVM heap memory.
 
 Currently only the java.util.Map is supported. The support is complete, in that it supports the underlying iterators as well.
 
-Key Differentiator wrt to other Libraries
+#Key Differentiator wrt to other Libraries#
 ================================================
 
 What makes this java.util.Map different? It is hard to provide a general implementation for LevelDB back store. We had tried to do that with LargeCollections. However if we depend on Java Serialization to convert objects to/from bytes the overall throughput of the collection API drops. Hence we used a new approach. Instead of providing pre-developed collections like FastUtil does we provide you Collection Generation templates. You can develop your own serialization plugins if you do not like the ones provided. Using these serialization plugins you can simply generate your own java.util collections which are ultra-fast. 
