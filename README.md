@@ -50,8 +50,8 @@ We will be adding more documentation in the coming days.
 Usage
 ================
 
-See implementations in the following class for now 
-com.axiomine.largecollections.IntIntCacheMapBasicTest
+See examples of usage by following the Unit Test cases from the 
+src/test/java folder
 
 License
 ================
