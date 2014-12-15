@@ -53,8 +53,9 @@ public class KryoUtils {
         Set ks =  props.keySet();
         for(Object k:ks){
             Class c = Class.forName((String)k);
-            Class s = Class.forName(props.getProperty((String)k));            
-            kryo.register(c, (Serializer)s.newInstance());
+            Class s = Class.forName(props.getProperty((String)k));
+            Serializer ss = (Serializer)s.newInstance();
+            kryo.register(c, ss);
         }           
 
     }

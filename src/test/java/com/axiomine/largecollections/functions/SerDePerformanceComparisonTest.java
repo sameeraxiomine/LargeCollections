@@ -1,5 +1,7 @@
 package com.axiomine.largecollections.functions;
 
+import java.io.File;
+
 import junit.framework.Assert;
 
 import org.apache.hadoop.io.IntWritable;
@@ -8,11 +10,12 @@ import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
 import com.axiomine.largecollections.functions.WritableSerDe;
+import com.axiomine.largecollections.utilities.KryoUtils;
 
-public class WritableSerDeComparisonTest {
+public class SerDePerformanceComparisonTest {
     
     @Test
-    public void test() {
+    public void writablePerformancetest() {
         KryoSerDe.SerFunction<IntWritable> ser1 = new KryoSerDe.SerFunction<IntWritable>();        
         KryoSerDe.DeSerFunction<IntWritable> deser1 = new KryoSerDe.DeSerFunction<IntWritable>();
 
@@ -68,5 +71,8 @@ public class WritableSerDeComparisonTest {
 
         
     }
+    
+   
+    
     
 }
