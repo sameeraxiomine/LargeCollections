@@ -17,7 +17,6 @@ public class BytesArraySerDeTest {
         byte[] sba = ser.apply(s.getBytes());
         byte[] dba = deser.apply(sba);
         Assert.assertEquals(s, new String(dba));
-
     }
     
 }
