@@ -20,4 +20,8 @@ public interface IDb extends Closeable{
     public void open();
     public void clearDB();
 
+    public String getDBPath();
+    public String getDBName();
+    public int getCacheSize();
+    public int getBloomFilterSize();
 }

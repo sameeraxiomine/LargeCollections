@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
@@ -20,12 +21,17 @@ import com.google.common.hash.PrimitiveSink;
 
 public abstract class LargeCollection implements IDb  {
     public static final Random rnd = new Random();
+    public static String OVERRIDE_DB_PATH="override.dbpath";
+    public static String OVERRIDE_DB_NAME="override.dbname";
+    
     public static int DEFAULT_CACHE_SIZE = 25;
     public static int DEFAULT_BLOOM_FILTER_SIZE = 10000000;
+    
+    
     protected String dbPath=System.getProperty("java.io.tmpdir");
     protected String dbName = "f"+System.currentTimeMillis()+rnd.nextInt();
     protected int cacheSize = DEFAULT_CACHE_SIZE;
-    protected long size;
+    protected int size;
     protected transient DB db;
     protected transient Options options;
     protected transient File dbFile;
@@ -129,9 +135,7 @@ public abstract class LargeCollection implements IDb  {
         }
     }
     
-    public String getDBPath(){
-        return this.dbPath;
-    }
+
     
     protected void serialize(java.io.ObjectOutputStream stream)
             throws IOException {
@@ -139,7 +143,7 @@ public abstract class LargeCollection implements IDb  {
         stream.writeObject(this.dbPath);
         stream.writeObject(this.dbName);
         stream.writeInt(this.cacheSize);
-        stream.writeLong(this.size);
+        stream.writeInt(this.size);
         stream.writeInt(this.bloomFilterSize);
         stream.writeObject(this.bloomFilter);
         this.db.close();
@@ -151,10 +155,20 @@ public abstract class LargeCollection implements IDb  {
         this.dbPath = (String) in.readObject();
         this.dbName = (String) in.readObject();
         this.cacheSize = in.readInt();
-        this.size = in.readLong();
+        this.size = in.readInt();
         this.bloomFilterSize = in.readInt();
         this.bloomFilter = (BloomFilter<Integer>) in.readObject();
 
+        //Override path here
+        if(!StringUtils.isBlank(System.getProperty(OVERRIDE_DB_PATH))){
+            System.out.println("Overriding DBPath from System Property="+System.getProperty(OVERRIDE_DB_PATH));
+            this.dbPath=System.getProperty(OVERRIDE_DB_PATH);
+        }
+        if(!StringUtils.isBlank(System.getProperty(OVERRIDE_DB_NAME))){
+            System.out.println("Overriding DBName from System Property="+System.getProperty(OVERRIDE_DB_NAME));
+            this.dbName=System.getProperty(OVERRIDE_DB_NAME);
+        }
+        
         this.initialize(false);
         System.out.println("Now deserialized " + this.dbName);
     }
@@ -163,9 +177,7 @@ public abstract class LargeCollection implements IDb  {
         return this.db;
     }
     
-    public long getLSize(){
-        return size;
-    }
+
     /* Destroys the map */
     
     @Override
@@ -227,7 +239,18 @@ public abstract class LargeCollection implements IDb  {
 
     }
     
-    
+    public String getDBPath(){
+        return this.dbPath;
+    }
+    public String getDBName(){
+        return this.dbName;
+    }
+    public int getCacheSize() {
+        return this.cacheSize;
+    }
+    public int getBloomFilterSize(){
+        return this.bloomFilterSize;
+    }
     
     public abstract void optimize();
 }
