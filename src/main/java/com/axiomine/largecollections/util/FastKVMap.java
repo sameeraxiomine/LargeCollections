@@ -32,7 +32,7 @@ import java.lang.Integer;
 import java.lang.Integer;
 
 
-public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
+public class FastKVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
     private transient Function<V, byte[]> valSerFunc       = new KryoSerDe.SerFunction<V>();
@@ -44,7 +44,7 @@ public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V
     private String keyDeSerCls = null;
     private String valDeSerCls = null;
     
-    public CustomKCustomVMap(String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public FastKVMap(String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
         super();
         this.keySerCls = kSerCls;
         this.valSerCls = vSerCls;
@@ -61,7 +61,7 @@ public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V
         }
     }
     
-    public CustomKCustomVMap(String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public FastKVMap(String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
         super(dbName);
         this.keySerCls = kSerCls;
         this.valSerCls = vSerCls;
@@ -78,7 +78,7 @@ public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V
         }
     }
     
-    public CustomKCustomVMap(String dbPath, String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public FastKVMap(String dbPath, String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
         super(dbPath, dbName);
         this.keySerCls = kSerCls;
         this.valSerCls = vSerCls;
@@ -96,7 +96,7 @@ public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V
 
     }
     
-    public CustomKCustomVMap(String dbPath, String dbName, int cacheSize,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public FastKVMap(String dbPath, String dbName, int cacheSize,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
         super(dbPath, dbName, cacheSize);
         this.keySerCls = kSerCls;
         this.valSerCls = vSerCls;
@@ -114,7 +114,7 @@ public class CustomKCustomVMap<K,V> extends LargeCollection implements   Map<K,V
 
     }
     
-    public CustomKCustomVMap(String dbPath, String dbName, int cacheSize,
+    public FastKVMap(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
         this.keySerCls = kSerCls;

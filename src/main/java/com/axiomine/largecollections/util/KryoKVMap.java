@@ -26,90 +26,38 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 import com.axiomine.largecollections.functions.*;
-
 import java.util.Random
 ;
 import java.lang.Integer;
 import java.lang.Integer;
 
 
-public class KryoKCustomVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
+public class KryoKVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
-    private transient Function<V, byte[]> valSerFunc       = null;
+    private transient Function<V, byte[]> valSerFunc       = new KryoSerDe.SerFunction<V>();
     private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-    private transient Function<byte[], V> valDeSerFunc     = null;
-    private String valSerCls=null;
-    private String valDeSerCls=null;
-
-    public KryoKCustomVMap(String vSerCls,String vDeSerCls) {
+    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+    
+    public KryoKVMap() {
         super();
-        try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
     }
     
-    public KryoKCustomVMap(String dbName,String vSerCls,String vDeSerCls) {
+    public KryoKVMap(String dbName) {
         super(dbName);
-        try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-
     }
     
-    public KryoKCustomVMap(String dbPath, String dbName,String vSerCls,String vDeSerCls) {
+    public KryoKVMap(String dbPath, String dbName) {
         super(dbPath, dbName);
-        try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-
     }
     
-    public KryoKCustomVMap(String dbPath, String dbName, int cacheSize,String vSerCls,String vDeSerCls) {
+    public KryoKVMap(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
-        try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-
     }
     
-    public KryoKCustomVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,String vSerCls,String vDeSerCls) {
+    public KryoKVMap(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-
     }
     
     @Override
@@ -273,25 +221,15 @@ public class KryoKCustomVMap<K,V> extends LargeCollection implements   Map<K,V>,
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.valSerCls);
-        stream.writeObject(this.valDeSerCls);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
         keySerFunc       = new KryoSerDe.SerFunction<K>();
+        valSerFunc       = new KryoSerDe.SerFunction<V>();
         keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
+        valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
         this.deserialize(in);
-        try{
-            this.valSerCls = (String)in.readObject();
-            this.valDeSerCls = (String)in.readObject();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        
     }
     /* End of Serialization functions go here */
     

@@ -21,11 +21,11 @@ public class WritableWritableMapBasicTest {
     
     @Test
     public void test00BasicTest() {
-        WritableKWritableVMap map = null;
+        WritableKVMap map = null;
         try {
             String kcls = "org.apache.hadoop.io.IntWritable";
             String vcls = "org.apache.hadoop.io.IntWritable";
-            map = new WritableKWritableVMap("c:/tmp/", "cacheMap",kcls,vcls);
+            map = new WritableKVMap("c:/tmp/", "cacheMap",kcls,vcls);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 IntWritable r = (IntWritable)map.put(new IntWritable(i), new IntWritable(i));
@@ -121,7 +121,7 @@ public class WritableWritableMapBasicTest {
             System.out.println("First Serialize");
             FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
             
-            map = (WritableKWritableVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (WritableKVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(new IntWritable(0),new IntWritable(0));    

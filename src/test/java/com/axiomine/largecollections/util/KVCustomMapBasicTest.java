@@ -14,20 +14,20 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 
-import com.axiomine.largecollections.util.CustomKCustomVMap;
+import com.axiomine.largecollections.util.FastKVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class KVCustomMapBasicTest {
     
     @Test
     public void test00BasicTest() {
-        CustomKCustomVMap<Integer,Integer> map = null;
+        FastKVMap<Integer,Integer> map = null;
         try {
             String kser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
             String vser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
             String kdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
             String vdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
-            map = new CustomKCustomVMap("c:/tmp/", "cacheMap",kser,vser,kdeser,vdeser);
+            map = new FastKVMap("c:/tmp/", "cacheMap",kser,vser,kdeser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);
@@ -123,7 +123,7 @@ public class KVCustomMapBasicTest {
             System.out.println("First Serialize");
             FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
             
-            map = (CustomKCustomVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (FastKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(0,0);    

@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 
-import com.axiomine.largecollections.util.KVMap;
+import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.util.LargeCollection;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 import com.google.common.base.Throwables;
@@ -35,7 +35,7 @@ public class KVMapSample {
     }
     
     
-    public static void workOnKVMap(KVMap<Integer,Integer> map){
+    public static void workOnKVMap(KryoKVMap<Integer,Integer> map){
         try {
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);
@@ -72,7 +72,7 @@ public class KVMapSample {
             File serFile = new File("c:/tmp/x.ser");
             FileSerDeUtils.serializeToFile(map,serFile);            
             System.out.println("Now De-Serialize the Map");
-            map = (KVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(serFile);
+            map = (KryoKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(serFile);
             System.out.println("After De-Serialization Size of map should be 10. Size of the map ="+map.size());
             printMapCharacteristics(map);
             System.out.println("Now calling map.clear()");
@@ -93,31 +93,31 @@ public class KVMapSample {
         
     }
     public static void createKVMap(){
-        KVMap<Integer,Integer> map = new KVMap<>();
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>();
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbName){
-        KVMap<Integer,Integer> map = new KVMap<>(dbName);
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>(dbName);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName){
-        KVMap<Integer,Integer> map = new KVMap<>(dbPath,dbName);
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>(dbPath,dbName);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName,int cacheSize){
-        KVMap<Integer,Integer> map = new KVMap<>(dbPath,dbName,cacheSize);
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>(dbPath,dbName,cacheSize);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName,int cacheSize,int bloomfilterSize){
-        KVMap<Integer,Integer> map = new KVMap<>(dbPath,dbName,cacheSize,bloomfilterSize);
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
@@ -125,7 +125,7 @@ public class KVMapSample {
     public static void createKVMapOveridePathAndNameWhileDSer(String dbPath,String dbName,int cacheSize,int bloomfilterSize){
         System.setProperty(LargeCollection.OVERRIDE_DB_PATH, dbPath);        
         System.setProperty(LargeCollection.OVERRIDE_DB_NAME, dbName);
-        KVMap<Integer,Integer> map = new KVMap<>(dbPath,dbName,cacheSize,bloomfilterSize);
+        KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }

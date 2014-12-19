@@ -18,9 +18,9 @@ public class KryoKCustomVMapBasicTest {
         File root = new File("");
         File p = new File(root.getAbsolutePath()+"/");
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
-        KryoKCustomVMap<Integer,Integer> map = null;
+        KryoKFastVMap<Integer,Integer> map = null;
         try {
-            map = new KryoKCustomVMap<Integer,Integer>("c:/tmp/", "cacheMap",
+            map = new KryoKFastVMap<Integer,Integer>("c:/tmp/", "cacheMap",
                             "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction",
                             "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction");
             Assert.assertTrue(map.isEmpty());

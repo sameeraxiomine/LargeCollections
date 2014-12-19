@@ -8,7 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.util.KVMap;
+import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.utilities.KryoUtils;
 
 public class KVMapBasicTest {
@@ -18,9 +18,9 @@ public class KVMapBasicTest {
         File root = new File("");
         File p = new File(root.getAbsolutePath()+"/");
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
-        KVMap<Integer,Integer> map = null;
+        KryoKVMap<Integer,Integer> map = null;
         try {
-            map = new KVMap<Integer,Integer>("c:/tmp/", "cacheMap");
+            map = new KryoKVMap<Integer,Integer>("c:/tmp/", "cacheMap");
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);

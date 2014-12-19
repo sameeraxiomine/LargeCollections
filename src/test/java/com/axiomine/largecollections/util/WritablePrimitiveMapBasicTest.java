@@ -15,19 +15,19 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
-import com.axiomine.largecollections.util.WritableKCustomVMap;
+import com.axiomine.largecollections.util.WritableKFastVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class WritablePrimitiveMapBasicTest {
     
     @Test
     public void test00BasicTest() {
-        WritableKCustomVMap<IntWritable,Integer> map = null;
+        WritableKFastVMap<IntWritable,Integer> map = null;
         try {
             String vser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
             String vdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
 
-            map = new WritableKCustomVMap<IntWritable,Integer>("c:/tmp/", "cacheMap",new IntWritable(),vser,vdeser);
+            map = new WritableKFastVMap<IntWritable,Integer>("c:/tmp/", "cacheMap",new IntWritable(),vser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(new IntWritable(i), i);
@@ -123,7 +123,7 @@ public class WritablePrimitiveMapBasicTest {
             System.out.println("First Serialize");
             FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
             
-            map = (WritableKCustomVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (WritableKFastVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(new IntWritable(0),0);    
