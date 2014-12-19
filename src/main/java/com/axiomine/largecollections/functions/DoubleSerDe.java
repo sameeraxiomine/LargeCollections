@@ -3,6 +3,7 @@ package com.axiomine.largecollections.functions;
 import java.nio.ByteBuffer;
 
 import com.google.common.base.Function;
+import com.google.common.primitives.Longs;
 
 public class DoubleSerDe {
     public static class SerFunction implements Function<Double,byte[]>{
@@ -11,7 +12,7 @@ public class DoubleSerDe {
                 return null;
             }
             else{
-                byte [] bytes = ByteBuffer.allocate(8).putDouble(arg).array();
+                byte [] bytes = Longs.toByteArray(Double.doubleToLongBits(arg));
                 return bytes;
             }
         }    
@@ -24,7 +25,7 @@ public class DoubleSerDe {
                 return null;
             }
             else{
-                return ByteBuffer.wrap(arg).getDouble();    
+                return Double.longBitsToDouble(Longs.fromByteArray(arg));    
             }
         }    
     }

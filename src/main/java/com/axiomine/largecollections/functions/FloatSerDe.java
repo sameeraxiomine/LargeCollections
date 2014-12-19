@@ -3,6 +3,7 @@ package com.axiomine.largecollections.functions;
 import java.nio.ByteBuffer;
 
 import com.google.common.base.Function;
+import com.google.common.primitives.Ints;
 
 public class FloatSerDe {
     public static class SerFunction implements Function<Float,byte[]>{
@@ -11,7 +12,7 @@ public class FloatSerDe {
                 return null;
             }
             else{
-                byte [] bytes = ByteBuffer.allocate(4).putFloat(arg).array();
+                byte [] bytes = Ints.toByteArray(Float.floatToIntBits(arg));
                 return bytes;
             }
         }    
@@ -23,7 +24,7 @@ public class FloatSerDe {
                 return null;
             }
             else{
-                return ByteBuffer.wrap(arg).getFloat();    
+                return Float.intBitsToFloat(Ints.fromByteArray(arg));    
             }
             
         }    
