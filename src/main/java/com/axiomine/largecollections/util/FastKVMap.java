@@ -25,7 +25,7 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 
 import java.util.Random
 ;
@@ -35,10 +35,10 @@ import java.lang.Integer;
 
 public class FastKVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
-    private transient Function<V, byte[]> valSerFunc       = new KryoSerDe.SerFunction<V>();
-    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+    private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
+    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
+    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
     
     private String keySerCls = null;
     private String valSerCls = null;

@@ -27,7 +27,7 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
@@ -35,10 +35,10 @@ import org.apache.hadoop.io.*;
 public class BytesWritableMapWritableMap extends LargeCollection implements   Map<BytesWritable,MapWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();    
-    private transient Function<byte[], BytesWritable> keyDeSerFunc     = new WritableSerDe.BytesWritableDeSerFunction();
-    private transient Function<byte[], MapWritable> valDeSerFunc     = new WritableSerDe.MapWritableDeSerFunction();
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient Function<byte[], BytesWritable> keyDeSerFunc     = new WritableSerDes.BytesWritableDeSerFunction();
+    private transient Function<byte[], MapWritable> valDeSerFunc     = new WritableSerDes.MapWritableDeSerFunction();
     
     public BytesWritableMapWritableMap() {
         super();
@@ -226,10 +226,10 @@ public class BytesWritableMapWritableMap extends LargeCollection implements   Ma
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();    
-        keyDeSerFunc     = new WritableSerDe.BytesWritableDeSerFunction();
-        valDeSerFunc     = new WritableSerDe.MapWritableDeSerFunction();
+        keySerFunc  = new WritableSerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();    
+        keyDeSerFunc     = new WritableSerDes.BytesWritableDeSerFunction();
+        valDeSerFunc     = new WritableSerDes.MapWritableDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

@@ -1,9 +1,9 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Longs;
 
-public class LongSerDe {
+public class LongSerDes {
     public static class SerFunction implements Function<Long,byte[]>{
         public byte[] apply(Long arg) {
             if(arg==null){

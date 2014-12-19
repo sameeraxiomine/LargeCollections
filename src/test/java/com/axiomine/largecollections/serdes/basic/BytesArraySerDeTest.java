@@ -4,14 +4,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.BytesArraySerDe;
+import com.axiomine.largecollections.serdes.BytesArraySerDes;
 
 public class BytesArraySerDeTest {
     
     @Test
     public void test() {
-        BytesArraySerDe.SerFunction ser = new BytesArraySerDe.SerFunction();
-        BytesArraySerDe.DeSerFunction deser = new BytesArraySerDe.DeSerFunction();
+        BytesArraySerDes.SerFunction ser = new BytesArraySerDes.SerFunction();
+        BytesArraySerDes.DeSerFunction deser = new BytesArraySerDes.DeSerFunction();
         
         String s = "This is a test";
         byte[] sba = ser.apply(s.getBytes());

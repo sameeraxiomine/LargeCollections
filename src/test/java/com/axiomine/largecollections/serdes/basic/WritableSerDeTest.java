@@ -6,16 +6,16 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 
 public class WritableSerDeTest {
     
     @Test
     public void test() {
-        WritableSerDe.SerFunction ser = new WritableSerDe.SerFunction();
+        WritableSerDes.SerFunction ser = new WritableSerDes.SerFunction();
         Text t = new Text();
-        WritableSerDe.DeSerFunction deser = new WritableSerDe.DeSerFunction(Text.class);
-        WritableSerDe.TextDeSerFunction deser2 = new WritableSerDe.TextDeSerFunction();
+        WritableSerDes.DeSerFunction deser = new WritableSerDes.DeSerFunction(Text.class);
+        WritableSerDes.TextDeSerFunction deser2 = new WritableSerDes.TextDeSerFunction();
         Text s = new Text("This is a test");
         byte[] sba = ser.apply(s);
         Writable ss = deser.apply(sba);

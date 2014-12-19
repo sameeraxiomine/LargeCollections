@@ -13,19 +13,30 @@ import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.axiomine.largecollections.util.WritableKFastVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class WritablePrimitiveMapBasicTest {
+    private String dbPath="";
     
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
+       
     @Test
     public void test00BasicTest() {
         WritableKFastVMap<IntWritable,Integer> map = null;
         try {
-            String vser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
-            String vdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
+            String vser = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
+            String vdeser = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
 
             map = new WritableKFastVMap<IntWritable,Integer>("c:/tmp/", "cacheMap",new IntWritable(),vser,vdeser);
             Assert.assertTrue(map.isEmpty());

@@ -27,17 +27,17 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
 
 public class FloatIntWritableMap extends LargeCollection implements   Map<Float,IntWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDe.DeSerFunction();
-    private transient Function<byte[], IntWritable> valDeSerFunc     = new WritableSerDe.IntWritableDeSerFunction();
+    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDes.DeSerFunction();
+    private transient Function<byte[], IntWritable> valDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
     
     public FloatIntWritableMap() {
         super();
@@ -225,10 +225,10 @@ public class FloatIntWritableMap extends LargeCollection implements   Map<Float,
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new FloatSerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();
-        keyDeSerFunc     = new FloatSerDe.DeSerFunction();
-        valDeSerFunc     = new WritableSerDe.IntWritableDeSerFunction();
+        keySerFunc       = new FloatSerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();
+        keyDeSerFunc     = new FloatSerDes.DeSerFunction();
+        valDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

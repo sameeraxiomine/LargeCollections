@@ -27,17 +27,17 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 
 
 public class KIntegerMap<K> extends LargeCollection implements   Map<K,Integer>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
-    private transient Function<Integer, byte[]> valSerFunc       = new IntegerSerDe.SerFunction();
-    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-    private transient Function<byte[], Integer> valDeSerFunc     = new IntegerSerDe.DeSerFunction();
+    private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
+    private transient Function<Integer, byte[]> valSerFunc       = new IntegerSerDes.SerFunction();
+    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
+    private transient Function<byte[], Integer> valDeSerFunc     = new IntegerSerDes.DeSerFunction();
     
     public KIntegerMap() {
         super();
@@ -225,10 +225,10 @@ public class KIntegerMap<K> extends LargeCollection implements   Map<K,Integer>,
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.SerFunction<K>();
-        valSerFunc       = new IntegerSerDe.SerFunction();
-        keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-        valDeSerFunc     = new IntegerSerDe.DeSerFunction();
+        keySerFunc       = new KryoSerDes.SerFunction<K>();
+        valSerFunc       = new IntegerSerDes.SerFunction();
+        keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
+        valDeSerFunc     = new IntegerSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

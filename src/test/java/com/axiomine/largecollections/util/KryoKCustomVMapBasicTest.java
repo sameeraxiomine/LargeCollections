@@ -6,12 +6,25 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
+
 
 
 import com.axiomine.largecollections.utilities.KryoUtils;
 
 public class KryoKCustomVMapBasicTest {
+    private String dbPath="";
+    
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
     
     @Test
     public void test00BasicTest() {
@@ -20,9 +33,9 @@ public class KryoKCustomVMapBasicTest {
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
         KryoKFastVMap<Integer,Integer> map = null;
         try {
-            map = new KryoKFastVMap<Integer,Integer>("c:/tmp/", "cacheMap",
-                            "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction",
-                            "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction");
+            map = new KryoKFastVMap<Integer,Integer>(dbPath, "cacheMap",
+                            "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction",
+                            "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction");
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);

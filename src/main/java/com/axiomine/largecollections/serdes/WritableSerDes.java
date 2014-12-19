@@ -1,4 +1,4 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import org.apache.hadoop.io.ArrayPrimitiveWritable;
 import org.apache.hadoop.io.BooleanWritable;
@@ -17,7 +17,7 @@ import com.axiomine.largecollections.utilities.*;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
-public class WritableSerDe {
+public class WritableSerDes {
     public static class SerFunction implements Function<Writable,byte[]>{
         public byte[] apply(Writable arg) {
             if (arg == null) {

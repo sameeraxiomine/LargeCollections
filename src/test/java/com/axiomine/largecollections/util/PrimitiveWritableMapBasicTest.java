@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.axiomine.largecollections.util.FastKWritableVMap;
@@ -20,15 +21,25 @@ import com.axiomine.largecollections.util.WritableKFastVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class PrimitiveWritableMapBasicTest {
+    private String dbPath="";
+    
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
     
     @Test
     public void test00BasicTest() {
         FastKWritableVMap<Integer,IntWritable> map = null;
         try {
-            String vser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
-            String vdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
+            String vser = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
+            String vdeser = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
 
-            map = new FastKWritableVMap<Integer,IntWritable>("c:/tmp/", "cacheMap",new IntWritable(),vser,vdeser);
+            map = new FastKWritableVMap<Integer,IntWritable>(dbPath, "cacheMap",new IntWritable(),vser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 IntWritable r = (IntWritable)map.put(i,new IntWritable(i));
@@ -122,9 +133,9 @@ public class PrimitiveWritableMapBasicTest {
             Assert.assertFalse(b);
             
             System.out.println("First Serialize");
-            FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
+            FileSerDeUtils.serializeToFile(map,new File(dbPath+"/x.ser"));
             
-            map = (FastKWritableVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (FastKWritableVMap) FileSerDeUtils.deserializeFromFile(new File(dbPath+"/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(0,new IntWritable(0));    

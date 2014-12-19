@@ -27,19 +27,20 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 public class FloatStringMap extends LargeCollection implements   Map<Float,String>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDe.SerFunction();
-    private transient Function<String, byte[]> valSerFunc       = new StringSerDe.SerFunction();
-    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDe.DeSerFunction();
-    private transient Function<byte[], String> valDeSerFunc     = new StringSerDe.DeSerFunction();
+    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDes.SerFunction();
+    private transient Function<String, byte[]> valSerFunc       = new StringSerDes.SerFunction();
+    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDes.DeSerFunction();
+    private transient Function<byte[], String> valDeSerFunc     = new StringSerDes.DeSerFunction();
     
     public FloatStringMap() {
         super();
@@ -227,10 +228,10 @@ public class FloatStringMap extends LargeCollection implements   Map<Float,Strin
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new FloatSerDe.SerFunction();
-        valSerFunc = new StringSerDe.SerFunction();
-        keyDeSerFunc = new FloatSerDe.DeSerFunction();
-        valDeSerFunc = new StringSerDe.DeSerFunction();
+        keySerFunc = new FloatSerDes.SerFunction();
+        valSerFunc = new StringSerDes.SerFunction();
+        keyDeSerFunc = new FloatSerDes.DeSerFunction();
+        valDeSerFunc = new StringSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

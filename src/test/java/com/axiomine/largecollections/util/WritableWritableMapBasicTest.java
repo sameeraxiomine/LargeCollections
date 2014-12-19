@@ -13,19 +13,30 @@ import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class WritableWritableMapBasicTest {
+    private String dbPath="";
     
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
+       
     @Test
     public void test00BasicTest() {
         WritableKVMap map = null;
         try {
             String kcls = "org.apache.hadoop.io.IntWritable";
             String vcls = "org.apache.hadoop.io.IntWritable";
-            map = new WritableKVMap("c:/tmp/", "cacheMap",kcls,vcls);
+            map = new WritableKVMap(dbPath, "cacheMap",kcls,vcls);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 IntWritable r = (IntWritable)map.put(new IntWritable(i), new IntWritable(i));

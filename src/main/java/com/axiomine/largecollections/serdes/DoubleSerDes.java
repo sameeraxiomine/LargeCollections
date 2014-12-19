@@ -1,11 +1,11 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import java.nio.ByteBuffer;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Longs;
 
-public class DoubleSerDe {
+public class DoubleSerDes {
     public static class SerFunction implements Function<Double,byte[]>{
         public byte[] apply(Double arg) {
             if(arg==null){

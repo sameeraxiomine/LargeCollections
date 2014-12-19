@@ -5,14 +5,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.CharacterSerDe;
+import com.axiomine.largecollections.serdes.CharacterSerDes;
 
 public class CharacterSerDeTest {
     
     @Test
     public void test() {
-        CharacterSerDe.SerFunction cser = new CharacterSerDe.SerFunction();
-        CharacterSerDe.DeSerFunction cdeser = new CharacterSerDe.DeSerFunction();
+        CharacterSerDes.SerFunction cser = new CharacterSerDes.SerFunction();
+        CharacterSerDes.DeSerFunction cdeser = new CharacterSerDes.DeSerFunction();
         
         char c1 = 'a';
         byte[] cba = cser.apply(c1);

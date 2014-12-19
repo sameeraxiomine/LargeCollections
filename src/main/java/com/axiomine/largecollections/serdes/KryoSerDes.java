@@ -1,4 +1,4 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import java.io.ByteArrayOutputStream;
 
@@ -9,7 +9,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
-public class KryoSerDe {
+public class KryoSerDes {
     public static class SerFunction<K> implements Function<K, byte[]> {        
         private final ThreadLocal<Kryo> kryos;        
         public SerFunction(){

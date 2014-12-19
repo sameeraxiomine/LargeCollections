@@ -9,9 +9,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.IntegerSerDe;
-import com.axiomine.largecollections.serdes.basic.KryoSerDe;
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.IntegerSerDes;
+import com.axiomine.largecollections.serdes.KryoSerDes;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 import com.axiomine.largecollections.utilities.KryoUtils;
 
 public class PrimitivePerformanceComparisonTest {
@@ -24,11 +24,11 @@ public class PrimitivePerformanceComparisonTest {
         //File p = new File(root.getAbsolutePath()+"/");
         //System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistrationCustom.properties");
 
-        KryoSerDe.SerFunction<Integer> ser1 = new KryoSerDe.SerFunction<Integer>();        
-        KryoSerDe.DeSerFunction<Integer> deser1 = new KryoSerDe.DeSerFunction<Integer>();
+        KryoSerDes.SerFunction<Integer> ser1 = new KryoSerDes.SerFunction<Integer>();        
+        KryoSerDes.DeSerFunction<Integer> deser1 = new KryoSerDes.DeSerFunction<Integer>();
 
-        IntegerSerDe.SerFunction ser2 = new IntegerSerDe.SerFunction();
-        IntegerSerDe.DeSerFunction deser2 = new IntegerSerDe.DeSerFunction();
+        IntegerSerDes.SerFunction ser2 = new IntegerSerDes.SerFunction();
+        IntegerSerDes.DeSerFunction deser2 = new IntegerSerDes.DeSerFunction();
         
         long st = System.currentTimeMillis();
         
@@ -84,11 +84,11 @@ public class PrimitivePerformanceComparisonTest {
         File p = new File(root.getAbsolutePath()+"/");
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistrationCustom.properties");
 
-        KryoSerDe.SerFunction<Integer> ser1 = new KryoSerDe.SerFunction<Integer>();        
-        KryoSerDe.DeSerFunction<Integer> deser1 = new KryoSerDe.DeSerFunction<Integer>();
+        KryoSerDes.SerFunction<Integer> ser1 = new KryoSerDes.SerFunction<Integer>();        
+        KryoSerDes.DeSerFunction<Integer> deser1 = new KryoSerDes.DeSerFunction<Integer>();
 
-        IntegerSerDe.SerFunction ser2 = new IntegerSerDe.SerFunction();
-        IntegerSerDe.DeSerFunction deser2 = new IntegerSerDe.DeSerFunction();
+        IntegerSerDes.SerFunction ser2 = new IntegerSerDes.SerFunction();
+        IntegerSerDes.DeSerFunction deser2 = new IntegerSerDes.DeSerFunction();
         
         long st = System.currentTimeMillis();
         

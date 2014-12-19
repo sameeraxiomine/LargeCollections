@@ -27,19 +27,20 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 public class IntegerDoubleMap extends LargeCollection implements   Map<Integer,Double>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDe.SerFunction();
-    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDe.SerFunction();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDe.DeSerFunction();
-    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDe.DeSerFunction();
+    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDes.SerFunction();
+    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDes.SerFunction();
+    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
+    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
     
     public IntegerDoubleMap() {
         super();
@@ -227,10 +228,10 @@ public class IntegerDoubleMap extends LargeCollection implements   Map<Integer,D
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new IntegerSerDe.SerFunction();
-        valSerFunc = new DoubleSerDe.SerFunction();
-        keyDeSerFunc = new IntegerSerDe.DeSerFunction();
-        valDeSerFunc = new DoubleSerDe.DeSerFunction();
+        keySerFunc = new IntegerSerDes.SerFunction();
+        valSerFunc = new DoubleSerDes.SerFunction();
+        keyDeSerFunc = new IntegerSerDes.DeSerFunction();
+        valDeSerFunc = new DoubleSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

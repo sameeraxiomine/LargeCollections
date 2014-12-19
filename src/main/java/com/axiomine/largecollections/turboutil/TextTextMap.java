@@ -27,7 +27,7 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
@@ -35,10 +35,10 @@ import org.apache.hadoop.io.*;
 public class TextTextMap extends LargeCollection implements   Map<Text,Text>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();    
-    private transient Function<byte[], Text> keyDeSerFunc     = new WritableSerDe.TextDeSerFunction();
-    private transient Function<byte[], Text> valDeSerFunc     = new WritableSerDe.TextDeSerFunction();
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient Function<byte[], Text> keyDeSerFunc     = new WritableSerDes.TextDeSerFunction();
+    private transient Function<byte[], Text> valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
     
     public TextTextMap() {
         super();
@@ -226,10 +226,10 @@ public class TextTextMap extends LargeCollection implements   Map<Text,Text>, Se
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();    
-        keyDeSerFunc     = new WritableSerDe.TextDeSerFunction();
-        valDeSerFunc     = new WritableSerDe.TextDeSerFunction();
+        keySerFunc  = new WritableSerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();    
+        keyDeSerFunc     = new WritableSerDes.TextDeSerFunction();
+        valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

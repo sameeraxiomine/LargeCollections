@@ -9,20 +9,20 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.KryoSerDe;
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.KryoSerDes;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 import com.axiomine.largecollections.utilities.KryoUtils;
 
 public class SerDePerformanceComparisonTest {
     
     @Test
     public void writablePerformancetest() {
-        KryoSerDe.SerFunction<IntWritable> ser1 = new KryoSerDe.SerFunction<IntWritable>();        
-        KryoSerDe.DeSerFunction<IntWritable> deser1 = new KryoSerDe.DeSerFunction<IntWritable>();
+        KryoSerDes.SerFunction<IntWritable> ser1 = new KryoSerDes.SerFunction<IntWritable>();        
+        KryoSerDes.DeSerFunction<IntWritable> deser1 = new KryoSerDes.DeSerFunction<IntWritable>();
 
-        WritableSerDe.SerFunction ser2 = new WritableSerDe.SerFunction();
-        WritableSerDe.DeSerFunction deser2 = new WritableSerDe.DeSerFunction(IntWritable.class);
-        WritableSerDe.IntWritableDeSerFunction deser3 = new WritableSerDe.IntWritableDeSerFunction();
+        WritableSerDes.SerFunction ser2 = new WritableSerDes.SerFunction();
+        WritableSerDes.DeSerFunction deser2 = new WritableSerDes.DeSerFunction(IntWritable.class);
+        WritableSerDes.IntWritableDeSerFunction deser3 = new WritableSerDes.IntWritableDeSerFunction();
         
         long st = System.currentTimeMillis();
         
@@ -37,7 +37,7 @@ public class SerDePerformanceComparisonTest {
         
         long stop = System.currentTimeMillis();
         
-        System.out.println("Test WritableSerDe.SerFunction");
+        System.out.println("Test WritableSerDes.SerFunction");
         for(int i=0;i<1000000;i++){
             IntWritable ii = new IntWritable(0);
             timerSt=System.currentTimeMillis();

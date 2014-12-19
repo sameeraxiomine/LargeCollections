@@ -25,7 +25,7 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 
 import java.util.Random
 ;
@@ -35,9 +35,9 @@ import java.lang.Integer;
 
 public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
+    private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
     private transient Function<V, byte[]> valSerFunc       = null;
-    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
+    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
     private transient Function<byte[], V> valDeSerFunc     = null;
     private String valSerCls=null;
     private String valDeSerCls=null;
@@ -279,8 +279,8 @@ public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, S
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.SerFunction<K>();
-        keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
+        keySerFunc       = new KryoSerDes.SerFunction<K>();
+        keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
         this.deserialize(in);
         try{
             this.valSerCls = (String)in.readObject();

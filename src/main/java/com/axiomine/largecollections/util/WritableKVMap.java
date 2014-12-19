@@ -28,15 +28,15 @@ import com.google.common.base.Function;
 
 
 import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 
 import org.apache.hadoop.io.*;
 
 public class WritableKVMap extends LargeCollection implements   Map<Writable,Writable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();    
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
     private transient Function<byte[], ? extends Writable> keyDeSerFunc     = null;
     private transient Function<byte[], ? extends Writable> valDeSerFunc     = null;
     private String keyClass=null;
@@ -46,7 +46,7 @@ public class WritableKVMap extends LargeCollection implements   Map<Writable,Wri
         Function<byte[], ? extends Writable> func = null;
         try{
             Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDe.DeSerFunction(cObj.getClass());
+            func = new WritableSerDes.DeSerFunction(cObj.getClass());
 
         }
         catch(Exception ex){
@@ -272,8 +272,8 @@ public class WritableKVMap extends LargeCollection implements   Map<Writable,Wri
         this.keyClass = (String)in.readObject();
         this.valueClass = (String)in.readObject();
         try{
-            keySerFunc  = new WritableSerDe.SerFunction();
-            valSerFunc  = new WritableSerDe.SerFunction();    
+            keySerFunc  = new WritableSerDes.SerFunction();
+            valSerFunc  = new WritableSerDes.SerFunction();    
             this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
             this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
         }

@@ -12,12 +12,24 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
+
 
 
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class IntegerIntegerMapTest {
+    private String dbPath="";
+    
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    } 
     public  void writeseq(Map<Integer, Integer> map,int size) {
         long ts = System.currentTimeMillis();
         for (int i = 0; i < size; i++) {
@@ -59,7 +71,7 @@ public class IntegerIntegerMapTest {
     public void test00BasicTest() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             for(int i=0;i<10;i++){
             	map.put(i,i);
@@ -77,7 +89,7 @@ public class IntegerIntegerMapTest {
     public void test01SimpleCreateAndPut() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             writeseq(map,1*2000);
             System.out.println("Size=" + map.size());
@@ -100,8 +112,8 @@ public class IntegerIntegerMapTest {
     public void test02SerDe() {
         IntegerIntegerMap map  = null;
         try{
-            File deSerFile = new File("c:/tmp/mymap.ser");
-            map = new IntegerIntegerMap("c:/tmp/",
+            File deSerFile = new File(dbPath+"/mymap.ser");
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap2");
             writeseq(map,1*1000);
             System.out.println("Size=" + map.size());
@@ -121,7 +133,7 @@ public class IntegerIntegerMapTest {
             throw new RuntimeException(ex);
         }
         try{
-            File deSerFile = new File("c:/tmp/mymap.ser");
+            File deSerFile = new File(dbPath+"/mymap.ser");
             map = (IntegerIntegerMap) FileSerDeUtils.deserializeFromFile(deSerFile);
             Assert.assertEquals(999, map.size());
             map.remove(1);
@@ -142,7 +154,7 @@ public class IntegerIntegerMapTest {
     public void test04TestGetKeySet() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             writeseq(map,1*10);
             for(int i=0;i<10;i++){
@@ -163,7 +175,7 @@ public class IntegerIntegerMapTest {
     public void test05TestGetEntrySet() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             writeseq(map,1*10);
             Set<java.util.Map.Entry<Integer, Integer>> es = map.entrySet();
@@ -181,7 +193,7 @@ public class IntegerIntegerMapTest {
     public void test05TestGetValues() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             writeseq(map,1*10);
            
@@ -211,7 +223,7 @@ public class IntegerIntegerMapTest {
     public void test06Performance() {
         IntegerIntegerMap map  = null;
         try{
-            map = new IntegerIntegerMap("c:/tmp/",
+            map = new IntegerIntegerMap(dbPath,
                     "cacheMap");
             int millions = 1;
             writeseq(map,millions*1000000);

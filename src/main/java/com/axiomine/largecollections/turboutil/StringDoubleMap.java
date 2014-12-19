@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package com.axiomine.largecollections.turboutil;
-import com.google.common.base.Throwables;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -24,22 +22,23 @@ import java.util.Set;
 
 import org.iq80.leveldb.WriteBatch;
 
+import com.axiomine.largecollections.serdes.DoubleSerDes;
+import com.axiomine.largecollections.serdes.StringSerDes;
+import com.axiomine.largecollections.util.LargeCollection;
+import com.axiomine.largecollections.util.MapEntrySet;
+import com.axiomine.largecollections.util.MapKeySet;
+import com.axiomine.largecollections.util.ValueCollection;
 import com.google.common.base.Function;
-
-
-import com.axiomine.largecollections.serdes.basic.*;
-import com.axiomine.largecollections.utilities.*;
-import com.axiomine.largecollections.util.*;
-import com.axiomine.largecollections.*;
+import com.google.common.base.Throwables;
 
 
 
 public class StringDoubleMap extends LargeCollection implements   Map<String,Double>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<String, byte[]> keySerFunc       = new StringSerDe.SerFunction();
-    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDe.SerFunction();
-    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDe.DeSerFunction();
-    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDe.DeSerFunction();
+    private transient Function<String, byte[]> keySerFunc       = new StringSerDes.SerFunction();
+    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDes.SerFunction();
+    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDes.DeSerFunction();
+    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
     
     public StringDoubleMap() {
         super();
@@ -227,10 +226,10 @@ public class StringDoubleMap extends LargeCollection implements   Map<String,Dou
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new StringSerDe.SerFunction();
-        valSerFunc = new DoubleSerDe.SerFunction();
-        keyDeSerFunc = new StringSerDe.DeSerFunction();
-        valDeSerFunc = new DoubleSerDe.DeSerFunction();
+        keySerFunc = new StringSerDes.SerFunction();
+        valSerFunc = new DoubleSerDes.SerFunction();
+        keyDeSerFunc = new StringSerDes.DeSerFunction();
+        valDeSerFunc = new DoubleSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

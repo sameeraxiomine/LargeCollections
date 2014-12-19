@@ -1,9 +1,9 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Ints;
 
-public class IntegerSerDe {
+public class IntegerSerDes {
     public static class SerFunction implements Function<Integer, byte[]> {
         public byte[] apply(Integer arg) {
             if (arg == null) {

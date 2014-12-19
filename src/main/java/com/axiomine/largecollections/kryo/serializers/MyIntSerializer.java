@@ -1,4 +1,4 @@
-package com.axiomine.largecollections.serdes.kryo;
+package com.axiomine.largecollections.kryo.serializers;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;

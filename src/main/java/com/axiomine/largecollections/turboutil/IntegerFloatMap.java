@@ -27,19 +27,20 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 public class IntegerFloatMap extends LargeCollection implements   Map<Integer,Float>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDe.SerFunction();
-    private transient Function<Float, byte[]> valSerFunc       = new FloatSerDe.SerFunction();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDe.DeSerFunction();
-    private transient Function<byte[], Float> valDeSerFunc     = new FloatSerDe.DeSerFunction();
+    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDes.SerFunction();
+    private transient Function<Float, byte[]> valSerFunc       = new FloatSerDes.SerFunction();
+    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
+    private transient Function<byte[], Float> valDeSerFunc     = new FloatSerDes.DeSerFunction();
     
     public IntegerFloatMap() {
         super();
@@ -227,10 +228,10 @@ public class IntegerFloatMap extends LargeCollection implements   Map<Integer,Fl
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new IntegerSerDe.SerFunction();
-        valSerFunc = new FloatSerDe.SerFunction();
-        keyDeSerFunc = new IntegerSerDe.DeSerFunction();
-        valDeSerFunc = new FloatSerDe.DeSerFunction();
+        keySerFunc = new IntegerSerDes.SerFunction();
+        valSerFunc = new FloatSerDes.SerFunction();
+        keyDeSerFunc = new IntegerSerDes.DeSerFunction();
+        valDeSerFunc = new FloatSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

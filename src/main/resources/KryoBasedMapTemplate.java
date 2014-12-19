@@ -28,16 +28,17 @@ import com.google.common.base.Function;
 
 #CUSTOM_IMPORTS#;
 import com.axiomine.largecollections.*;
-import #KPACKAGE#.#K#SerDe;
-import #VPACKAGE#.#V#SerDe;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
+
 
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new KryoSerDe.SerFunction<#K#>();
-    private transient Function<#V#, byte[]> valSerFunc       = new KryoSerDe.SerFunction<#V#>();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new KryoSerDe.DeSerFunction<#K#>();
-    private transient Function<byte[], #V#> valDeSerFunc     = new KryoSerDe.DeSerFunction<#V#>();
+    private transient Function<#K#, byte[]> keySerFunc       = new KryoSerDes.SerFunction<#K#>();
+    private transient Function<#V#, byte[]> valSerFunc       = new KryoSerDes.SerFunction<#V#>();
+    private transient Function<byte[], #K#> keyDeSerFunc     = new KryoSerDes.DeSerFunction<#K#>();
+    private transient Function<byte[], #V#> valDeSerFunc     = new KryoSerDes.DeSerFunction<#V#>();
     
     public #CLASS_NAME#() {
         super();
@@ -225,10 +226,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.SerFunction<#K#>();
-        valSerFunc       = new KryoSerDe.SerFunction<#V#>();
-        keyDeSerFunc     = new KryoSerDe.DeSerFunction<#K#>();
-        valDeSerFunc     = new KryoSerDe.DeSerFunction<#V#>();
+        keySerFunc       = new KryoSerDes.SerFunction<#K#>();
+        valSerFunc       = new KryoSerDes.SerFunction<#V#>();
+        keyDeSerFunc     = new KryoSerDes.DeSerFunction<#K#>();
+        valDeSerFunc     = new KryoSerDes.DeSerFunction<#V#>();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

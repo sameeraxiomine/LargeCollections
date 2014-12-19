@@ -7,15 +7,15 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.KryoSerDe;
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.KryoSerDes;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 
 public class WritableKryoTest {
     
     @Test
     public void testIntWritable() {
-        KryoSerDe.SerFunction<IntWritable> ser = new KryoSerDe.SerFunction<IntWritable>();        
-        KryoSerDe.DeSerFunction<IntWritable> deser = new KryoSerDe.DeSerFunction<IntWritable>();
+        KryoSerDes.SerFunction<IntWritable> ser = new KryoSerDes.SerFunction<IntWritable>();        
+        KryoSerDes.DeSerFunction<IntWritable> deser = new KryoSerDes.DeSerFunction<IntWritable>();
 
         IntWritable i = new IntWritable(0);
         byte[] sba = ser.apply(i);
@@ -25,8 +25,8 @@ public class WritableKryoTest {
 
     @Test
     public void testText() {
-        KryoSerDe.SerFunction<Text> ser = new KryoSerDe.SerFunction<Text>();        
-        KryoSerDe.DeSerFunction<Text> deser = new KryoSerDe.DeSerFunction<Text>();
+        KryoSerDes.SerFunction<Text> ser = new KryoSerDes.SerFunction<Text>();        
+        KryoSerDes.DeSerFunction<Text> deser = new KryoSerDes.DeSerFunction<Text>();
 
         Text i = new Text("This is a test");
         byte[] sba = ser.apply(i);

@@ -11,23 +11,35 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
+
 
 
 import com.axiomine.largecollections.util.FastKVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
 public class KVCustomMapBasicTest {
+    private String dbPath="";
+    
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
     
     @Test
     public void test00BasicTest() {
         FastKVMap<Integer,Integer> map = null;
         try {
-            String kser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
-            String vser = "com.axiomine.largecollections.functions.IntegerSerDe$SerFunction";
-            String kdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
-            String vdeser = "com.axiomine.largecollections.functions.IntegerSerDe$DeSerFunction";
-            map = new FastKVMap("c:/tmp/", "cacheMap",kser,vser,kdeser,vdeser);
+            String kser = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
+            String vser = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
+            String kdeser = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
+            String vdeser = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
+            map = new FastKVMap(dbPath, "cacheMap",kser,vser,kdeser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);

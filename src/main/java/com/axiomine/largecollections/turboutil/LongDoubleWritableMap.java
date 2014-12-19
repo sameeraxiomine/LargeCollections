@@ -27,17 +27,17 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
 
 public class LongDoubleWritableMap extends LargeCollection implements   Map<Long,DoubleWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Long, byte[]> keySerFunc       = new LongSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<byte[], Long> keyDeSerFunc     = new LongSerDe.DeSerFunction();
-    private transient Function<byte[], DoubleWritable> valDeSerFunc     = new WritableSerDe.DoubleWritableDeSerFunction();
+    private transient Function<Long, byte[]> keySerFunc       = new LongSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<byte[], Long> keyDeSerFunc     = new LongSerDes.DeSerFunction();
+    private transient Function<byte[], DoubleWritable> valDeSerFunc     = new WritableSerDes.DoubleWritableDeSerFunction();
     
     public LongDoubleWritableMap() {
         super();
@@ -225,10 +225,10 @@ public class LongDoubleWritableMap extends LargeCollection implements   Map<Long
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new LongSerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();
-        keyDeSerFunc     = new LongSerDe.DeSerFunction();
-        valDeSerFunc     = new WritableSerDe.DoubleWritableDeSerFunction();
+        keySerFunc       = new LongSerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();
+        keyDeSerFunc     = new LongSerDes.DeSerFunction();
+        valDeSerFunc     = new WritableSerDes.DoubleWritableDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

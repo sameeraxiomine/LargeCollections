@@ -4,14 +4,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.LongSerDe;
+import com.axiomine.largecollections.serdes.LongSerDes;
 
 public class LongSerDeTest {
     
     @Test
     public void test() {
-        LongSerDe.SerFunction ser = new LongSerDe.SerFunction();
-        LongSerDe.DeSerFunction deser = new LongSerDe.DeSerFunction();
+        LongSerDes.SerFunction ser = new LongSerDes.SerFunction();
+        LongSerDes.DeSerFunction deser = new LongSerDes.DeSerFunction();
         
         Long l = 1l;
         byte[] ba = ser.apply(l);

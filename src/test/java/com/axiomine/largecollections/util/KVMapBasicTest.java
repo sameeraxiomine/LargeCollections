@@ -6,12 +6,24 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.utilities.KryoUtils;
 
 public class KVMapBasicTest {
+    private String dbPath="";
+    
+    @Before
+    public void setup() throws Exception{
+        dbPath = System.getProperty("java.io.tmpdir")+"/test/";
+        File f = new File(dbPath);
+        if(f.exists()){
+            FileUtils.deleteDirectory(f);
+        }
+    }
     
     @Test
     public void test00BasicTest() {
@@ -20,7 +32,7 @@ public class KVMapBasicTest {
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
         KryoKVMap<Integer,Integer> map = null;
         try {
-            map = new KryoKVMap<Integer,Integer>("c:/tmp/", "cacheMap");
+            map = new KryoKVMap<Integer,Integer>(dbPath, "cacheMap");
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);

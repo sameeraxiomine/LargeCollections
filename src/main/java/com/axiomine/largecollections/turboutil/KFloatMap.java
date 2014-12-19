@@ -27,17 +27,17 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 
 
 public class KFloatMap<K> extends LargeCollection implements   Map<K,Float>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = new KryoSerDe.SerFunction<K>();
-    private transient Function<Float, byte[]> valSerFunc       = new FloatSerDe.SerFunction();
-    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-    private transient Function<byte[], Float> valDeSerFunc     = new FloatSerDe.DeSerFunction();
+    private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
+    private transient Function<Float, byte[]> valSerFunc       = new FloatSerDes.SerFunction();
+    private transient Function<byte[], K> keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
+    private transient Function<byte[], Float> valDeSerFunc     = new FloatSerDes.DeSerFunction();
     
     public KFloatMap() {
         super();
@@ -225,10 +225,10 @@ public class KFloatMap<K> extends LargeCollection implements   Map<K,Float>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.SerFunction<K>();
-        valSerFunc       = new FloatSerDe.SerFunction();
-        keyDeSerFunc     = new KryoSerDe.DeSerFunction<K>();
-        valDeSerFunc     = new FloatSerDe.DeSerFunction();
+        keySerFunc       = new KryoSerDes.SerFunction<K>();
+        valSerFunc       = new FloatSerDes.SerFunction();
+        keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
+        valDeSerFunc     = new FloatSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

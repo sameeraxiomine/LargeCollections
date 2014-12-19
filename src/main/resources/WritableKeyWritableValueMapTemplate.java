@@ -28,17 +28,19 @@ import com.google.common.base.Function;
 #CUSTOM_IMPORTS#
 import com.axiomine.largecollections.util.*;
 
-import com.axiomine.largecollections.functions.*;
+import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.kryo.serializers.*;
+
 
 import org.apache.hadoop.io.*;
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();    
-    private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new WritableSerDe.#V#DeSerFunction();
+    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
+    private transient Function<byte[], #V#> valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
     
     public #CLASS_NAME#() {
         super();
@@ -226,10 +228,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();    
-        keyDeSerFunc     = new WritableSerDe.#K#DeSerFunction();
-        valDeSerFunc     = new WritableSerDe.#V#DeSerFunction();
+        keySerFunc  = new WritableSerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();    
+        keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
+        valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

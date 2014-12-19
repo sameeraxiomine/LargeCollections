@@ -1,11 +1,11 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import java.nio.ByteBuffer;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Ints;
 
-public class FloatSerDe {
+public class FloatSerDes {
     public static class SerFunction implements Function<Float,byte[]>{
         public byte[] apply(Float arg) {
             if(arg==null){

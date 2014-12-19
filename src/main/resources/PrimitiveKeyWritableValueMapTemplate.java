@@ -30,13 +30,15 @@ import com.axiomine.largecollections.util.*;
 
 import com.axiomine.largecollections.functions.*;
 import org.apache.hadoop.io.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDe.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
-    private transient Function<byte[], #VCLS#> valDeSerFunc     = new WritableSerDe.#VCLS#DeSerFunction();
+    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDes.SerFunction();
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
+    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+    private transient Function<byte[], #VCLS#> valDeSerFunc     = new WritableSerDes.#VCLS#DeSerFunction();
     
     public #CLASS_NAME#() {
         super();
@@ -224,10 +226,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new #KCLS#SerDe.SerFunction();
-        valSerFunc  = new WritableSerDe.SerFunction();
-        keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
-        valDeSerFunc     = new WritableSerDe.#VCLS#DeSerFunction();
+        keySerFunc       = new #KCLS#SerDes.SerFunction();
+        valSerFunc  = new WritableSerDes.SerFunction();
+        keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+        valDeSerFunc     = new WritableSerDes.#VCLS#DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

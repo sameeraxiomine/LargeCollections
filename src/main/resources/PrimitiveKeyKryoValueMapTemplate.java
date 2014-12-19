@@ -30,16 +30,18 @@ import com.axiomine.largecollections.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.functions.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 
 public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDe.SerFunction();
-    private transient Function<V, byte[]> valSerFunc       = new KryoSerDe.SerFunction<V>();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
-    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDes.SerFunction();
+    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
 
     public #CLASS_NAME#() {
         super();
@@ -227,10 +229,10 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new #KCLS#SerDe.SerFunction();
-        valSerFunc       = new KryoSerDe.SerFunction<V>();
-        keyDeSerFunc     = new #KCLS#SerDe.DeSerFunction();
-        valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+        keySerFunc       = new #KCLS#SerDes.SerFunction();
+        valSerFunc       = new KryoSerDes.SerFunction<V>();
+        keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+        valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

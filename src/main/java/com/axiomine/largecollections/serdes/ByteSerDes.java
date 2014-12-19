@@ -1,8 +1,8 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import com.google.common.base.Function;
 
-public class ByteSerDe {
+public class ByteSerDes {
     public static class SerFunction implements Function<Byte,byte[]>{
         public byte[] apply(Byte arg) {       
             if(arg==null){

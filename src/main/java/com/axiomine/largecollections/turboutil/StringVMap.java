@@ -26,7 +26,7 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.utilities.*;
 
@@ -35,10 +35,10 @@ import com.axiomine.largecollections.utilities.*;
 
 public class StringVMap<V> extends LargeCollection implements   Map<String,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<String, byte[]> keySerFunc       = new StringSerDe.SerFunction();
-    private transient Function<V, byte[]> valSerFunc       = new KryoSerDe.SerFunction<V>();
-    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDe.DeSerFunction();
-    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+    private transient Function<String, byte[]> keySerFunc       = new StringSerDes.SerFunction();
+    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDes.DeSerFunction();
+    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
 
     public StringVMap() {
         super();
@@ -226,10 +226,10 @@ public class StringVMap<V> extends LargeCollection implements   Map<String,V>, S
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new StringSerDe.SerFunction();
-        valSerFunc       = new KryoSerDe.SerFunction<V>();
-        keyDeSerFunc     = new StringSerDe.DeSerFunction();
-        valDeSerFunc     = new KryoSerDe.DeSerFunction<V>();
+        keySerFunc       = new StringSerDes.SerFunction();
+        valSerFunc       = new KryoSerDes.SerFunction<V>();
+        keyDeSerFunc     = new StringSerDes.DeSerFunction();
+        valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

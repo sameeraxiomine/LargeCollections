@@ -28,7 +28,7 @@ import com.google.common.base.Function;
 
 
 import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.serdes.basic.WritableSerDe;
+import com.axiomine.largecollections.serdes.WritableSerDes;
 
 import org.apache.hadoop.io.*;
 
@@ -36,7 +36,7 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     public static final long               serialVersionUID = 2l;
     
     private transient Function<K, byte[]> keySerFunc  = null;
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDe.SerFunction();    
+    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
     private transient Function<byte[], ? extends K> keyDeSerFunc     = null;
     private transient Function<byte[], ? extends Writable> valDeSerFunc     = null;
     private String writableValClass=null;
@@ -48,7 +48,7 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
         Function<byte[], ? extends Writable> func = null;
         try{
             Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDe.DeSerFunction(cObj.getClass());
+            func = new WritableSerDes.DeSerFunction(cObj.getClass());
 
         }
         catch(Exception ex){
@@ -308,7 +308,7 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
             this.keySerCls = (String)in.readObject();
             this.keyDeSerCls = (String)in.readObject();
             this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc  = new WritableSerDe.SerFunction();
+            this.valSerFunc  = new WritableSerDes.SerFunction();
             this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
             this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
         }

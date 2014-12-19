@@ -1,11 +1,11 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import java.io.Serializable;
 
 import com.google.common.base.Function;
 import com.google.common.primitives.Longs;
 
-public class SerializableSerDe {
+public class SerializableSerDes {
     public static class SerFunction implements Function<Serializable, byte[]> {
         public byte[] apply(Serializable arg) {
             if(arg==null){

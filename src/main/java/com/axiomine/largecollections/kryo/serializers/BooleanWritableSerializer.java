@@ -1,4 +1,4 @@
-package com.axiomine.largecollections.serdes.kryo;
+package com.axiomine.largecollections.kryo.serializers;
 
 import org.apache.hadoop.io.BooleanWritable;
 

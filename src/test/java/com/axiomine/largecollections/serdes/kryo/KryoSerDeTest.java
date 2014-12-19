@@ -6,16 +6,16 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.axiomine.largecollections.serdes.basic.KryoSerDe;
+import com.axiomine.largecollections.serdes.KryoSerDes;
 
 public class KryoSerDeTest {
     
     @Test
     public void test() {
         
-        KryoSerDe.SerFunction<String> ser = new KryoSerDe.SerFunction<String>();
+        KryoSerDes.SerFunction<String> ser = new KryoSerDes.SerFunction<String>();
        
-        KryoSerDe.DeSerFunction<String> deser = new KryoSerDe.DeSerFunction<String>();
+        KryoSerDes.DeSerFunction<String> deser = new KryoSerDes.DeSerFunction<String>();
         String s = "This is a test";
         byte[] sba = ser.apply(s);
         String ss = (String) deser.apply(sba);

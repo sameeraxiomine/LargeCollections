@@ -27,19 +27,20 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 public class BytesArrayByteMap extends LargeCollection implements   Map<byte[],Byte>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<byte[], byte[]> keySerFunc       = new BytesArraySerDe.SerFunction();
-    private transient Function<Byte, byte[]> valSerFunc       = new ByteSerDe.SerFunction();
-    private transient Function<byte[], byte[]> keyDeSerFunc     = new BytesArraySerDe.DeSerFunction();
-    private transient Function<byte[], Byte> valDeSerFunc     = new ByteSerDe.DeSerFunction();
+    private transient Function<byte[], byte[]> keySerFunc       = new BytesArraySerDes.SerFunction();
+    private transient Function<Byte, byte[]> valSerFunc       = new ByteSerDes.SerFunction();
+    private transient Function<byte[], byte[]> keyDeSerFunc     = new BytesArraySerDes.DeSerFunction();
+    private transient Function<byte[], Byte> valDeSerFunc     = new ByteSerDes.DeSerFunction();
     
     public BytesArrayByteMap() {
         super();
@@ -227,10 +228,10 @@ public class BytesArrayByteMap extends LargeCollection implements   Map<byte[],B
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new BytesArraySerDe.SerFunction();
-        valSerFunc = new ByteSerDe.SerFunction();
-        keyDeSerFunc = new BytesArraySerDe.DeSerFunction();
-        valDeSerFunc = new ByteSerDe.DeSerFunction();
+        keySerFunc = new BytesArraySerDes.SerFunction();
+        valSerFunc = new ByteSerDes.SerFunction();
+        keyDeSerFunc = new BytesArraySerDes.DeSerFunction();
+        valDeSerFunc = new ByteSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

@@ -27,19 +27,20 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
-import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.*;
+import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
 public class BytesArrayLongMap extends LargeCollection implements   Map<byte[],Long>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<byte[], byte[]> keySerFunc       = new BytesArraySerDe.SerFunction();
-    private transient Function<Long, byte[]> valSerFunc       = new LongSerDe.SerFunction();
-    private transient Function<byte[], byte[]> keyDeSerFunc     = new BytesArraySerDe.DeSerFunction();
-    private transient Function<byte[], Long> valDeSerFunc     = new LongSerDe.DeSerFunction();
+    private transient Function<byte[], byte[]> keySerFunc       = new BytesArraySerDes.SerFunction();
+    private transient Function<Long, byte[]> valSerFunc       = new LongSerDes.SerFunction();
+    private transient Function<byte[], byte[]> keyDeSerFunc     = new BytesArraySerDes.DeSerFunction();
+    private transient Function<byte[], Long> valDeSerFunc     = new LongSerDes.DeSerFunction();
     
     public BytesArrayLongMap() {
         super();
@@ -227,10 +228,10 @@ public class BytesArrayLongMap extends LargeCollection implements   Map<byte[],L
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc = new BytesArraySerDe.SerFunction();
-        valSerFunc = new LongSerDe.SerFunction();
-        keyDeSerFunc = new BytesArraySerDe.DeSerFunction();
-        valDeSerFunc = new LongSerDe.DeSerFunction();
+        keySerFunc = new BytesArraySerDes.SerFunction();
+        valSerFunc = new LongSerDes.SerFunction();
+        keyDeSerFunc = new BytesArraySerDes.DeSerFunction();
+        valDeSerFunc = new LongSerDes.DeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

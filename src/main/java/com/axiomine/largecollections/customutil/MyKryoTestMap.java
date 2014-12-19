@@ -25,7 +25,7 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
-import com.axiomine.largecollections.serdes.basic.*;
+import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.util.*;
 
 import java.util.Random
@@ -36,10 +36,10 @@ import java.lang.Integer;
 
 public class MyKryoTestMap extends LargeCollection implements   Map<Integer,Integer>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new KryoSerDe.SerFunction<Integer>();
-    private transient Function<Integer, byte[]> valSerFunc       = new KryoSerDe.SerFunction<Integer>();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new KryoSerDe.DeSerFunction<Integer>();
-    private transient Function<byte[], Integer> valDeSerFunc     = new KryoSerDe.DeSerFunction<Integer>();
+    private transient Function<Integer, byte[]> keySerFunc       = new KryoSerDes.SerFunction<Integer>();
+    private transient Function<Integer, byte[]> valSerFunc       = new KryoSerDes.SerFunction<Integer>();
+    private transient Function<byte[], Integer> keyDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
+    private transient Function<byte[], Integer> valDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
     
     public MyKryoTestMap() {
         super();
@@ -228,10 +228,10 @@ public class MyKryoTestMap extends LargeCollection implements   Map<Integer,Inte
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new KryoSerDe.SerFunction<Integer>();
-        valSerFunc       = new KryoSerDe.SerFunction<Integer>();
-        keyDeSerFunc     = new KryoSerDe.DeSerFunction<Integer>();
-        valDeSerFunc     = new KryoSerDe.DeSerFunction<Integer>();
+        keySerFunc       = new KryoSerDes.SerFunction<Integer>();
+        valSerFunc       = new KryoSerDes.SerFunction<Integer>();
+        keyDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
+        valDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */
