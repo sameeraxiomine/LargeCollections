@@ -25,8 +25,9 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
+import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.util.*;
-import com.axiomine.largecollections.functions.*;
+
 import java.util.Random
 ;
 import java.lang.Integer;

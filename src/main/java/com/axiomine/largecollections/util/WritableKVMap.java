@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.util;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -27,9 +28,8 @@ import com.google.common.base.Function;
 
 
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.basic.WritableSerDe;
 
-
-import com.axiomine.largecollections.functions.WritableSerDe;
 import org.apache.hadoop.io.*;
 
 public class WritableKVMap extends LargeCollection implements   Map<Writable,Writable>, Serializable{

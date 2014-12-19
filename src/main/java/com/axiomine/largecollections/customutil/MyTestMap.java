@@ -21,8 +21,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iq80.leveldb.WriteBatch;
+
+import com.axiomine.largecollections.serdes.basic.IntegerSerDe;
 import com.axiomine.largecollections.util.*;
-import com.axiomine.largecollections.functions.IntegerSerDe;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 

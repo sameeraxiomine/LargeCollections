@@ -27,9 +27,9 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
+import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.util.*;
-import com.axiomine.largecollections.functions.*;
 
 
 public class KFloatMap<K> extends LargeCollection implements   Map<K,Float>, Serializable{

@@ -28,7 +28,7 @@ import com.google.common.base.Function;
 
 
 import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.functions.WritableSerDe;
+import com.axiomine.largecollections.serdes.basic.WritableSerDe;
 
 import org.apache.hadoop.io.*;
 

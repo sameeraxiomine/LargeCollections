@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -26,9 +27,9 @@ import org.iq80.leveldb.WriteBatch;
 import com.google.common.base.Function;
 
 
+import com.axiomine.largecollections.serdes.basic.*;
 import com.axiomine.largecollections.util.*;
 
-import com.axiomine.largecollections.functions.*;
 import org.apache.hadoop.io.*;
 
 public class LongIntWritableMap extends LargeCollection implements   Map<Long,IntWritable>, Serializable{
