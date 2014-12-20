@@ -32,7 +32,7 @@ public class KryoGeneratorPrimitiveObject {
             kCls = "BytesArray";
         }
         
-        String CLASS_NAME = kCls+"V"+"Map"; //Default
+        String CLASS_NAME = kCls+"KryoV"+"Map"; //Default
         
         
         //String templatePath = args[5];

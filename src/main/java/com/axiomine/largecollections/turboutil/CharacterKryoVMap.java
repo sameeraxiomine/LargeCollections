@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package #MY_PACKAGE#;
+package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
-#CUSTOM_IMPORTS#
+
 import com.axiomine.largecollections.*;
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.utilities.*;
@@ -35,30 +35,30 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 
 
-public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Serializable{
+public class CharacterKryoVMap<V> extends LargeCollection implements   Map<Character,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDes.SerFunction();
+    private transient Function<Character, byte[]> keySerFunc       = new CharacterSerDes.SerFunction();
     private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+    private transient Function<byte[], Character> keyDeSerFunc     = new CharacterSerDes.DeSerFunction();
     private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
 
-    public #CLASS_NAME#() {
+    public CharacterKryoVMap() {
         super();
     }
     
-    public #CLASS_NAME#(String dbName) {
+    public CharacterKryoVMap(String dbName) {
         super(dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName) {
+    public CharacterKryoVMap(String dbPath, String dbName) {
         super(dbPath, dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize) {
+    public CharacterKryoVMap(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize,
+    public CharacterKryoVMap(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
     }
@@ -67,7 +67,7 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<#K#, V> entry : this.entrySet()) {
+            for (Entry<Character, V> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -79,7 +79,7 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     public boolean containsKey(Object key) {
         byte[] valBytes = null;
         if (key != null) {
-            #K# ki = (#K#) key;
+            Character ki = (Character) key;
             if (this.bloomFilter.mightContain(ki)) {
                 byte[] keyBytes = keySerFunc.apply(ki);
                 valBytes = db.get(keyBytes);
@@ -102,8 +102,8 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
         if (key == null) {
             return null;
         }
-        #K# ki = (#K#) key;
-        if (bloomFilter.mightContain((#K#) key)) {
+        Character ki = (Character) key;
+        if (bloomFilter.mightContain((Character) key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -128,7 +128,7 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     
     /* Putting null values is not allowed for this map */
     @Override
-    public V put(#K# key, V value) {
+    public V put(Character key, V value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -150,12 +150,12 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
         V v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((#K#) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((Character) key)) {
             v = this.get(key);
         }
         
         if (v != null) {
-            byte[] fullKeyArr = keySerFunc.apply((#K#) key);
+            byte[] fullKeyArr = keySerFunc.apply((Character) key);
             db.delete(fullKeyArr);
             size--;
         }
@@ -163,15 +163,15 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     }
     
     @Override
-    public void putAll(Map<? extends #K#, ? extends V> m) {
+    public void putAll(Map<? extends Character, ? extends V> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends #K#, ? extends V> e : m
+            for (Map.Entry<? extends Character, ? extends V> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
                 V v = null;
-                #K# k = e.getKey();
+                Character k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
                 }
@@ -202,8 +202,8 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     
     /* Iterators and Collections based on this Map */
     @Override
-    public Set<#K#> keySet() {
-        return new MapKeySet<#K#>(this, keyDeSerFunc);
+    public Set<Character> keySet() {
+        return new MapKeySet<Character>(this, keyDeSerFunc);
     }
     
     @Override
@@ -213,8 +213,8 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     }
     
     @Override
-    public Set<java.util.Map.Entry<#K#, V>> entrySet() {
-        return new MapEntrySet<#K#, V>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<Character, V>> entrySet() {
+        return new MapEntrySet<Character, V>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -228,9 +228,9 @@ public class #CLASS_NAME#<V> extends LargeCollection implements   Map<#K#,V>, Se
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new #KCLS#SerDes.SerFunction();
+        keySerFunc       = new CharacterSerDes.SerFunction();
         valSerFunc       = new KryoSerDes.SerFunction<V>();
-        keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
+        keyDeSerFunc     = new CharacterSerDes.DeSerFunction();
         valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
         this.deserialize(in);
     }
