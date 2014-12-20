@@ -9,7 +9,7 @@ public class GenerateKryoKeyPrimitiveValueMaps {
         
         String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
-        String vPackage = "com.axiomine.largecollections.functions";
+        String vPackage = "com.axiomine.largecollections.serdes";
         String vClass = "";
         for (String v : vals) {
             vClass = v;
