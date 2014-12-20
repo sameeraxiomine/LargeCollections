@@ -53,10 +53,36 @@ The constructors supported for each of the Map's are as follows-
 
 5. (dbPath,dbName,cacheSize,bloomFilterSize) - Override the dbPath,dbName,cacheSize,bloomFilterSize attributes
 
+LargeCollections provides a Map implementations based on how the SerDes classes are provided for K and V class types-
+
+1. Turbo SerDes are highly custom SerDes for primitive (mostly) types which are designed to be very efficient. The following turbo serdes classes are provided
+	- 	`com.axiomine.largecollections.serdes.IntegerSerdes` 
+	- 	`com.axiomine.largecollections.serdes.LongSerdes 	`
+	- 	`com.axiomine.largecollections.serdes.FloatSerdes`
+	- 	`com.axiomine.largecollections.serdes.DoubleSerdes`
+	- 	`com.axiomine.largecollections.serdes.StringSerdes`
+	- 	`com.axiomine.largecollections.serdes.CharacterSerdes`
+	- 	`com.axiomine.largecollections.serdes.ByteSerdes`
+	- 	`com.axiomine.largecollections.serdes.ByteArraySerdes`
+ 
+2. `com.axiomine.largecollections.serdes.KryoSerdes` class utilizes [Kryo](https://github.com/EsotericSoftware/kryo/ "Kryo") for Serialization and Deserialization. More details on how to register custom Kryo Serializers will be discussed in the next sections.
+3. `com.axiomine.largecollections.serdes.WritableSerdes` class provides SerDes for `org.hadoop.io.Writable` implementations. There is only one Serialization implementation and several deserialization implementations. Below are the constructors to various Deserialization implementations
+	- 	`public DeSerFunction(Class<? extends Writable> wCls)`  - Utilize this you are using your own custom `Writable` implementation.
+	- 	`public ArrayPrimitiveWritableDeSerFunction()` - Utilize this when your Key or Value is of type `ArrayPrimitiveWritable`
+	- 	`public BooleanWritableDeSerFunction()` - Utilize this when your Key or Value is of type `BooleanWritable`
+	- 	`public BytesWritableDeSerFunction()` - Utilize this when your Key or Value is of type `BytesWritable` 
+	- 	`public DoubleWritableDeSerFunction()` - Utilize this when your Key or Value is of type `DoubleWritable` 
+	- 	`public FloatWritableDeSerFunction()` - Utilize this when your Key or Value is of type `FloatWritable` 
+	- 	`public LongWritableDeSerFunction()` - Utilize this when your Key or Value is of type `LongWritable` 
+	- 	`public MapWritableDeSerFunction()` - Utilize this when your Key or Value is of type `MapWritable` 
+	- 	`public ShortWritableDeSerFunction()` - Utilize this when your Key or Value is of type `ShortWritable` 
+	- 	`public TextDeSerFunction()` - Utilize this when your Key or Value is of type `Text` 
+For each of the above `Writable` implementation classes, Kryo Serializers have been provided.
+
 ## Map Types Supported ##
 There 5 main types of Maps
 
-1. FastKVMap<K,V> - This implementation `java.util.Map` expect you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
+1. TurboKVMap<K,V> - This implementation `java.util.Map` expect you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
 
 	- 	kSerClass This is a Serializer class used to serialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if K is of type `java.lang.Integer`
 	- 	vSerClass This is a Serializer class used to serialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if V is of type `java.lang.Integer`
