@@ -8,8 +8,8 @@ public class GeneratePrimitiveMaps {
         String[] vals={"String","Integer","Long","Double","Float","Byte","Character","byte[]"};
         String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
-        String kPackage = "com.axiomine.largecollections.functions";
-        String vPackage = "com.axiomine.largecollections.functions";
+        String kPackage = "com.axiomine.largecollections.serdes";
+        String vPackage = "com.axiomine.largecollections.serdes";
         String kClass="";
         String vClass="";
         for(String k:keys){

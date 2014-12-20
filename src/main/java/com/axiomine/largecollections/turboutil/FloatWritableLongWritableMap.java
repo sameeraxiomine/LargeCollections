@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package #MY_PACKAGE#;
+package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 
-#CUSTOM_IMPORTS#
+
 import com.axiomine.largecollections.util.*;
 
 import com.axiomine.largecollections.serdes.*;
@@ -34,31 +34,31 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 import org.apache.hadoop.io.*;
 
-public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
+public class FloatWritableLongWritableMap extends LargeCollection implements   Map<FloatWritable,LongWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
     private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
     private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
+    private transient Function<byte[], FloatWritable> keyDeSerFunc     = new WritableSerDes.FloatWritableDeSerFunction();
+    private transient Function<byte[], LongWritable> valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
     
-    public #CLASS_NAME#() {
+    public FloatWritableLongWritableMap() {
         super();
     }
     
-    public #CLASS_NAME#(String dbName) {
+    public FloatWritableLongWritableMap(String dbName) {
         super(dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName) {
+    public FloatWritableLongWritableMap(String dbPath, String dbName) {
         super(dbPath, dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize) {
+    public FloatWritableLongWritableMap(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize,
+    public FloatWritableLongWritableMap(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
     }
@@ -67,7 +67,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<#K#, #V#> entry : this.entrySet()) {
+            for (Entry<FloatWritable, LongWritable> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -79,7 +79,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     public boolean containsKey(Object key) {
         byte[] valBytes = null;
         if (key != null) {
-            #K# ki = (#K#) key;
+            FloatWritable ki = (FloatWritable) key;
             if (this.bloomFilter.mightContain(ki)) {
                 byte[] keyBytes = keySerFunc.apply(ki);
                 valBytes = db.get(keyBytes);
@@ -97,13 +97,13 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public #V# get(Object key) {
+    public LongWritable get(Object key) {
         byte[] vbytes = null;
         if (key == null) {
             return null;
         }
-        #K# ki = (#K#) key;
-        if (bloomFilter.mightContain((#K#) key)) {
+        FloatWritable ki = (FloatWritable) key;
+        if (bloomFilter.mightContain((FloatWritable) key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -128,7 +128,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     /* Putting null values is not allowed for this map */
     @Override
-    public #V# put(#K# key, #V# value) {
+    public LongWritable put(FloatWritable key, LongWritable value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -146,16 +146,16 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public #V# remove(Object key) {
-        #V# v = null;
+    public LongWritable remove(Object key) {
+        LongWritable v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((#K#) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((FloatWritable) key)) {
             v = this.get(key);
         }
         
         if (v != null) {
-            byte[] fullKeyArr = keySerFunc.apply((#K#) key);
+            byte[] fullKeyArr = keySerFunc.apply((FloatWritable) key);
             db.delete(fullKeyArr);
             size--;
         }
@@ -163,15 +163,15 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public void putAll(Map<? extends #K#, ? extends #V#> m) {
+    public void putAll(Map<? extends FloatWritable, ? extends LongWritable> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends #K#, ? extends #V#> e : m
+            for (Map.Entry<? extends FloatWritable, ? extends LongWritable> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
-                #V# v = null;
-                #K# k = e.getKey();
+                LongWritable v = null;
+                FloatWritable k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
                 }
@@ -202,19 +202,19 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     /* Iterators and Collections based on this Map */
     @Override
-    public Set<#K#> keySet() {
-        return new MapKeySet<#K#>(this, keyDeSerFunc);
+    public Set<FloatWritable> keySet() {
+        return new MapKeySet<FloatWritable>(this, keyDeSerFunc);
     }
     
     @Override
-    public Collection<#V#> values() {
-        return new ValueCollection<#V#>(this, this.getDB(),
+    public Collection<LongWritable> values() {
+        return new ValueCollection<LongWritable>(this, this.getDB(),
                 this.valDeSerFunc);
     }
     
     @Override
-    public Set<java.util.Map.Entry<#K#, #V#>> entrySet() {
-        return new MapEntrySet<#K#, #V#>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<FloatWritable, LongWritable>> entrySet() {
+        return new MapEntrySet<FloatWritable, LongWritable>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -230,8 +230,8 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
             ClassNotFoundException {
         keySerFunc  = new WritableSerDes.SerFunction();
         valSerFunc  = new WritableSerDes.SerFunction();    
-        keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
-        valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
+        keyDeSerFunc     = new WritableSerDes.FloatWritableDeSerFunction();
+        valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

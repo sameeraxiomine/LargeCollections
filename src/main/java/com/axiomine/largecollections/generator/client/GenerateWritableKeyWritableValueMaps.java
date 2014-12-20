@@ -11,8 +11,8 @@ public class GenerateWritableKeyWritableValueMaps {
 
         String myPackage = "com.axiomine.largecollections.turboutil";
         String customImports = "-";
-        String kPackage = "com.axiomine.largecollections.functions";
-        String vPackage = "com.axiomine.largecollections.functions";
+        String kPackage = "com.axiomine.largecollections.serdes";
+        String vPackage = "com.axiomine.largecollections.serdes";
         String kClass="";
         String vClass="";
         for(String k:keys){
