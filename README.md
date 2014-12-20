@@ -83,7 +83,7 @@ For each of the above `Writable` implementation classes, Kryo Serializers have b
 ## Map Types Supported ##
 There 5 main types of Maps
 
-1. TurboKVMap<K,V> - This implementation `java.util.Map` expect you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
+1. TurboKVMap<K,V> - This implementation of `java.util.Map` expects you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
 
 	- 	kSerClass This is a Serializer class used to serialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if K is of type `java.lang.Integer`
 	- 	vSerClass This is a Serializer class used to serialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if V is of type `java.lang.Integer`
@@ -99,7 +99,26 @@ There 5 main types of Maps
     `java.util.Map<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);`
     `//Use it like a regular java.util.Map`
         
-2.  KryoKVMap<K,V> - 
+2.  KryoKVMap<K,V> - This implementation of `java.util.Map` utilizes Kryo for high performance serialization and deserialization. For all the standard primitive types Kryo provides default serializers. LargeCollections also provides Kryo Serializers for the following standard org.hadoop.io.Writable implementations in the package `com.axiomine.largecollections.kryo.serializers`
+	- 	`ArrayPrimitiveWritable` 
+	- 	`BooleanWritable`
+	- 	`BytesWritable`
+	- 	`ByteWritable`
+	- 	`DoubleWritable`
+	- 	`FloatWritable`
+	- 	`IntWritable`
+	- 	`LongWritable`
+	- 	`MapWritable`
+	- 	`ShortWritable`
+	- 	`Text`	
+
+You should review the classes in the package `com.axiomine.largecollections.kryo.serializers` for examples of how to write your own KryoSerializers. The Kryo documentation is the best resource on how to write your own Kryo Serializers
+
+You do have to register your own KryoSerializers. For example `com.axiomine.largecollections.kryo.serializers.MyIntSerializer` is an example of the custom Kryo serializer. If you want to register your own serializer you should create a property file and make entries as follows
+    `java.lang.Integer=com.axiomine.largecollections.kryo.serializers.MyIntSerializer`
+`java.lang.Float=com.axiomine.largecollections.kryo.serializers.MyFloatSerializer`
+
+An example file is in location `src/test/resources/KryoRegistration.properties`. 
 
 
 #SerDes#

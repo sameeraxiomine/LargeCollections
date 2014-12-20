@@ -27,7 +27,7 @@ public class KryoKTurboVMapBasicTest {
     }
     
     @Test
-    public void test00BasicTest() {
+    public void basicTest() {
         File root = new File("");
         File p = new File(root.getAbsolutePath()+"/");
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
