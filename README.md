@@ -62,7 +62,17 @@ There 5 main types of Maps
 	- 	vSerClass This is a Serializer class used to serialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if V is of type `java.lang.Integer`
 	- 	kDeSerClass This is a DeSerializer class used to deserialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if K is of type `java.lang.Integer`
 	- 	vDeSerClass This is a DeSerializer class used to deserialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if V is of type `java.lang.Integer`
-- 
+
+	For examples of how to use this class see `samples.FastKVSample.java`
+
+    `String KSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";`
+    `String VSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";`
+    `String KDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
+    `String VDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
+    `java.util.Map<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);`
+    `//Use it like a regular java.util.Map`
+        
+2.  KryoKVMap<K,V> - 
 
 
 #SerDes#
