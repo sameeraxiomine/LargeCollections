@@ -12,9 +12,10 @@ import org.junit.Test;
 
 
 
+
 import com.axiomine.largecollections.utilities.KryoUtils;
 
-public class KryoKCustomVMapBasicTest {
+public class TurboKKryoVMapBasicTest {
     private String dbPath="";
     
     @Before
@@ -31,11 +32,11 @@ public class KryoKCustomVMapBasicTest {
         File root = new File("");
         File p = new File(root.getAbsolutePath()+"/");
         System.setProperty(KryoUtils.KRYO_REGISTRATION_PROP_FILE,root.getAbsolutePath()+ "/src/test/resources/KryoRegistration.properties");
-        KryoKFastVMap<Integer,Integer> map = null;
+        TurboKKryoVMap<Integer,Integer> map = null;
         try {
-            map = new KryoKFastVMap<Integer,Integer>(dbPath, "cacheMap",
-                            "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction",
-                            "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction");
+            map = new TurboKKryoVMap<Integer,Integer>(dbPath, "cacheMap",
+                            new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction(),
+                            new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction());
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);

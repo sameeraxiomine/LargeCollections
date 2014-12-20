@@ -55,46 +55,45 @@ public class WritableKVMap extends LargeCollection implements   Map<Writable,Wri
         return func;        
     }
     
-    public WritableKVMap(String keyClass,String valueClass) {
+    public WritableKVMap(Class<? extends Writable> keyClass,Class<? extends Writable> valueClass) {
         super();
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
+        this.keyClass = keyClass.getName();
+        this.valueClass = valueClass.getName();
         this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
         this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
     }
     
-    public WritableKVMap(String dbName,String keyClass,String valueClass) {
+    public WritableKVMap(String dbName,Class<? extends Writable> keyClass,Class<? extends Writable> valueClass) {
         super(dbName);
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
+        this.keyClass = keyClass.getName();
+        this.valueClass = valueClass.getName();
         this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
         this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
 
     }
     
-    public WritableKVMap(String dbPath, String dbName,String keyClass,String valueClass) {
+    public WritableKVMap(String dbPath, String dbName,Class<? extends Writable> keyClass,Class<? extends Writable> valueClass) {
         super(dbPath, dbName);
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
+        this.keyClass = keyClass.getName();
+        this.valueClass = valueClass.getName();
         this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
         this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
 
     }
     
-    public WritableKVMap(String dbPath, String dbName, int cacheSize,String keyClass,String valueClass) {
+    public WritableKVMap(String dbPath, String dbName, int cacheSize,Class<? extends Writable> keyClass,Class<? extends Writable> valueClass) {
         super(dbPath, dbName, cacheSize);
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
+        this.keyClass = keyClass.getName();
+        this.valueClass = valueClass.getName();
         this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
         this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
-
     }
     
     public WritableKVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,String keyClass,String valueClass) {
+            int bloomFilterSize,Class<? extends Writable> keyClass,Class<? extends Writable> valueClass) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
+        this.keyClass = keyClass.getName();
+        this.valueClass = valueClass.getName();
         this.keyDeSerFunc = getWritableDeSerFunction(this.keyClass);
         this.valDeSerFunc = getWritableDeSerFunction(this.valueClass);
 

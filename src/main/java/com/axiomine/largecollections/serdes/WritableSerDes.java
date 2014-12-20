@@ -125,7 +125,7 @@ public class WritableSerDes {
             }
         }    
     }
-    String[] vals={"LongWritable","MapWritable","ShortWritable","Text",};
+
     public static class DoubleWritableDeSerFunction implements Function<byte[],DoubleWritable>{
         public DoubleWritable apply(byte[] arg) {
             if (arg == null) {

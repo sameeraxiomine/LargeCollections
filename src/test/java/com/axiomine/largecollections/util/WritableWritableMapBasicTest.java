@@ -34,9 +34,7 @@ public class WritableWritableMapBasicTest {
     public void test00BasicTest() {
         WritableKVMap map = null;
         try {
-            String kcls = "org.apache.hadoop.io.IntWritable";
-            String vcls = "org.apache.hadoop.io.IntWritable";
-            map = new WritableKVMap(dbPath, "cacheMap",kcls,vcls);
+            map = new WritableKVMap(dbPath, "cacheMap",IntWritable.class,IntWritable.class);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
                 IntWritable r = (IntWritable)map.put(new IntWritable(i), new IntWritable(i));

@@ -33,7 +33,7 @@ import java.lang.Integer;
 import java.lang.Integer;
 
 
-public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
+public class KryoKTurboVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
     private transient Function<V, byte[]> valSerFunc       = null;
@@ -42,26 +42,26 @@ public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, S
     private String valSerCls=null;
     private String valDeSerCls=null;
 
-    public KryoKFastVMap(String vSerCls,String vDeSerCls) {
+    public KryoKTurboVMap(Function<V,byte[]> vSerializer,Function<byte[],V> vDeSerializer) {
         super();
         try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
+            this.valSerFunc = vSerializer;
+            this.valDeSerFunc = vDeSerializer;
+            this.valSerCls = vSerializer.getClass().getName();
+            this.valDeSerCls = vDeSerializer.getClass().getName();
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);
         }
     }
     
-    public KryoKFastVMap(String dbName,String vSerCls,String vDeSerCls) {
+    public KryoKTurboVMap(String dbName,Function<V,byte[]> vSerializer,Function<byte[],V> vDeSerializer) {
         super(dbName);
         try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
+            this.valSerFunc = vSerializer;
+            this.valDeSerFunc = vDeSerializer;
+            this.valSerCls = vSerializer.getClass().getName();
+            this.valDeSerCls = vDeSerializer.getClass().getName();
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);
@@ -69,13 +69,13 @@ public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, S
 
     }
     
-    public KryoKFastVMap(String dbPath, String dbName,String vSerCls,String vDeSerCls) {
+    public KryoKTurboVMap(String dbPath, String dbName,Function<V,byte[]> vSerializer,Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName);
         try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
+            this.valSerFunc = vSerializer;
+            this.valDeSerFunc = vDeSerializer;
+            this.valSerCls = vSerializer.getClass().getName();
+            this.valDeSerCls = vDeSerializer.getClass().getName();
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);
@@ -83,13 +83,13 @@ public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, S
 
     }
     
-    public KryoKFastVMap(String dbPath, String dbName, int cacheSize,String vSerCls,String vDeSerCls) {
+    public KryoKTurboVMap(String dbPath, String dbName, int cacheSize,Function<V,byte[]> vSerializer,Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName, cacheSize);
         try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
+            this.valSerFunc = vSerializer;
+            this.valDeSerFunc = vDeSerializer;
+            this.valSerCls = vSerializer.getClass().getName();
+            this.valDeSerCls = vDeSerializer.getClass().getName();
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);
@@ -97,14 +97,14 @@ public class KryoKFastVMap<K,V> extends LargeCollection implements   Map<K,V>, S
 
     }
     
-    public KryoKFastVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,String vSerCls,String vDeSerCls) {
+    public KryoKTurboVMap(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize,Function<V,byte[]> vSerializer,Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
         try{
-            this.valSerCls = vSerCls;
-            this.valDeSerCls = vDeSerCls;
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
+            this.valSerFunc = vSerializer;
+            this.valDeSerFunc = vDeSerializer;
+            this.valSerCls = vSerializer.getClass().getName();
+            this.valDeSerCls = vDeSerializer.getClass().getName();
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);

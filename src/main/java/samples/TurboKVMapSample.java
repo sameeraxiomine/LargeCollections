@@ -5,17 +5,18 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.axiomine.largecollections.util.FastKVMap;
+import com.axiomine.largecollections.util.TurboKVMap;
 import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.util.LargeCollection;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
+import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
-public class FastKVMapSample {
-    public static String KSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
-    public static String VSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
-    public static String KDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
-    public static String VDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
+public class TurboKVMapSample {
+    public static Function<Integer,byte[]> KSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+    public static Function<Integer,byte[]>  VSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+    public static Function<byte[],Integer>  KDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+    public static Function<byte[],Integer>  VDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
 
     /*
      * Utilize KVMap when you have Kryo Serializers for both K and V
@@ -42,7 +43,7 @@ public class FastKVMapSample {
     }
     
     
-    public static void workOnKVMap(FastKVMap<Integer,Integer> map){
+    public static void workOnKVMap(TurboKVMap<Integer,Integer> map){
         try {
             for (int i = 0; i < 10; i++) {
                 int r = map.put(i, i);
@@ -79,7 +80,7 @@ public class FastKVMapSample {
             File serFile = new File("c:/tmp/x.ser");
             FileSerDeUtils.serializeToFile(map,serFile);            
             System.out.println("Now De-Serialize the Map");
-            map = (FastKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(serFile);
+            map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(serFile);
             System.out.println("After De-Serialization Size of map should be 10. Size of the map ="+map.size());
             printMapCharacteristics(map);
             System.out.println("Now calling map.clear()");
@@ -99,33 +100,32 @@ public class FastKVMapSample {
         }
         
     }
-    public static void createKVMap(){
-        
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+    public static void createKVMap(){        
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbName){
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(dbName,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(dbName,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName){
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(dbPath,dbName,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(dbPath,dbName,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName,int cacheSize){
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(dbPath,dbName,cacheSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(dbPath,dbName,cacheSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
 
     public static void createKVMap(String dbPath,String dbName,int cacheSize,int bloomfilterSize){
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }
@@ -133,7 +133,7 @@ public class FastKVMapSample {
     public static void createKVMapOveridePathAndNameWhileDSer(String dbPath,String dbName,int cacheSize,int bloomfilterSize){
         System.setProperty(LargeCollection.OVERRIDE_DB_PATH, dbPath);        
         System.setProperty(LargeCollection.OVERRIDE_DB_NAME, dbName);
-        FastKVMap<Integer,Integer> map = new FastKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
+        TurboKVMap<Integer,Integer> map = new TurboKVMap<Integer,Integer>(dbPath,dbName,cacheSize,bloomfilterSize,KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);
         printMapCharacteristics(map);
         workOnKVMap(map);
     }

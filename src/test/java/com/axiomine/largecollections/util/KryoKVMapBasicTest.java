@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.utilities.KryoUtils;
 
-public class KVMapBasicTest {
+public class KryoKVMapBasicTest {
     private String dbPath="";
     
     @Before

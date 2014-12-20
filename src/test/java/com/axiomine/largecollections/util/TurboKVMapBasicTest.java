@@ -11,16 +11,17 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Writable;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.axiomine.largecollections.util.FastKWritableVMap;
-import com.axiomine.largecollections.util.WritableKFastVMap;
-import com.axiomine.largecollections.utilities.FileSerDeUtils;
 
-public class PrimitiveWritableMapBasicTest {
+
+
+import com.axiomine.largecollections.util.TurboKVMap;
+import com.axiomine.largecollections.utilities.FileSerDeUtils;
+import com.google.common.base.Function;
+
+public class TurboKVMapBasicTest {
     private String dbPath="";
     
     @Before
@@ -34,25 +35,26 @@ public class PrimitiveWritableMapBasicTest {
     
     @Test
     public void test00BasicTest() {
-        FastKWritableVMap<Integer,IntWritable> map = null;
+        TurboKVMap<Integer,Integer> map = null;
         try {
-            String vser = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";
-            String vdeser = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";
-
-            map = new FastKWritableVMap<Integer,IntWritable>(dbPath, "cacheMap",new IntWritable(),vser,vdeser);
+            Function<Integer,byte[]> kser =  new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+            Function<Integer,byte[]> vser =  new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+            Function<byte[],Integer> kdeser = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+            Function<byte[],Integer> vdeser = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+            map = new TurboKVMap(dbPath, "cacheMap",kser,vser,kdeser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
-                IntWritable r = (IntWritable)map.put(i,new IntWritable(i));
-                Assert.assertEquals(r.get(), i);
+                int r = map.put(i, i);
+                Assert.assertEquals(r, i);
             }
             Assert.assertFalse(map.isEmpty());
             Assert.assertEquals(10, map.size());
             
-            IntWritable r =  (IntWritable) map.remove(0);
-            Assert.assertEquals(0, r.get());
+            int i = map.remove(0);
+            Assert.assertEquals(0, i);
             
-            r = (IntWritable) map.remove(0);
-            Assert.assertNull(r);
+            Integer nullI = map.remove(0);
+            Assert.assertNull(nullI);
             
             Assert.assertTrue(map.containsKey(1));
             Assert.assertFalse(map.containsKey(0));
@@ -67,10 +69,10 @@ public class PrimitiveWritableMapBasicTest {
             
             
             
-            Map<Integer,IntWritable> m = new HashMap<Integer,IntWritable>();
-            m.put(0,new IntWritable(0));
-            m.put(1,new IntWritable(11));
-            m.put(2,new IntWritable(22));
+            Map<Integer,Integer> m = new HashMap<Integer,Integer>();
+            m.put(0,0);
+            m.put(1,11);
+            m.put(2,22);
             map.putAll(m);
             Assert.assertEquals(10, map.size());
             
@@ -86,26 +88,26 @@ public class PrimitiveWritableMapBasicTest {
             }
             
             System.out.println("Values");
-            Collection<Writable> vs = map.values();
-            for(Writable s:vs){
-                System.out.println(((IntWritable)s).get());
+            Collection<Integer> vs = map.values();
+            for(Integer s:vs){
+                System.out.println(s);
             }
             System.out.println("-");
-            Iterator<Writable> iteri = vs.iterator();
-            while(iteri.hasNext()){
-                System.out.println(iteri.next());
+            iter = vs.iterator();
+            while(iter.hasNext()){
+                System.out.println(iter.next());
             }
 
             System.out.println("EntrySet");
-            Set<Map.Entry<Integer,Writable>> es = map.entrySet();
+            Set<Map.Entry<Integer, Integer>> es = map.entrySet();
             
-            for(Map.Entry<Integer,Writable> e:es){
+            for(Map.Entry<Integer, Integer> e:es){
                 System.out.println(e.getKey() +"="+e.getValue());
             }
             System.out.println("-");
-            Iterator<Map.Entry<Integer,Writable>> iter2 = es.iterator();
+            Iterator<Map.Entry<Integer, Integer>> iter2 = es.iterator();
             while(iter2.hasNext()){
-                Map.Entry<Integer,Writable> e = iter2.next();
+                Map.Entry<Integer, Integer> e = iter2.next();
                 System.out.println(e.getKey() +"="+e.getValue());
             }
             
@@ -113,7 +115,7 @@ public class PrimitiveWritableMapBasicTest {
             map.close();
             boolean b = false;
             try{
-                map.put(0,new IntWritable(0));    
+                map.put(0,0);    
             }
             catch(Exception ex){
                 b=true;
@@ -125,7 +127,7 @@ public class PrimitiveWritableMapBasicTest {
             
             b = false;
             try{
-                map.put(0,new IntWritable(0));    
+                map.put(0,0);    
             }
             catch(Exception ex){
                 b=true;
@@ -133,18 +135,18 @@ public class PrimitiveWritableMapBasicTest {
             Assert.assertFalse(b);
             
             System.out.println("First Serialize");
-            FileSerDeUtils.serializeToFile(map,new File(dbPath+"/x.ser"));
+            FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
             
-            map = (FastKWritableVMap) FileSerDeUtils.deserializeFromFile(new File(dbPath+"/x.ser"));
+            map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
-            map.put(0,new IntWritable(0));    
+            map.put(0,0);    
             System.out.println(map.size());
             System.out.println("Finally Destroying");
             map.destroy();
             b = false;
             try{
-                map.put(0,new IntWritable(0));    
+                map.put(0,0);    
             }
             catch(Exception ex){
                 b=true;

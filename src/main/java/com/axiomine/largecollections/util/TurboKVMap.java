@@ -33,7 +33,7 @@ import java.lang.Integer;
 import java.lang.Integer;
 
 
-public class FastKVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
+public class TurboKVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient Function<K, byte[]> keySerFunc       = new KryoSerDes.SerFunction<K>();
     private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
@@ -45,92 +45,72 @@ public class FastKVMap<K,V> extends LargeCollection implements   Map<K,V>, Seria
     private String keyDeSerCls = null;
     private String valDeSerCls = null;
     
-    public FastKVMap(String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public TurboKVMap(Function<K,byte[]> kSerializer,Function<V,byte[]> vSerializer, 
+                     Function<byte[],K> kDeSerializer, Function<byte[],V> vDeSerializer) {
         super();
-        this.keySerCls = kSerCls;
-        this.valSerCls = vSerCls;
-        this.keyDeSerCls = kDeSerCls;
-        this.valDeSerCls = vDeSerCls;
-        try{
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>)  Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.valSerFunc = vSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.valDeSerFunc = vDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.valSerCls = vSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
+        this.valDeSerCls = vDeSerializer.getClass().getName();
     }
     
-    public FastKVMap(String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public TurboKVMap(String dbName,Function<K,byte[]> kSerializer,Function<V,byte[]> vSerializer, 
+            Function<byte[],K> kDeSerializer, Function<byte[],V> vDeSerializer) {
         super(dbName);
-        this.keySerCls = kSerCls;
-        this.valSerCls = vSerCls;
-        this.keyDeSerCls = kDeSerCls;
-        this.valDeSerCls = vDeSerCls;
-        try{
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>)  Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.valSerFunc = vSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.valDeSerFunc = vDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.valSerCls = vSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
+        this.valDeSerCls = vDeSerializer.getClass().getName();
     }
     
-    public FastKVMap(String dbPath, String dbName,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public TurboKVMap(String dbPath, String dbName,Function<K,byte[]> kSerializer,Function<V,byte[]> vSerializer, 
+            Function<byte[],K> kDeSerializer, Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName);
-        this.keySerCls = kSerCls;
-        this.valSerCls = vSerCls;
-        this.keyDeSerCls = kDeSerCls;
-        this.valDeSerCls = vDeSerCls;
-        try{
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>)  Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.valSerFunc = vSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.valDeSerFunc = vDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.valSerCls = vSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
+        this.valDeSerCls = vDeSerializer.getClass().getName();
 
     }
     
-    public FastKVMap(String dbPath, String dbName, int cacheSize,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public TurboKVMap(String dbPath, String dbName, int cacheSize,Function<K,byte[]> kSerializer,Function<V,byte[]> vSerializer, 
+            Function<byte[],K> kDeSerializer, Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName, cacheSize);
-        this.keySerCls = kSerCls;
-        this.valSerCls = vSerCls;
-        this.keyDeSerCls = kDeSerCls;
-        this.valDeSerCls = vDeSerCls;
-        try{
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>)  Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.valSerFunc = vSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.valDeSerFunc = vDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.valSerCls = vSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
+        this.valDeSerCls = vDeSerializer.getClass().getName();
 
     }
     
-    public FastKVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,String kSerCls,String vSerCls, String kDeSerCls, String vDeSerCls) {
+    public TurboKVMap(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize,Function<K,byte[]> kSerializer,Function<V,byte[]> vSerializer, 
+            Function<byte[],K> kDeSerializer, Function<byte[],V> vDeSerializer) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        this.keySerCls = kSerCls;
-        this.valSerCls = vSerCls;
-        this.keyDeSerCls = kDeSerCls;
-        this.valDeSerCls = vDeSerCls;
-        try{
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc = (Function<V, byte[]>) Class.forName(this.valSerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>)  Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = (Function<byte[], V>) Class.forName(this.valDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.valSerFunc = vSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.valDeSerFunc = vDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.valSerCls = vSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
+        this.valDeSerCls = vDeSerializer.getClass().getName();
 
     }
     

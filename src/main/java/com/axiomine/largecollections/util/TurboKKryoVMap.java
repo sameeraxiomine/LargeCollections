@@ -25,119 +25,69 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
+import com.axiomine.largecollections.serdes.*;
+
+import java.util.Random
+;
+import java.lang.Integer;
+import java.lang.Integer;
 
 
-import com.axiomine.largecollections.*;
-import com.axiomine.largecollections.serdes.WritableSerDes;
-
-import org.apache.hadoop.io.*;
-
-public class FastKWritableVMap<K,V extends Writable> extends LargeCollection implements   Map<K,Writable>, Serializable{
+public class TurboKKryoVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    
-    private transient Function<K, byte[]> keySerFunc  = null;
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], ? extends K> keyDeSerFunc     = null;
-    private transient Function<byte[], ? extends Writable> valDeSerFunc     = null;
-    private String writableValClass=null;
+    private transient Function<K, byte[]> keySerFunc       = null;
+    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private transient Function<byte[], K> keyDeSerFunc     = null;
+    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
     private String keySerCls=null;
     private String keyDeSerCls=null;
 
-    
-    private static Function<byte[], ? extends Writable> getWritableDeSerFunction(String cls){
-        Function<byte[], ? extends Writable> func = null;
-        try{
-            Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDes.DeSerFunction(cObj.getClass());
-
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        return func;        
-    }
-    
-    public FastKWritableVMap(V vwritable,String kSerCls,String kDeSerCls) {
+    public TurboKKryoVMap(Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
         super();
-        try{
-            this.writableValClass = vwritable.getClass().getName();
-            this.keySerCls = kSerCls;
-            this.keyDeSerCls = kDeSerCls;
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public FastKWritableVMap(String dbName,V vwritable,String kSerCls,String kDeSerCls) {
+    public TurboKKryoVMap(String dbName,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
         super(dbName);
-        try{
-            this.writableValClass = vwritable.getClass().getName();
-            this.keySerCls = kSerCls;
-            this.keyDeSerCls = kDeSerCls;
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public FastKWritableVMap(String dbPath, String dbName,V vwritable,String kSerCls,String kDeSerCls) {
+    public TurboKKryoVMap(String dbPath, String dbName,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
         super(dbPath, dbName);
-        try{
-            this.writableValClass = vwritable.getClass().getName();
-            this.keySerCls = kSerCls;
-            this.keyDeSerCls = kDeSerCls;
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public FastKWritableVMap(String dbPath, String dbName, int cacheSize,V vwritable,String kSerCls,String kDeSerCls) {
+    public TurboKKryoVMap(String dbPath, String dbName, int cacheSize,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
         super(dbPath, dbName, cacheSize);
-        try{
-            this.writableValClass = vwritable.getClass().getName();
-            this.keySerCls = kSerCls;
-            this.keyDeSerCls = kDeSerCls;
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public FastKWritableVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,V vwritable,String kSerCls,String kDeSerCls) {
+    public TurboKKryoVMap(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        try{
-            this.writableValClass = vwritable.getClass().getName();
-            this.keySerCls = kSerCls;
-            this.keyDeSerCls = kDeSerCls;
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = kSerializer;
+        this.keyDeSerFunc = kDeSerializer;
+        this.keySerCls = kSerializer.getClass().getName();
+        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
     @Override
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<K, Writable> entry : this.entrySet()) {
+            for (Entry<K, V> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -167,13 +117,13 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     }
     
     @Override
-    public Writable get(Object key) {
+    public V get(Object key) {
         byte[] vbytes = null;
         if (key == null) {
             return null;
         }
         K ki = (K) key;
-        if (bloomFilter.mightContain((K) key)) {
+        if (bloomFilter.mightContain(key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -198,7 +148,7 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     
     /* Putting null values is not allowed for this map */
     @Override
-    public Writable put(K key, Writable value) {
+    public V put(K key, V value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -216,11 +166,11 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     }
     
     @Override
-    public Writable remove(Object key) {
-        Writable v = null;
+    public V remove(Object key) {
+        V v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((K) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((Integer) key)) {
             v = this.get(key);
         }
         
@@ -233,14 +183,14 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     }
     
     @Override
-    public void putAll(Map<? extends K, ? extends Writable> m) {
+    public void putAll(Map<? extends K, ? extends V> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends K, ? extends Writable> e : m
+            for (Map.Entry<? extends K, ? extends V> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
-                Writable v = null;
+                V v = null;
                 K k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
@@ -260,7 +210,7 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
             db.write(batch);
             batch.close();
         } catch (Exception ex) {
-            throw Throwables.propagate(ex);
+            Throwables.propagate(ex);
         }
         
     }
@@ -277,14 +227,14 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     }
     
     @Override
-    public Collection<Writable> values() {
-        return new ValueCollection<Writable>(this, this.getDB(),
+    public Collection<V> values() {
+        return new ValueCollection<V>(this, this.getDB(),
                 this.valDeSerFunc);
     }
     
     @Override
-    public Set<java.util.Map.Entry<K, Writable>> entrySet() {
-        return new MapEntrySet<K, Writable>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<K, V>> entrySet() {
+        return new MapEntrySet<K, V>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -294,23 +244,20 @@ public class FastKWritableVMap<K,V extends Writable> extends LargeCollection imp
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.writableValClass);
         stream.writeObject(this.keySerCls);
         stream.writeObject(this.keyDeSerCls);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-
+        valSerFunc       = new KryoSerDes.SerFunction<V>();
+        valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
         this.deserialize(in);
         try{
-            this.writableValClass = (String)in.readObject();
             this.keySerCls = (String)in.readObject();
             this.keyDeSerCls = (String)in.readObject();
             this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.valSerFunc  = new WritableSerDes.SerFunction();
             this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);
