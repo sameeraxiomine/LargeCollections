@@ -74,7 +74,8 @@ public abstract class LargeCollection implements IDb  {
     }
     
 
-    public LargeCollection(){        
+    public LargeCollection(){      
+        dbName = "f"+System.currentTimeMillis()+rnd.nextInt();
         this.open();
     }
 

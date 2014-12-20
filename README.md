@@ -28,6 +28,42 @@ The best way to learn how to use the API is to follow the samples contained in t
 
 The main thing to remember when using this library is, it supports the java.util.Map interface. The only method not supported (for performance reason) is  `public boolean containsValue(Object value)`
 
+## Map Attributes ##
+We provide implementations of java.util.Map. Each of these Map implementations has the following attributes
+
+
+1. `dbPath` - This is a folder where the LevelDB named cache is created. Default value is the folder provided by the java System property `java.io.tmpdir`
+
+2. `dbName` - The name of LevelDB Cache. Each Map should have a unique LevelDB backing database. The default value of this attribute is a value which is randomly generated. You can override it with your own user-defined name
+
+3. `cacheSize` - LevelDB uses an internal cache to improve its response time. This parameter is specified in MB. Its default value is `25`.
+
+4. `bloomFilterSize` - Internally we use bloom filter to make swift determination of if a key is contained in the underlying LevelDB database. BloomFilters need to know at the outset the approximate number of elements they will contain. Underestimating this size will lead to more false positives and consequently degrade your performance as the LevelDB will be checked for a key even when the key does not exist. Default value is `10000000` (10 million)
+ 
+## Map Constructors ##
+The constructors supported for each of the Map's are as follows-
+
+1. () - All default values Map attributes mentioned above. Note that the dbName is a randomly generated attribute for each map.
+
+2. (dbName) - Override the dbName attribute above. Other attributes take on default values
+
+3. (dbPath,dbName) - Override the dbPath and dbName attributes
+
+4. (dbPath,dbName,cacheSize) - Override the dbPath,dbName,cacheSize attributes
+
+5. (dbPath,dbName,cacheSize,bloomFilterSize) - Override the dbPath,dbName,cacheSize,bloomFilterSize attributes
+
+## Map Types Supported ##
+There 5 main types of Maps
+
+1. FastKVMap<K,V> - This implementation `java.util.Map` expect you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
+
+	- 	kSerClass This is a Serializer class used to serialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if K is of type `java.lang.Integer`
+	- 	vSerClass This is a Serializer class used to serialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if V is of type `java.lang.Integer`
+	- 	kDeSerClass This is a DeSerializer class used to deserialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if K is of type `java.lang.Integer`
+	- 	vDeSerClass This is a DeSerializer class used to deserialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if V is of type `java.lang.Integer`
+- 
+
 
 #SerDes#
 
