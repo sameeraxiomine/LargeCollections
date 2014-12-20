@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package #MY_PACKAGE#;
+package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,37 +25,37 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 
-#CUSTOM_IMPORTS#
+
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
 import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.kryo.serializers.*;
 
-public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
+public class IntegerLongWritableMap extends LargeCollection implements   Map<Integer,LongWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<#K#, byte[]> keySerFunc       = new #KCLS#SerDes.SerFunction();
+    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDes.SerFunction();
     private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<byte[], #K#> keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
-    private transient Function<byte[], #VCLS#> valDeSerFunc     = new WritableSerDes.#VCLS#DeSerFunction();
+    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
+    private transient Function<byte[], LongWritable> valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
     
-    public #CLASS_NAME#() {
+    public IntegerLongWritableMap() {
         super();
     }
     
-    public #CLASS_NAME#(String dbName) {
+    public IntegerLongWritableMap(String dbName) {
         super(dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName) {
+    public IntegerLongWritableMap(String dbPath, String dbName) {
         super(dbPath, dbName);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize) {
+    public IntegerLongWritableMap(String dbPath, String dbName, int cacheSize) {
         super(dbPath, dbName, cacheSize);
     }
     
-    public #CLASS_NAME#(String dbPath, String dbName, int cacheSize,
+    public IntegerLongWritableMap(String dbPath, String dbName, int cacheSize,
             int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
     }
@@ -64,7 +64,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            for (Entry<#K#, #V#> entry : this.entrySet()) {
+            for (Entry<Integer, LongWritable> entry : this.entrySet()) {
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -76,7 +76,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     public boolean containsKey(Object key) {
         byte[] valBytes = null;
         if (key != null) {
-            #K# ki = (#K#) key;
+            Integer ki = (Integer) key;
             if (this.bloomFilter.mightContain(ki)) {
                 byte[] keyBytes = keySerFunc.apply(ki);
                 valBytes = db.get(keyBytes);
@@ -94,13 +94,13 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public #V# get(Object key) {
+    public LongWritable get(Object key) {
         byte[] vbytes = null;
         if (key == null) {
             return null;
         }
-        #K# ki = (#K#) key;
-        if (bloomFilter.mightContain((#K#) key)) {
+        Integer ki = (Integer) key;
+        if (bloomFilter.mightContain((Integer) key)) {
             vbytes = db.get(keySerFunc.apply(ki));
             if (vbytes == null) {
                 return null;
@@ -125,7 +125,7 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     /* Putting null values is not allowed for this map */
     @Override
-    public #V# put(#K# key, #V# value) {
+    public LongWritable put(Integer key, LongWritable value) {
         if (key == null)
             return null;
         if (value == null)// Do not add null key or value
@@ -143,16 +143,16 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public #V# remove(Object key) {
-        #V# v = null;
+    public LongWritable remove(Object key) {
+        LongWritable v = null;
         if (key == null)
             return v;
-        if (this.size > 0 && this.bloomFilter.mightContain((#K#) key)) {
+        if (this.size > 0 && this.bloomFilter.mightContain((Integer) key)) {
             v = this.get(key);
         }
         
         if (v != null) {
-            byte[] fullKeyArr = keySerFunc.apply((#K#) key);
+            byte[] fullKeyArr = keySerFunc.apply((Integer) key);
             db.delete(fullKeyArr);
             size--;
         }
@@ -160,15 +160,15 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     }
     
     @Override
-    public void putAll(Map<? extends #K#, ? extends #V#> m) {
+    public void putAll(Map<? extends Integer, ? extends LongWritable> m) {
         try {
             WriteBatch batch = db.createWriteBatch();
             int counter = 0;
-            for (Map.Entry<? extends #K#, ? extends #V#> e : m
+            for (Map.Entry<? extends Integer, ? extends LongWritable> e : m
                     .entrySet()) {
                 byte[] keyArr = keySerFunc.apply(e.getKey());
-                #V# v = null;
-                #K# k = e.getKey();
+                LongWritable v = null;
+                Integer k = e.getKey();
                 if (this.size > 0 && this.bloomFilter.mightContain(k)) {
                     v = this.get(k);
                 }
@@ -199,19 +199,19 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     /* Iterators and Collections based on this Map */
     @Override
-    public Set<#K#> keySet() {
-        return new MapKeySet<#K#>(this, keyDeSerFunc);
+    public Set<Integer> keySet() {
+        return new MapKeySet<Integer>(this, keyDeSerFunc);
     }
     
     @Override
-    public Collection<#V#> values() {
-        return new ValueCollection<#V#>(this, this.getDB(),
+    public Collection<LongWritable> values() {
+        return new ValueCollection<LongWritable>(this, this.getDB(),
                 this.valDeSerFunc);
     }
     
     @Override
-    public Set<java.util.Map.Entry<#K#, #V#>> entrySet() {
-        return new MapEntrySet<#K#, #V#>(this, this.keyDeSerFunc,
+    public Set<java.util.Map.Entry<Integer, LongWritable>> entrySet() {
+        return new MapEntrySet<Integer, LongWritable>(this, this.keyDeSerFunc,
                 this.valDeSerFunc);
     }
     
@@ -225,10 +225,10 @@ public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Ser
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc       = new #KCLS#SerDes.SerFunction();
+        keySerFunc       = new IntegerSerDes.SerFunction();
         valSerFunc  = new WritableSerDes.SerFunction();
-        keyDeSerFunc     = new #KCLS#SerDes.DeSerFunction();
-        valDeSerFunc     = new WritableSerDes.#VCLS#DeSerFunction();
+        keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
+        valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
         this.deserialize(in);
     }
     /* End of Serialization functions go here */

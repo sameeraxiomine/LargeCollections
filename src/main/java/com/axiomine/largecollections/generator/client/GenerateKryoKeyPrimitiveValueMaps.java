@@ -1,6 +1,6 @@
 package com.axiomine.largecollections.generator.client;
 
-import com.axiomine.largecollections.generator.KryoGeneratorObjectPrimitive;
+import com.axiomine.largecollections.generator.GeneratorKryoKPrimitiveValue;
 
 public class GenerateKryoKeyPrimitiveValueMaps {
     public static void main(String[] args) throws Exception {
@@ -14,7 +14,7 @@ public class GenerateKryoKeyPrimitiveValueMaps {
         for (String v : vals) {
             vClass = v;
             String[] myArgs = { myPackage, customImports, vPackage,vClass };
-            KryoGeneratorObjectPrimitive.main(myArgs);
+            GeneratorKryoKPrimitiveValue.main(myArgs);
         }
     }
 }
