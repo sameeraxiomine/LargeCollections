@@ -78,7 +78,7 @@ LargeCollections provides a Map implementations based on how the SerDes classes 
 	- 	`public MapWritableDeSerFunction()` - Utilize this when your Key or Value is of type `MapWritable` 
 	- 	`public ShortWritableDeSerFunction()` - Utilize this when your Key or Value is of type `ShortWritable` 
 	- 	`public TextDeSerFunction()` - Utilize this when your Key or Value is of type `Text` 
-For each of the above `Writable` implementation classes, Kryo Serializers have been provided.
+For each of the above `Writable` implementation classes, Kryo Serializers have been provided. 
 
 ## Map Types Supported ##
 There 5 main types of Maps
@@ -99,6 +99,8 @@ There 5 main types of Maps
     `java.util.Map<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);`
     `//Use it like a regular java.util.Map`
         
+If you do not wish to pass the SerDes classes for K and V types you can simply use the standard classes provided in the `com.axiomine.largecollections.turboutil` package. Examples of such classes are `IntegerIntegerMap`, `IntegerByteArrayMap`, `StringIntegerMap`, etc.
+
 2.  KryoKVMap<K,V> - This implementation of `java.util.Map` utilizes Kryo for high performance serialization and deserialization. For all the standard primitive types Kryo provides default serializers. LargeCollections also provides Kryo Serializers for the following standard org.hadoop.io.Writable implementations in the package `com.axiomine.largecollections.kryo.serializers`
 	- 	`ArrayPrimitiveWritable` 
 	- 	`BooleanWritable`
@@ -111,14 +113,43 @@ There 5 main types of Maps
 	- 	`MapWritable`
 	- 	`ShortWritable`
 	- 	`Text`	
+	KryoKVMap can be used where TurboKVMap is used for standard types mentioned in the TurboSerDes described above. However using the TurboKVMap will perform significantly faster if you are working with the primitive types. 
+	You should review the classes in the package `com.axiomine.largecollections.kryo.serializers` for examples of how to write your own KryoSerializers. The Kryo documentation is the best resource on how to write your own Kryo Serializers
+	
+	You do have to register your own KryoSerializers. For example `com.axiomine.largecollections.kryo.serializers.MyIntSerializer` is an example of the custom Kryo serializer. If you want to register your own serializer you should create a property file and make entries as follows
+	    `java.lang.Integer=com.axiomine.largecollections.kryo.serializers.MyIntSerializer`
+	`java.lang.Float=com.axiomine.largecollections.kryo.serializers.MyFloatSerializer`
+	
+	An example file is in location `src/test/resources/KryoRegistration.properties`. See the following test case to `com.axiomine.largecollections.util.KryoKTurboVMapBasicTest` for example on how to register custom Kryo serializers. The above mentioned Property file must be passed to the JVM using the following System Property
+	
+	    -DKRYO_REG_PROP_FILE=${PATH_TO_KRYO_PROPS}/KryoRegistration.properties
 
-You should review the classes in the package `com.axiomine.largecollections.kryo.serializers` for examples of how to write your own KryoSerializers. The Kryo documentation is the best resource on how to write your own Kryo Serializers
+3. WritableKVMap<K extends Writable,V extends Writable> - Use this Map implementation when you have a highly custom Writable K and V classes and you do not wish to create Kryo Serializer. If you Writable classes are one of those mentioned earlier then using the KryoKVMap should be adequate. All the standard constructors take two trailing parameters 
+	- 	`Class<K extends Writable>` Ex. IntWritable.class
+	- 	`Class<V extends Writable>` Ex. Text.class
 
-You do have to register your own KryoSerializers. For example `com.axiomine.largecollections.kryo.serializers.MyIntSerializer` is an example of the custom Kryo serializer. If you want to register your own serializer you should create a property file and make entries as follows
-    `java.lang.Integer=com.axiomine.largecollections.kryo.serializers.MyIntSerializer`
-`java.lang.Float=com.axiomine.largecollections.kryo.serializers.MyFloatSerializer`
+	For the above mentioned examples the WritableKVMap will be instantiated as follows
+    `Map<IntWritable,Text> m = new WritableKVMap<IntWritable,Text>(IntWritable.class,Text.class)`
 
-An example file is in location `src/test/resources/KryoRegistration.properties`. 
+	Similar to the TurboKVMap helper Map implementations are provided for the following Writable types in the package `com.axiomine.largecollections.turboutil`
+
+	- 	`ArrayPrimitiveWritable` 
+	- 	`BooleanWritable`
+	- 	`BytesWritable`
+	- 	`ByteWritable`
+	- 	`DoubleWritable`
+	- 	`FloatWritable`
+	- 	`IntWritable`
+	- 	`LongWritable`
+	- 	`MapWritable`
+	- 	`ShortWritable`
+	- 	`Text`	
+	
+	Examples of such classes in the `com.axiomine.largecollections.turboutil` package are `IntWritableIntWritableMap`, `IntWritableTextMap`, etc.
+    
+4. 
+
+
 
 
 #SerDes#
@@ -192,19 +223,19 @@ At this point let us examine a sample Serdes class, `StringSerdes`
     }
 
 
-What's coming
-================
+#What's coming#
+
 In the next few weeks we will add the following implementations
 
-1. java.util.List with most functions implemented. The function which will not be implemented is the ability to insert records in the middle of the list. Records cannot be deleted but can be replaced.
-2. java.util.Set 
+1. `java.util.List` with most functions implemented. The function which will not be implemented is the ability to insert records in the middle of the list. Records cannot be deleted but can be replaced.
+2. `java.util.Set `
 
 
 We will be adding more documentation in the coming days.
 
 
-License
-================
+#License#
+
 
 Copyright 2014 Axiomine
 Licensed under the Apache License, Version 2.0 (the "License");
