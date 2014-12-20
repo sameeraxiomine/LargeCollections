@@ -4,6 +4,7 @@ LargeCollections supports java.util.Map implementation which is backed by LevelD
 
 Currently only the java.util.Map is supported. The support is complete, in that it supports the underlying iterators as well.
 
+The Javadoc for this project can be found [here](http://sameeraxiomine.github.io/largecollections/ "here").
 
 #Key Design Principles#
 The underlying java.util.Map implementations are backed by [https://github.com/google/leveldb](https://github.com/google/leveldb "LevelDB"). LevelDB is a fast key-value storage library written at Google that provides an ordered mapping from byte array keys to byte array values.
