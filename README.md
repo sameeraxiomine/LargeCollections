@@ -163,6 +163,29 @@ There 8 main types of Maps provided are -
 
 8.	KryoKWritableV<K,V extends Writable> - This is implementation where the SerDes used for the Key is a Kryo SerDes and the one used for Value is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `KryoKIntWritableMap`, `KryoKTextMap`, etc.
 
+##Serializing the LargeCollection Map to disk##
+
+The Map implementations can be serialized like any other java.util.Map instance. Only the meta-data is serialized. The actual data is stored in the LevelDB instance which is not serialized. When the Map instance is deserialized, only the underlying meta-data is deserialized which effectively leads to the correct LevelDB database being pointed to. 
+    
+    TurboKVMap<Integer,Integer> map = /* initialized the map */
+    FileSerDeUtils.serializeToFile(map,new File("c:/tmp/map.ser"));
+    map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/map.ser"));
+
+It is possible to change the path of the underlying LevelDB database during De-Serialization. This can happen when you are porting your serialized Map and the associated LevelDB database (which nothing but a folder and some files on your disk). In order to indicate to the deserialization process the new path to the LevelDB database you need to configure the following System Properties
+
+    /*
+     LargeCollection.OVERRIDE_DB_PATH="override.dbpath" overrides the base folder for the LevelDB Database
+    */
+    System.setProperty(LargeCollection.OVERRIDE_DB_PATH, dbPath);
+    /*
+     LargeCollection.OVERRIDE_DB_PATH="override.dbname" overrides the name of the sub-folder contained in the override.dbpath which is the name of the LevelDB 
+     database. If you only change the root folder of the LevelDB database but left its name unchanged, you do not have to provide this property value.
+    */
+    System.setProperty(LargeCollection.OVERRIDE_DB_NAME, dbName);
+    map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/map.ser"));
+
+
+
 #SerDes#
 
 It was important to select the fasted possible serialization/deserialization mechanisms. The default java serialization is supported but we have done considerably better. Below is a list of various mechanisms used for SerDes-
