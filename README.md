@@ -85,10 +85,10 @@ There 8 main types of Maps provided are -
 
 1. TurboKVMap<K,V> - This implementation of `java.util.Map` expects you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
 
-	- 	kSerClass This is a Serializer class used to serialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if K is of type `java.lang.Integer`
-	- 	vSerClass This is a Serializer class used to serialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction`" if V is of type `java.lang.Integer`
-	- 	kDeSerClass This is a DeSerializer class used to deserialize K instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if K is of type `java.lang.Integer`
-	- 	vDeSerClass This is a DeSerializer class used to deserialize V instance. For example "`com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction`" if V is of type `java.lang.Integer`
+	- 	kSerClass This is a Serializer class used to serialize K instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction` if K is of type `java.lang.Integer`
+	- 	vSerClass This is a Serializer class used to serialize V instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction` if V is of type `java.lang.Integer`
+	- 	kDeSerClass This is a DeSerializer class used to deserialize K instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction` if K is of type `java.lang.Integer`
+	- 	vDeSerClass This is a DeSerializer class used to deserialize V instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction` if V is of type `java.lang.Integer`
 
 	For examples of how to use this class see `samples.FastKVSample.java`
 
