@@ -97,7 +97,8 @@ There 8 main types of Maps provided are -
     `String KDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
     `String VDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
     `java.util.Map<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);`
-    `//Use it like a regular java.util.Map`
+  
+ `//Use it like a regular java.util.Map`
         
 	If you do not wish to pass the SerDes classes for K and V types you can simply use the standard classes provided in the `com.axiomine.largecollections.turboutil` package. Examples of such classes are `IntegerIntegerMap`, `IntegerByteArrayMap`, `StringIntegerMap`, etc.
 
