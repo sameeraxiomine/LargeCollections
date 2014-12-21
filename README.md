@@ -81,7 +81,7 @@ LargeCollections provides a Map implementations based on how the SerDes classes 
 For each of the above `Writable` implementation classes, Kryo Serializers have been provided. 
 
 ## Map Types Supported ##
-There 5 main types of Maps
+There 8 main types of Maps provided are -
 
 1. TurboKVMap<K,V> - This implementation of `java.util.Map` expects you to provide SerDes classes for key and value classes used with this map. Each of the above constructor will take four more trailing parameters
 
@@ -99,7 +99,7 @@ There 5 main types of Maps
     `java.util.Map<Integer,Integer> map = new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);`
     `//Use it like a regular java.util.Map`
         
-If you do not wish to pass the SerDes classes for K and V types you can simply use the standard classes provided in the `com.axiomine.largecollections.turboutil` package. Examples of such classes are `IntegerIntegerMap`, `IntegerByteArrayMap`, `StringIntegerMap`, etc.
+	If you do not wish to pass the SerDes classes for K and V types you can simply use the standard classes provided in the `com.axiomine.largecollections.turboutil` package. Examples of such classes are `IntegerIntegerMap`, `IntegerByteArrayMap`, `StringIntegerMap`, etc.
 
 2.  KryoKVMap<K,V> - This implementation of `java.util.Map` utilizes Kryo for high performance serialization and deserialization. For all the standard primitive types Kryo provides default serializers. LargeCollections also provides Kryo Serializers for the following standard org.hadoop.io.Writable implementations in the package `com.axiomine.largecollections.kryo.serializers`
 	- 	`ArrayPrimitiveWritable` 
@@ -147,10 +147,17 @@ If you do not wish to pass the SerDes classes for K and V types you can simply u
 	
 	Examples of such classes in the `com.axiomine.largecollections.turboutil` package are `IntWritableIntWritableMap`, `IntWritableTextMap`, etc.
     
-4. 
+4. KryoKTurboVMap<K,V>  - This is implementation where the SerDes used for the Key is a Kryo SerDes and the one used for Value is a custom SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `KryoKIntegerMap`, `KryoKStringMap`, etc.
 
+5.	TurboKKryoV<K,V> - This is implementation where the SerDes used for the Key is a custom SerDes and the one used for Value is a Kryo SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `IntegerKryoVMap`, `StringKryoVMap`, etc.
 
+6.	TurboKWritableV<K,V extends Writable> - This is implementation where the SerDes used for the Key is a custom SerDes and the one used for Value is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `IntegerIntWritableMap`, `IntegerIntWritableMap`, etc.
 
+7.	WritableKTurboV<K extends Writable,V> - This is implementation where the SerDes used for the Value is a custom SerDes and the one used for Key is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `IntWritableIntegerMap`, `IntWritableStringMap`, etc.
+
+7.	WritableKKryoV<K extends Writable,V> - This is implementation where the SerDes used for the Value is a Kryo SerDes and the one used for Key is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `IntWritableKryoVMap`, `TextKryoVMap`, etc.
+
+8.	KryoKWritableV<K,V extends Writable> - This is implementation where the SerDes used for the Key is a Kryo SerDes and the one used for Value is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `KryoKIntWritableMap`, `KryoKTextMap`, etc.
 
 #SerDes#
 
