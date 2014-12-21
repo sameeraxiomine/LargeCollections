@@ -96,8 +96,7 @@ There 8 main types of Maps provided are -
     `String VSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";`
     `String KDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
     `String VDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
-    `java.util.Map<Integer,Integer> map = `
-     
+    `java.util.Map<Integer,Integer> map = `     
      `new FastKVMap<Integer,Integer>(KSERIALIZER,
     										  VSERIALIZER,
     									     KDESERIALIZER,
