@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
@@ -29,9 +30,9 @@ public final class MapEntryIterator<K, V> implements
         Iterator<java.util.Map.Entry<K, V>> {
 
     private DBIterator iter = null;
-    private Function<byte[],? extends K> keyDeSerFunc = null;
-    private Function<byte[],? extends V> valDeSerFunc = null;
-    protected MapEntryIterator(DB db,Function<byte[],? extends K> keyDeSerFunc,Function<byte[],? extends V> valDeSerFunc) {
+    private TurboDeSerializer<? extends K> keyDeSerFunc = null;
+    private TurboDeSerializer<? extends V> valDeSerFunc = null;
+    protected MapEntryIterator(DB db,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc) {
         try {
             this.keyDeSerFunc = keyDeSerFunc;
             this.valDeSerFunc = valDeSerFunc;

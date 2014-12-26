@@ -11,15 +11,16 @@ import java.util.Set;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
 import com.google.common.base.Function;
 
 public  class MapKeySet<K> implements Set<K> {
     private Map<K,?> map = null;
     private DB db = null;
-    private Function<byte[],? extends K> deSerFunc = null;
+    private TurboDeSerializer<? extends K> deSerFunc = null;
     private int DELETE_EVERY_N_RECORDS=1000000;
 
-    public MapKeySet(Map<K,?> map,Function<byte[],? extends K> deSerFunc) {
+    public MapKeySet(Map<K,?> map,TurboDeSerializer<? extends K> deSerFunc) {
         this.map = map;
         this.db = ((IDb)this.map).getDB();
         this.deSerFunc = deSerFunc;

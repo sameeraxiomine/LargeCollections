@@ -37,10 +37,10 @@ import org.apache.hadoop.io.*;
 public class ShortWritableFloatWritableMap extends LargeCollection implements   Map<ShortWritable,FloatWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], ShortWritable> keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
-    private transient Function<byte[], FloatWritable> valDeSerFunc     = new WritableSerDes.FloatWritableDeSerFunction();
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboDeSerializer<ShortWritable> keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
+    private transient TurboDeSerializer<FloatWritable> valDeSerFunc     = new WritableSerDes.FloatWritableDeSerFunction();
     
     public ShortWritableFloatWritableMap() {
         super();

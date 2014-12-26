@@ -32,15 +32,12 @@ import com.axiomine.largecollections.utilities.*;
 import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.kryo.serializers.*;
 
-
-
-
 public class DoubleKryoVMap<V> extends LargeCollection implements   Map<Double,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Double, byte[]> keySerFunc       = new DoubleSerDes.SerFunction();
-    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
-    private transient Function<byte[], Double> keyDeSerFunc     = new DoubleSerDes.DeSerFunction();
-    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
+    private transient TurboSerializer<Double> keySerFunc       = new DoubleSerDes.SerFunction();
+    private transient TurboSerializer<V> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private transient TurboDeSerializer<Double> keyDeSerFunc     = new DoubleSerDes.DeSerFunction();
+    private transient TurboDeSerializer<V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
 
     public DoubleKryoVMap() {
         super();

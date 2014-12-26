@@ -36,10 +36,10 @@ import org.apache.hadoop.io.*;
 public class ShortWritableDoubleMap extends LargeCollection implements   Map<ShortWritable,Double>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDes.SerFunction();    
-    private transient Function<byte[], ShortWritable> keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
-    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Double> valSerFunc       = new DoubleSerDes.SerFunction();    
+    private transient TurboDeSerializer<ShortWritable> keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
+    private transient TurboDeSerializer< Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
     
     public ShortWritableDoubleMap() {
         super();

@@ -34,10 +34,10 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 public class LongMapWritableMap extends LargeCollection implements   Map<Long,MapWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Long, byte[]> keySerFunc       = new LongSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<byte[], Long> keyDeSerFunc     = new LongSerDes.DeSerFunction();
-    private transient Function<byte[], MapWritable> valDeSerFunc     = new WritableSerDes.MapWritableDeSerFunction();
+    private transient TurboSerializer<Long> keySerFunc       = new LongSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboDeSerializer<Long> keyDeSerFunc     = new LongSerDes.DeSerFunction();
+    private transient TurboDeSerializer<MapWritable> valDeSerFunc     = new WritableSerDes.MapWritableDeSerFunction();
     
     public LongMapWritableMap() {
         super();

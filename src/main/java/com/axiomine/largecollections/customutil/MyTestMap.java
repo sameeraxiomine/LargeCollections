@@ -23,6 +23,8 @@ import java.util.Set;
 import org.iq80.leveldb.WriteBatch;
 
 import com.axiomine.largecollections.serdes.IntegerSerDes;
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
+import com.axiomine.largecollections.serdes.TurboSerializer;
 import com.axiomine.largecollections.util.*;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -30,10 +32,10 @@ import com.google.common.base.Throwables;
 
 public class MyTestMap extends LargeCollection implements   Map<Integer,Integer>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new IntegerSerDes.SerFunction();
-    private transient Function<Integer, byte[]> valSerFunc       = new IntegerSerDes.SerFunction();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
-    private transient Function<byte[], Integer> valDeSerFunc     = new IntegerSerDes.DeSerFunction();
+    private transient TurboSerializer<Integer> keySerFunc       = new IntegerSerDes.SerFunction();
+    private transient TurboSerializer<Integer> valSerFunc       = new IntegerSerDes.SerFunction();
+    private transient TurboDeSerializer<Integer> keyDeSerFunc     = new IntegerSerDes.DeSerFunction();
+    private transient TurboDeSerializer<Integer> valDeSerFunc     = new IntegerSerDes.DeSerFunction();
     
     public MyTestMap() {
         super();

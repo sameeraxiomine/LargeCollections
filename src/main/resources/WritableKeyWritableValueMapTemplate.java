@@ -37,10 +37,10 @@ import org.apache.hadoop.io.*;
 public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], #K#> keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
-    private transient Function<byte[], #V#> valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboDeSerializer<#K#> keyDeSerFunc     = new WritableSerDes.#K#DeSerFunction();
+    private transient TurboDeSerializer<#V#> valDeSerFunc     = new WritableSerDes.#V#DeSerFunction();
     
     public #CLASS_NAME#() {
         super();

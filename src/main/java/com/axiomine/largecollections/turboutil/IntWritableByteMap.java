@@ -36,10 +36,10 @@ import org.apache.hadoop.io.*;
 public class IntWritableByteMap extends LargeCollection implements   Map<IntWritable,Byte>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Byte, byte[]> valSerFunc       = new ByteSerDes.SerFunction();    
-    private transient Function<byte[], IntWritable> keyDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
-    private transient Function<byte[], Byte> valDeSerFunc     = new ByteSerDes.DeSerFunction();
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Byte> valSerFunc       = new ByteSerDes.SerFunction();    
+    private transient TurboDeSerializer<IntWritable> keyDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
+    private transient TurboDeSerializer< Byte> valDeSerFunc     = new ByteSerDes.DeSerFunction();
     
     public IntWritableByteMap() {
         super();

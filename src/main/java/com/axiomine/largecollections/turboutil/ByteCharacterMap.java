@@ -36,10 +36,10 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 public class ByteCharacterMap extends LargeCollection implements   Map<Byte,Character>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Byte, byte[]> keySerFunc       = new ByteSerDes.SerFunction();
-    private transient Function<Character, byte[]> valSerFunc       = new CharacterSerDes.SerFunction();
-    private transient Function<byte[], Byte> keyDeSerFunc     = new ByteSerDes.DeSerFunction();
-    private transient Function<byte[], Character> valDeSerFunc     = new CharacterSerDes.DeSerFunction();
+    private transient TurboSerializer<Byte> keySerFunc       = new ByteSerDes.SerFunction();
+    private transient TurboSerializer<Character> valSerFunc       = new CharacterSerDes.SerFunction();
+    private transient TurboDeSerializer<Byte> keyDeSerFunc     = new ByteSerDes.DeSerFunction();
+    private transient TurboDeSerializer<Character> valDeSerFunc     = new CharacterSerDes.DeSerFunction();
     
     public ByteCharacterMap() {
         super();

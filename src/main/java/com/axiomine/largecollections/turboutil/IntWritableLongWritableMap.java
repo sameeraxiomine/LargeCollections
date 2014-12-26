@@ -37,10 +37,10 @@ import org.apache.hadoop.io.*;
 public class IntWritableLongWritableMap extends LargeCollection implements   Map<IntWritable,LongWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], IntWritable> keyDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
-    private transient Function<byte[], LongWritable> valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboDeSerializer<IntWritable> keyDeSerFunc     = new WritableSerDes.IntWritableDeSerFunction();
+    private transient TurboDeSerializer<LongWritable> valDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
     
     public IntWritableLongWritableMap() {
         super();

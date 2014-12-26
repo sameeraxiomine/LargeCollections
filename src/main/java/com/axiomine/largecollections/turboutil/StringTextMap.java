@@ -34,10 +34,10 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 public class StringTextMap extends LargeCollection implements   Map<String,Text>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<String, byte[]> keySerFunc       = new StringSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<byte[], String> keyDeSerFunc     = new StringSerDes.DeSerFunction();
-    private transient Function<byte[], Text> valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
+    private transient TurboSerializer<String> keySerFunc       = new StringSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboDeSerializer<String> keyDeSerFunc     = new StringSerDes.DeSerFunction();
+    private transient TurboDeSerializer<Text> valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
     
     public StringTextMap() {
         super();

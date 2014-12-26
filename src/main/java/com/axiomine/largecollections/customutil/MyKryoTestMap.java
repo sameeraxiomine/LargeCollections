@@ -36,10 +36,10 @@ import java.lang.Integer;
 
 public class MyKryoTestMap extends LargeCollection implements   Map<Integer,Integer>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Integer, byte[]> keySerFunc       = new KryoSerDes.SerFunction<Integer>();
-    private transient Function<Integer, byte[]> valSerFunc       = new KryoSerDes.SerFunction<Integer>();
-    private transient Function<byte[], Integer> keyDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
-    private transient Function<byte[], Integer> valDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
+    private transient TurboSerializer<Integer> keySerFunc       = new KryoSerDes.SerFunction<Integer>();
+    private transient TurboSerializer<Integer> valSerFunc       = new KryoSerDes.SerFunction<Integer>();
+    private transient TurboDeSerializer<Integer> keyDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
+    private transient TurboDeSerializer<Integer> valDeSerFunc     = new KryoSerDes.DeSerFunction<Integer>();
     
     public MyKryoTestMap() {
         super();

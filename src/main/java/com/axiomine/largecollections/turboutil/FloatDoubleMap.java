@@ -36,10 +36,10 @@ import com.axiomine.largecollections.kryo.serializers.*;
 
 public class FloatDoubleMap extends LargeCollection implements   Map<Float,Double>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<Float, byte[]> keySerFunc       = new FloatSerDes.SerFunction();
-    private transient Function<Double, byte[]> valSerFunc       = new DoubleSerDes.SerFunction();
-    private transient Function<byte[], Float> keyDeSerFunc     = new FloatSerDes.DeSerFunction();
-    private transient Function<byte[], Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
+    private transient TurboSerializer<Float> keySerFunc       = new FloatSerDes.SerFunction();
+    private transient TurboSerializer<Double> valSerFunc       = new DoubleSerDes.SerFunction();
+    private transient TurboDeSerializer<Float> keyDeSerFunc     = new FloatSerDes.DeSerFunction();
+    private transient TurboDeSerializer<Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
     
     public FloatDoubleMap() {
         super();

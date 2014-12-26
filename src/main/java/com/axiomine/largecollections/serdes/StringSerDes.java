@@ -1,9 +1,9 @@
 package com.axiomine.largecollections.serdes;
 
-import com.google.common.base.Function;
 
 public class StringSerDes {
-    public static class SerFunction implements Function<String,byte[]>{
+    public static class SerFunction implements TurboSerializer<String>{
+        private static final long serialVersionUID = 11L;
         public byte[] apply(String arg) {
             if(arg==null){
                 return null;
@@ -15,7 +15,8 @@ public class StringSerDes {
         }    
     }
 
-    public static class DeSerFunction implements Function<byte[],String>{
+    public static class DeSerFunction implements TurboDeSerializer<String>{
+        private static final long serialVersionUID = 11L;
         public String apply(byte[] arg) {
             if(arg==null){
                 return null;

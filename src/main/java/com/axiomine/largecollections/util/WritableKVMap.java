@@ -28,6 +28,8 @@ import com.google.common.base.Function;
 
 
 import com.axiomine.largecollections.*;
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
+import com.axiomine.largecollections.serdes.TurboSerializer;
 import com.axiomine.largecollections.serdes.WritableSerDes;
 
 import org.apache.hadoop.io.*;
@@ -35,19 +37,18 @@ import org.apache.hadoop.io.*;
 public class WritableKVMap extends LargeCollection implements   Map<Writable,Writable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient Function<Writable, byte[]> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient Function<Writable, byte[]> valSerFunc  = new WritableSerDes.SerFunction();    
-    private transient Function<byte[], ? extends Writable> keyDeSerFunc     = null;
-    private transient Function<byte[], ? extends Writable> valDeSerFunc     = null;
+    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboDeSerializer<? extends Writable> keyDeSerFunc     = null;
+    private transient TurboDeSerializer<? extends Writable> valDeSerFunc     = null;
     private String keyClass=null;
     private String valueClass=null;
     
-    private static Function<byte[], ? extends Writable> getWritableDeSerFunction(String cls){
-        Function<byte[], ? extends Writable> func = null;
+    private static TurboDeSerializer<? extends Writable> getWritableDeSerFunction(String cls){
+        TurboDeSerializer<? extends Writable> func = null;
         try{
             Writable cObj = (Writable) Class.forName(cls).newInstance();
             func = new WritableSerDes.DeSerFunction(cObj.getClass());
-
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);

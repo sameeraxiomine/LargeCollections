@@ -10,7 +10,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public class KryoSerDes {
-    public static class SerFunction<K> implements Function<K, byte[]> {        
+    public static class SerFunction<K> implements TurboSerializer<K> {        
+        private static final long serialVersionUID = 7L;
         private final ThreadLocal<Kryo> kryos;        
         public SerFunction(){
             this.kryos = KryoUtils.getThreadLocalKryos();
@@ -44,7 +45,8 @@ public class KryoSerDes {
         }
     }
     
-    public static class DeSerFunction<K> implements Function<byte[],K>{
+    public static class DeSerFunction<K> implements TurboDeSerializer<K>{
+        private static final long serialVersionUID = 7L;
         private final ThreadLocal<Kryo> kryos; 
         public DeSerFunction(){
             this.kryos = KryoUtils.getThreadLocalKryos();

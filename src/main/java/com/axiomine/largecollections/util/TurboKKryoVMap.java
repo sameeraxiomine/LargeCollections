@@ -35,52 +35,40 @@ import java.lang.Integer;
 
 public class TurboKKryoVMap<K,V> extends LargeCollection implements   Map<K,V>, Serializable{
     public static final long               serialVersionUID = 2l;
-    private transient Function<K, byte[]> keySerFunc       = null;
-    private transient Function<V, byte[]> valSerFunc       = new KryoSerDes.SerFunction<V>();
-    private transient Function<byte[], K> keyDeSerFunc     = null;
-    private transient Function<byte[], V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
-    private String keySerCls=null;
-    private String keyDeSerCls=null;
+    private TurboSerializer<K> keySerFunc       = null;
+    private transient TurboSerializer<V> valSerFunc       = new KryoSerDes.SerFunction<V>();
+    private TurboDeSerializer<K> keyDeSerFunc     = null;
+    private TurboDeSerializer<V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
 
-    public TurboKKryoVMap(Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
+    public TurboKKryoVMap(TurboSerializer<K> kSerializer,TurboDeSerializer<K> kDeSerializer) {
         super();
         this.keySerFunc = kSerializer;
         this.keyDeSerFunc = kDeSerializer;
-        this.keySerCls = kSerializer.getClass().getName();
-        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public TurboKKryoVMap(String dbName,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
+    public TurboKKryoVMap(String dbName,TurboSerializer<K> kSerializer,TurboDeSerializer<K> kDeSerializer) {
         super(dbName);
         this.keySerFunc = kSerializer;
         this.keyDeSerFunc = kDeSerializer;
-        this.keySerCls = kSerializer.getClass().getName();
-        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public TurboKKryoVMap(String dbPath, String dbName,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
+    public TurboKKryoVMap(String dbPath, String dbName,TurboSerializer<K> kSerializer,TurboDeSerializer<K> kDeSerializer) {
         super(dbPath, dbName);
         this.keySerFunc = kSerializer;
         this.keyDeSerFunc = kDeSerializer;
-        this.keySerCls = kSerializer.getClass().getName();
-        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
-    public TurboKKryoVMap(String dbPath, String dbName, int cacheSize,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
+    public TurboKKryoVMap(String dbPath, String dbName, int cacheSize,TurboSerializer<K> kSerializer,TurboDeSerializer<K> kDeSerializer) {
         super(dbPath, dbName, cacheSize);
         this.keySerFunc = kSerializer;
         this.keyDeSerFunc = kDeSerializer;
-        this.keySerCls = kSerializer.getClass().getName();
-        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
     public TurboKKryoVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,Function<K,byte[]> kSerializer,Function<byte[],K> kDeSerializer) {
+            int bloomFilterSize,TurboSerializer<K> kSerializer,TurboDeSerializer<K> kDeSerializer) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
         this.keySerFunc = kSerializer;
         this.keyDeSerFunc = kDeSerializer;
-        this.keySerCls = kSerializer.getClass().getName();
-        this.keyDeSerCls = kDeSerializer.getClass().getName();
     }
     
     @Override
@@ -244,8 +232,8 @@ public class TurboKKryoVMap<K,V> extends LargeCollection implements   Map<K,V>, 
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.keySerCls);
-        stream.writeObject(this.keyDeSerCls);
+        stream.writeObject(this.keySerFunc);
+        stream.writeObject(this.keyDeSerFunc);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
@@ -253,15 +241,8 @@ public class TurboKKryoVMap<K,V> extends LargeCollection implements   Map<K,V>, 
         valSerFunc       = new KryoSerDes.SerFunction<V>();
         valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();
         this.deserialize(in);
-        try{
-            this.keySerCls = (String)in.readObject();
-            this.keyDeSerCls = (String)in.readObject();
-            this.keySerFunc = (Function<K, byte[]>) Class.forName(this.keySerCls).newInstance();
-            this.keyDeSerFunc = (Function<byte[], K>) Class.forName(this.keyDeSerCls).newInstance();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.keySerFunc = (TurboSerializer<K>) in.readObject();
+        this.keyDeSerFunc = (TurboDeSerializer<K>) in.readObject();;
         
     }
     /* End of Serialization functions go here */

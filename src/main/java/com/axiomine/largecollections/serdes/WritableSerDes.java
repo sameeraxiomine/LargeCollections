@@ -18,7 +18,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public class WritableSerDes {
-    public static class SerFunction implements Function<Writable,byte[]>{
+    public static class SerFunction implements TurboSerializer<Writable>{
+        private static final long serialVersionUID = 12L;
         public byte[] apply(Writable arg) {
             if (arg == null) {
                 return null;
@@ -29,7 +30,8 @@ public class WritableSerDes {
         }    
     }
     
-    public static class DeSerFunction implements Function<byte[],Writable>{
+    public static class DeSerFunction implements TurboDeSerializer<Writable>{
+        private static final long serialVersionUID = 12L;
         private Class<? extends Writable> writableCls = null; 
         public DeSerFunction(Class<? extends Writable> wCls){
             this.writableCls = wCls;
@@ -67,7 +69,7 @@ public class WritableSerDes {
     }
     
     
-    public static class IntWritableDeSerFunction implements Function<byte[],IntWritable>{
+    public static class IntWritableDeSerFunction implements TurboDeSerializer<IntWritable>{
         public IntWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -78,7 +80,7 @@ public class WritableSerDes {
             }
         }    
     }
-    public static class ArrayPrimitiveWritableDeSerFunction implements Function<byte[],ArrayPrimitiveWritable>{
+    public static class ArrayPrimitiveWritableDeSerFunction implements TurboDeSerializer<ArrayPrimitiveWritable>{
         public ArrayPrimitiveWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -90,7 +92,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class BooleanWritableDeSerFunction implements Function<byte[],BooleanWritable>{
+    public static class BooleanWritableDeSerFunction implements TurboDeSerializer<BooleanWritable>{
         public BooleanWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -102,7 +104,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class BytesWritableDeSerFunction implements Function<byte[],BytesWritable>{
+    public static class BytesWritableDeSerFunction implements TurboDeSerializer<BytesWritable>{
         public BytesWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -114,7 +116,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class ByteWritableDeSerFunction implements Function<byte[],ByteWritable>{
+    public static class ByteWritableDeSerFunction implements TurboDeSerializer<ByteWritable>{
         public ByteWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -126,7 +128,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class DoubleWritableDeSerFunction implements Function<byte[],DoubleWritable>{
+    public static class DoubleWritableDeSerFunction implements TurboDeSerializer<DoubleWritable>{
         public DoubleWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -137,7 +139,7 @@ public class WritableSerDes {
             }
         }    
     }
-    public static class FloatWritableDeSerFunction implements Function<byte[],FloatWritable>{
+    public static class FloatWritableDeSerFunction implements TurboDeSerializer<FloatWritable>{
         public FloatWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -149,7 +151,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class LongWritableDeSerFunction implements Function<byte[],LongWritable>{
+    public static class LongWritableDeSerFunction implements TurboDeSerializer<LongWritable>{
         public LongWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -161,7 +163,7 @@ public class WritableSerDes {
         }    
     }
     
-    public static class MapWritableDeSerFunction implements Function<byte[],MapWritable>{
+    public static class MapWritableDeSerFunction implements TurboDeSerializer<MapWritable>{
         public MapWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -173,7 +175,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class ShortWritableDeSerFunction implements Function<byte[],ShortWritable>{
+    public static class ShortWritableDeSerFunction implements TurboDeSerializer<ShortWritable>{
         public ShortWritable apply(byte[] arg) {
             if (arg == null) {
                 return null;
@@ -185,7 +187,7 @@ public class WritableSerDes {
         }    
     }
 
-    public static class TextDeSerFunction implements Function<byte[],Text>{
+    public static class TextDeSerFunction implements TurboDeSerializer<Text>{
         public Text apply(byte[] arg) {
             if (arg == null) {
                 return null;

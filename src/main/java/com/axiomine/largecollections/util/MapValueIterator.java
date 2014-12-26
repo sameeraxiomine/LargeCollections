@@ -7,6 +7,7 @@ import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 import org.iq80.leveldb.ReadOptions;
 
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
 import com.google.common.base.Function;
 
 
@@ -29,8 +30,8 @@ import com.google.common.base.Function;
 public final class MapValueIterator<V> implements Iterator<V> {
 
     private DBIterator iter = null;
-    private Function<byte[],? extends V> valDeSerFunc = null;
-    protected MapValueIterator(DB db,Function<byte[],? extends V> valDeSerFunc) {
+    private TurboDeSerializer<? extends V> valDeSerFunc = null;
+    protected MapValueIterator(DB db,TurboDeSerializer<? extends V> valDeSerFunc) {
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
         this.iter =db.iterator(ro);

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
+import com.axiomine.largecollections.serdes.TurboSerializer;
 import com.axiomine.largecollections.util.TurboKVMap;
 import com.axiomine.largecollections.util.KryoKVMap;
 import com.axiomine.largecollections.util.LargeCollection;
@@ -13,10 +15,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public class TurboKVMapSample {
-    public static Function<Integer,byte[]> KSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
-    public static Function<Integer,byte[]>  VSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
-    public static Function<byte[],Integer>  KDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
-    public static Function<byte[],Integer>  VDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+    public static TurboSerializer<Integer> KSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes2.SerFunction();
+    public static TurboSerializer<Integer>  VSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes2.SerFunction();
+    public static TurboDeSerializer<Integer>  KDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes2.DeSerFunction();
+    public static TurboDeSerializer<Integer>  VDESERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes2.DeSerFunction();
 
     /*
      * Utilize KVMap when you have Kryo Serializers for both K and V

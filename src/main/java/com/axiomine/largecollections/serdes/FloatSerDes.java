@@ -1,12 +1,11 @@
 package com.axiomine.largecollections.serdes;
 
-import java.nio.ByteBuffer;
-
-import com.google.common.base.Function;
 import com.google.common.primitives.Ints;
 
 public class FloatSerDes {
-    public static class SerFunction implements Function<Float,byte[]>{
+    public static class SerFunction implements TurboSerializer<Float>{
+        private static final long serialVersionUID = 5L;
+
         public byte[] apply(Float arg) {
             if(arg==null){
                 return null;
@@ -18,7 +17,8 @@ public class FloatSerDes {
         }    
     }
     
-    public static class DeSerFunction implements Function<byte[],Float>{
+    public static class DeSerFunction implements TurboDeSerializer<Float>{
+        private static final long serialVersionUID = 5L;
         public Float apply(byte[] arg) {
             if(arg==null){
                 return null;

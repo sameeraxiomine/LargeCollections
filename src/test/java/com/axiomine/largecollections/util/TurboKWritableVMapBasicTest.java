@@ -16,6 +16,9 @@ import org.apache.hadoop.io.Writable;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.axiomine.largecollections.serdes.IntegerSerDes;
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
+import com.axiomine.largecollections.serdes.TurboSerializer;
 import com.axiomine.largecollections.util.TurboKWritableVMap;
 import com.axiomine.largecollections.util.WritableKTurboVMap;
 import com.axiomine.largecollections.utilities.FileSerDeUtils;
@@ -37,8 +40,8 @@ public class TurboKWritableVMapBasicTest {
     public void test00BasicTest() {
         TurboKWritableVMap<Integer,IntWritable> map = null;
         try {
-            Function<Integer,byte[]> kser = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
-            Function<byte[],Integer> kdeser = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+            TurboSerializer<Integer> kser = new IntegerSerDes.SerFunction();
+            TurboDeSerializer<Integer> kdeser = new IntegerSerDes.DeSerFunction();
 
             map = new TurboKWritableVMap<Integer,IntWritable>(dbPath, "cacheMap",IntWritable.class,kser,kdeser);
             Assert.assertTrue(map.isEmpty());

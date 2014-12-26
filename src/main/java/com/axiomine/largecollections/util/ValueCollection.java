@@ -21,13 +21,14 @@ import java.util.Map;
 
 import org.iq80.leveldb.DB;
 
+import com.axiomine.largecollections.serdes.TurboDeSerializer;
 import com.google.common.base.Function;
 
 public  class ValueCollection<V> implements Collection<V> {
     private Map<?,V> map = null;
     private DB db = null;
-    private Function<byte[],? extends V> valDeSerFunc = null; 
-    public ValueCollection(Map<?,V> map, DB db, Function<byte[],? extends V> valDeSerFunc) {
+    private TurboDeSerializer<? extends V> valDeSerFunc = null; 
+    public ValueCollection(Map<?,V> map, DB db, TurboDeSerializer<? extends V> valDeSerFunc) {
         this.map = map;
         this.db = db;
         this.valDeSerFunc = valDeSerFunc;
