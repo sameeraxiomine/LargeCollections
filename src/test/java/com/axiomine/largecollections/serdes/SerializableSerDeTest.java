@@ -1,4 +1,4 @@
-package com.axiomine.largecollections.serdes.basic;
+package com.axiomine.largecollections.serdes;
 
 import java.io.Serializable;
 
