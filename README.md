@@ -326,7 +326,6 @@ We will be adding more documentation in the coming days.
 
 #License#
 
-
 Copyright 2014 Axiomine
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
