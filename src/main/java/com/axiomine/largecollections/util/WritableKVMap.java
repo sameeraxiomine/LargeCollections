@@ -34,7 +34,7 @@ import com.axiomine.largecollections.serdes.WritableSerDes;
 
 import org.apache.hadoop.io.*;
 
-public class WritableKVMap extends LargeCollection implements   Map<Writable,Writable>, Serializable{
+public class WritableKVMap<K extends Writable,V extends Writable> extends LargeCollection implements   Map<Writable,Writable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
     private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();

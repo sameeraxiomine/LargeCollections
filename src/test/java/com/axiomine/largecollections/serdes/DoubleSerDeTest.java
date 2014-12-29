@@ -11,8 +11,9 @@ public class DoubleSerDeTest {
     
     @Test
     public void test() {
-        DoubleSerDes.SerFunction ser = new DoubleSerDes.SerFunction();
-        DoubleSerDes.DeSerFunction deser = new DoubleSerDes.DeSerFunction();
+        TurboSerializer<Double> ser = new DoubleSerDes.SerFunction();
+        TurboDeSerializer<Double> deser = new DoubleSerDes.DeSerFunction();
+
         
         double d = 1d;
         byte[] ba = ser.apply(d);

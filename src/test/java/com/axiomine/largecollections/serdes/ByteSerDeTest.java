@@ -10,8 +10,9 @@ public class ByteSerDeTest {
     
     @Test
     public void test() {
-        ByteSerDes.SerFunction ser = new ByteSerDes.SerFunction();
-        ByteSerDes.DeSerFunction deser = new ByteSerDes.DeSerFunction();
+        TurboSerializer<Byte> ser = new ByteSerDes.SerFunction();
+        TurboDeSerializer<Byte> deser = new ByteSerDes.DeSerFunction();
+
         
         byte b = 1;
         byte[] sba = ser.apply(b);

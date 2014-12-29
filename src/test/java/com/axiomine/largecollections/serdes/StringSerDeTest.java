@@ -1,5 +1,7 @@
 package com.axiomine.largecollections.serdes;
 
+import java.io.Serializable;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -10,9 +12,9 @@ public class StringSerDeTest {
     
     @Test
     public void test() {
-        StringSerDes.SerFunction ser = new StringSerDes.SerFunction();
-        StringSerDes.DeSerFunction deser = new StringSerDes.DeSerFunction();
-        
+        TurboSerializer<String> ser = new StringSerDes.SerFunction();
+        TurboDeSerializer<String> deser = new StringSerDes.DeSerFunction();
+
         String s = "This is a test";
         byte[] sba = ser.apply(s);
         String ss = deser.apply(sba);

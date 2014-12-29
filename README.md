@@ -13,13 +13,21 @@ While LargeCollections supports any Serializable/Externalizable/Writable/Kryo-Se
 
 To support the conversions from object to byte-array and back, every java.util.Map sub-class provided by LargeCollections library needs to have Serializer-Deserializer (SerDes) pair, one each for Key and Value class. 
 
+These SerDes pair is implements the following standard Interfaces
+
+1. `com.axiomine.largecollections.serdes.TurboSerializer<T>` 
+2. `com.axiomine.largecollections.serdes.TurboDeSerializer<T>` 
+
+
 # When should you use LargeCollections #
 
-The should use LargeCollections in the following situations
+You should use LargeCollections in the following situations
 
-1. The size of your Map is larger than over 50-100MB
+1. The size of your Map is larger than over 100-200 MB. It is well known fact about Java that despite the availability of Heap Memory, the JVM gets slower as the size of objects gets larger. The situation gets worse when these objects are long-lived which is typical of caches as the GC is kicked off more often.
 
 2. The size of your Key-Value store is not so large as to justify a NoSQL store like HBase or Cassandra
+
+3. You would like to use large Caches which support the java.util.Map API.
 
 You you find yourself wishing you could use an in-process MongoDB instance, you should consider using LargeCollections. It is designed to be an in-process persistent Map which allows you to store a few million entries.
 
@@ -29,6 +37,58 @@ The best way to learn how to use the API is to follow the samples contained in t
 
 The main thing to remember when using this library is, it supports the java.util.Map interface. The only method not supported (for performance reason) is  `public boolean containsValue(Object value)`
 
+For examples of how to use the library classes in the `com.axiomine.largecollections.util` package see the source code for the classes below
+
+    samples.com.axiomine.largecollections.util.KryoKVMapSample
+    samples.com.axiomine.largecollections.util.TurboKVMapSample
+    samples.com.axiomine.largecollections.util.WritableKVMapSample
+	samples.com.axiomine.largecollections.util.KryoKTurboVMapSample
+    samples.com.axiomine.largecollections.util.TurboKKryoVMapSample
+	samples.com.axiomine.largecollections.util.KryoKWritableVMapSample
+    samples.com.axiomine.largecollections.util.WritableKKryoVMapSample
+	samples.com.axiomine.largecollections.util.TurboKWritableVMapSample
+    samples.com.axiomine.largecollections.util.WritableKTurboVMapSample
+
+For examples of how to use the library classes in the `com.axiomine.largecollections.turboutil` package see the source code for the classes below
+
+    samples.com.axiomine.largecollections.turboutil.IntegerIntegerMapSample
+    samples.com.axiomine.largecollections.turboutil.IntegerIntWritableMapSample
+	samples.com.axiomine.largecollections.turboutil.IntWritableIntegerMapSample
+    samples.com.axiomine.largecollections.turboutil.IntegerKryoVMapSample
+	samples.com.axiomine.largecollections.turboutil.KryoKIntegerMapSample
+	samples.com.axiomine.largecollections.turboutil.IntegerKryoVMapSample
+
+The classes in `com.axiomine.largecollections.turboutil` are helper classes provided to handle primitive (almost) types as follows
+    Integer
+    Long
+    Double
+    Float
+    Byte
+    BytesArray(byte[])
+    Character
+    String
+     
+The classes in `com.axiomine.largecollections.turboutil` are helper classes provided to handle Writable types as follows
+    IntWritable
+    LongWritable
+    FloatWritable
+    DoubleWritable
+    Text
+	BooleanWritable
+	ArrayPrimitiveWritable
+	BytesWritable
+	ShortWritable
+	MapWritable
+
+The classes in `com.axiomine.largecollections.turboutil` also support combinations of all of the above classes with each other as well as templatized when K/V use Kryo based Serialization, Examples are -
+
+     KryoKIntegerMap 
+     IntegerKryoVMap
+     IntWritableIntegerMap 
+     IntegerIntWritableMap
+     IntWritableKryoVMap
+     KryoKIntWritableMap
+    
 ## Map Attributes ##
 We provide implementations of java.util.Map. Each of these Map implementations has the following attributes
 
@@ -90,21 +150,15 @@ There 8 main types of Maps provided are -
 	- 	kDeSerClass This is a DeSerializer class used to deserialize K instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction` if K is of type `java.lang.Integer`
 	- 	vDeSerClass This is a DeSerializer class used to deserialize V instance. For example `com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction` if V is of type `java.lang.Integer`
 
-	For examples of how to use this class see `samples.FastKVSample.java`
+	For examples of how to use this class see `samples.com.axiomine.largecollections.util.TurboKVMapSample.java`
 
-    `String KSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";`
-    `String VSERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$SerFunction";`
-    `String KDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
-    `String VDESERIALIZER = "com.axiomine.largecollections.serdes.IntegerSerDes$DeSerFunction";`
-    `java.util.Map<Integer,Integer> map = `     
-     `new FastKVMap<Integer,Integer>(KSERIALIZER,
-    										  VSERIALIZER,
-    									     KDESERIALIZER,
-    										 VDESERIALIZER);`  
- `//Use it like a regular java.util.Map`
+    TurboSerializer<Integer> KSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+    TurboSerializer<Integer> VSERIALIZER = new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+    TurboDeSerializer<Integer> KDESERIALIZER =new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+    TurboDeSerializer<Integer> VDESERIALIZER =new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+    java.util.Map<Integer,Integer> map =   new FastKVMap<Integer,Integer>(KSERIALIZER,VSERIALIZER,KDESERIALIZER,VDESERIALIZER);    					
+ 	//Use it like a regular java.util.Map`
         
-	If you do not wish to pass the SerDes classes for K and V types you can simply use the standard classes provided in the `com.axiomine.largecollections.turboutil` package. Examples of such classes are `IntegerIntegerMap`, `IntegerByteArrayMap`, `StringIntegerMap`, etc.
-
 2.  KryoKVMap<K,V> - This implementation of `java.util.Map` utilizes Kryo for high performance serialization and deserialization. For all the standard primitive types Kryo provides default serializers. LargeCollections also provides Kryo Serializers for the following standard org.hadoop.io.Writable implementations in the package `com.axiomine.largecollections.kryo.serializers`
 	- 	`ArrayPrimitiveWritable` 
 	- 	`BooleanWritable`
@@ -117,12 +171,14 @@ There 8 main types of Maps provided are -
 	- 	`MapWritable`
 	- 	`ShortWritable`
 	- 	`Text`	
+
 	KryoKVMap can be used where TurboKVMap is used for standard types mentioned in the TurboSerDes described above. However using the TurboKVMap will perform significantly faster if you are working with the primitive types. 
 	You should review the classes in the package `com.axiomine.largecollections.kryo.serializers` for examples of how to write your own KryoSerializers. The Kryo documentation is the best resource on how to write your own Kryo Serializers
 	
 	You do have to register your own KryoSerializers. For example `com.axiomine.largecollections.kryo.serializers.MyIntSerializer` is an example of the custom Kryo serializer. If you want to register your own serializer you should create a property file and make entries as follows
-	    `java.lang.Integer=com.axiomine.largecollections.kryo.serializers.MyIntSerializer`
-	`java.lang.Float=com.axiomine.largecollections.kryo.serializers.MyFloatSerializer`
+
+		             	java.lang.Integer=com.axiomine.largecollections.kryo.serializers.MyIntSerializer
+    	java.lang.Float=com.axiomine.largecollections.kryo.serializers.MyFloatSerializer   	
 	
 	An example file is in location `src/test/resources/KryoRegistration.properties`. See the following test case to `com.axiomine.largecollections.util.KryoKTurboVMapBasicTest` for example on how to register custom Kryo serializers. The above mentioned Property file must be passed to the JVM using the following System Property
 	

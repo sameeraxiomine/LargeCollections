@@ -10,8 +10,8 @@ public class IntegerSerDeTest {
     
     @Test
     public void test() {
-        IntegerSerDes.SerFunction ser = new IntegerSerDes.SerFunction();
-        IntegerSerDes.DeSerFunction deser = new IntegerSerDes.DeSerFunction();
+        TurboSerializer<Integer> ser = new IntegerSerDes.SerFunction();
+        TurboDeSerializer<Integer> deser = new IntegerSerDes.DeSerFunction();
         
         Integer i = 1;
         byte[] ba = ser.apply(i);

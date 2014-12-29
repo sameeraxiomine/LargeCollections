@@ -12,10 +12,10 @@ public class WritableSerDeTest {
     
     @Test
     public void test() {
-        WritableSerDes.SerFunction ser = new WritableSerDes.SerFunction();
-        Text t = new Text();
-        WritableSerDes.DeSerFunction deser = new WritableSerDes.DeSerFunction(Text.class);
-        WritableSerDes.TextDeSerFunction deser2 = new WritableSerDes.TextDeSerFunction();
+        TurboSerializer<Writable> ser = new WritableSerDes.SerFunction();
+        TurboDeSerializer<Writable> deser = new WritableSerDes.DeSerFunction(Text.class);
+
+        TurboDeSerializer<Text> deser2 = new WritableSerDes.TextDeSerFunction();
         Text s = new Text("This is a test");
         byte[] sba = ser.apply(s);
         Writable ss = deser.apply(sba);

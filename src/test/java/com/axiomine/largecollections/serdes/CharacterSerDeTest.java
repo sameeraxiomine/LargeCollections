@@ -11,17 +11,17 @@ public class CharacterSerDeTest {
     
     @Test
     public void test() {
-        CharacterSerDes.SerFunction cser = new CharacterSerDes.SerFunction();
-        CharacterSerDes.DeSerFunction cdeser = new CharacterSerDes.DeSerFunction();
-        
+        TurboSerializer<Character> ser = new CharacterSerDes.SerFunction();
+        TurboDeSerializer<Character> deser = new CharacterSerDes.DeSerFunction();
+
         char c1 = 'a';
-        byte[] cba = cser.apply(c1);
-        char c2 = cdeser.apply(cba);
+        byte[] cba = ser.apply(c1);
+        char c2 = deser.apply(cba);
         Assert.assertEquals(c1, c2);
 
         c1 = 0x01;
-        cba = cser.apply(c1);
-        c2 = cdeser.apply(cba);
+        cba = ser.apply(c1);
+        c2 = deser.apply(cba);
         Assert.assertEquals(c1, c2);
 
     }

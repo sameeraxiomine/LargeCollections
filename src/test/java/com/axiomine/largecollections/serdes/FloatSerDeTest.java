@@ -11,8 +11,8 @@ public class FloatSerDeTest {
     
     @Test
     public void test() {
-        FloatSerDes.SerFunction ser = new FloatSerDes.SerFunction();
-        FloatSerDes.DeSerFunction deser = new FloatSerDes.DeSerFunction();
+        TurboSerializer<Float> ser = new FloatSerDes.SerFunction();
+        TurboDeSerializer<Float> deser = new FloatSerDes.DeSerFunction();
         
         Float f = 1f;
         byte[] ba = ser.apply(f);

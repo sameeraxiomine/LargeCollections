@@ -10,8 +10,8 @@ public class LongSerDeTest {
     
     @Test
     public void test() {
-        LongSerDes.SerFunction ser = new LongSerDes.SerFunction();
-        LongSerDes.DeSerFunction deser = new LongSerDes.DeSerFunction();
+        TurboSerializer<Long> ser = new LongSerDes.SerFunction();
+        TurboDeSerializer<Long> deser = new LongSerDes.DeSerFunction();
         
         Long l = 1l;
         byte[] ba = ser.apply(l);
