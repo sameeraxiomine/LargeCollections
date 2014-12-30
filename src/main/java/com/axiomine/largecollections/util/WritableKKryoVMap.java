@@ -42,76 +42,39 @@ public class WritableKKryoVMap<K extends Writable,V> extends LargeCollection imp
     private transient TurboSerializer<V> valSerFunc  = new KryoSerDes.SerFunction<V>();    
     private transient TurboDeSerializer<? extends Writable> keyDeSerFunc     = null;
     private transient TurboDeSerializer<? extends V> valDeSerFunc     = new KryoSerDes.DeSerFunction<V>();;
-    private String writableKeyClass=null;
+    private Class<K> kClass = null;
     
-    private static TurboDeSerializer<? extends Writable> getWritableDeSerFunction(String cls){
-        TurboDeSerializer<? extends Writable> func = null;
-        try{
-            Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDes.DeSerFunction(cObj.getClass());
-
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        return func;        
-    }
     
-    public WritableKKryoVMap(Class<? extends Writable> keyClass) {
+    public WritableKKryoVMap(Class<K> keyClass) {
         super();
-        try{
-            this.writableKeyClass = keyClass.getName();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.kClass = keyClass;
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
-    public WritableKKryoVMap(String dbName,Class<? extends Writable> keyClass) {
+    public WritableKKryoVMap(String dbName,Class<K> keyClass) {
         super(dbName);
-        try{
-            this.writableKeyClass = keyClass.getName();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.kClass = keyClass;
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
 
     }
     
-    public WritableKKryoVMap(String dbPath, String dbName,Class<? extends Writable> keyClass) {
+    public WritableKKryoVMap(String dbPath, String dbName,Class<K> keyClass) {
         super(dbPath, dbName);
-        try{
-            this.writableKeyClass = keyClass.getName();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.kClass = keyClass;
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
-    public WritableKKryoVMap(String dbPath, String dbName, int cacheSize,Class<? extends Writable> keyClass) {
+    public WritableKKryoVMap(String dbPath, String dbName, int cacheSize,Class<K> keyClass) {
         super(dbPath, dbName, cacheSize);
-        try{
-            this.writableKeyClass = keyClass.getName();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.kClass = keyClass;
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
     public WritableKKryoVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,Class<? extends Writable> keyClass) {
+            int bloomFilterSize,Class<K> keyClass) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        try{
-            this.writableKeyClass = keyClass.getName();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.kClass = keyClass;
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
     @Override
@@ -275,24 +238,18 @@ public class WritableKKryoVMap<K extends Writable,V> extends LargeCollection imp
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.writableKeyClass);
+        stream.writeObject(this.kClass);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
 
         this.deserialize(in);
-        this.writableKeyClass = (String)in.readObject();
-        try{
-            this.keySerFunc  = new WritableSerDes.SerFunction();
-            this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
-            this.valSerFunc = new KryoSerDes.SerFunction<V>();
-            this.valDeSerFunc = new KryoSerDes.DeSerFunction<V>();
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        
+        this.kClass = (Class<K>)in.readObject();
+        this.keySerFunc  = new WritableSerDes.SerFunction();
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
+        this.valSerFunc = new KryoSerDes.SerFunction<V>();
+        this.valDeSerFunc = new KryoSerDes.DeSerFunction<V>();
     }
     /* End of Serialization functions go here */
     

@@ -42,76 +42,39 @@ public class KryoKWritableVMap<K,V extends Writable> extends LargeCollection imp
     private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
     private transient TurboDeSerializer<K> keyDeSerFunc     = new KryoSerDes.DeSerFunction<K>();
     private transient TurboDeSerializer<? extends Writable> valDeSerFunc     = null;
-    private String writableValClass=null;
+    private Class<V>  vClass  = null;
+
 
     
-    private static TurboDeSerializer<? extends Writable> getWritableDeSerFunction(String cls){
-        TurboDeSerializer<? extends Writable> func = null;
-        try{
-            Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDes.DeSerFunction(cObj.getClass());
-
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        return func;        
-    }
-    
-    public KryoKWritableVMap(Class<? extends Writable> valueClass) {
+    public KryoKWritableVMap(Class<V> valueClass) {
         super();
-        try{
-            this.writableValClass = valueClass.getName();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.vClass = valueClass;
+        this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
     }
     
-    public KryoKWritableVMap(String dbName,Class<? extends Writable> valueClass) {
+    public KryoKWritableVMap(String dbName,Class<V> valueClass) {
         super(dbName);
-        try{
-            this.writableValClass = valueClass.getName();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.vClass = valueClass;
+        this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
     }
     
-    public KryoKWritableVMap(String dbPath, String dbName,Class<? extends Writable> valueClass) {
+    public KryoKWritableVMap(String dbPath, String dbName,Class<V> valueClass) {
         super(dbPath, dbName);
-        try{
-            this.writableValClass = valueClass.getName();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.vClass = valueClass;
+        this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
     }
     
-    public KryoKWritableVMap(String dbPath, String dbName, int cacheSize,Class<? extends Writable> valueClass) {
+    public KryoKWritableVMap(String dbPath, String dbName, int cacheSize,Class<V> valueClass) {
         super(dbPath, dbName, cacheSize);
-        try{
-            this.writableValClass = valueClass.getName();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.vClass = valueClass;
+        this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
     }
     
     public KryoKWritableVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,Class<? extends Writable> valueClass) {
+            int bloomFilterSize,Class<V> valueClass) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        try{
-            this.writableValClass = valueClass.getName();
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
+        this.vClass = valueClass;
+        this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
     }
     
     @Override
@@ -275,7 +238,7 @@ public class KryoKWritableVMap<K,V extends Writable> extends LargeCollection imp
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.writableValClass);
+        stream.writeObject(this.vClass);
     }
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
@@ -283,11 +246,11 @@ public class KryoKWritableVMap<K,V extends Writable> extends LargeCollection imp
 
         this.deserialize(in);
         try{
-            this.writableValClass = (String)in.readObject();
+            this.vClass = (Class<V>)in.readObject();
             this.keySerFunc = new KryoSerDes.SerFunction<K>();
             this.valSerFunc  = new WritableSerDes.SerFunction();
             this.keyDeSerFunc = new KryoSerDes.DeSerFunction<K>();;
-            this.valDeSerFunc = getWritableDeSerFunction(this.writableValClass);
+            this.valDeSerFunc = new WritableSerDes.DeSerFunction(this.vClass);
         }
         catch(Exception ex){
             throw Throwables.propagate(ex);

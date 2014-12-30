@@ -42,61 +42,49 @@ public class WritableKTurboVMap<K extends Writable,V> extends LargeCollection im
     
     private TurboSerializer<V> valSerFunc  = null;
     private TurboDeSerializer<? extends V> valDeSerFunc     = null;
-    private String writableKeyClass=null;
+    private Class<K> kClass = null;
     
-    private static TurboDeSerializer<? extends Writable> getWritableDeSerFunction(String cls){
-        TurboDeSerializer<? extends Writable> func = null;
-        try{
-            Writable cObj = (Writable) Class.forName(cls).newInstance();
-            func = new WritableSerDes.DeSerFunction(cObj.getClass());
-
-        }
-        catch(Exception ex){
-            throw Throwables.propagate(ex);
-        }
-        return func;        
-    }
     
-    public WritableKTurboVMap(Class<? extends Writable> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
+    public WritableKTurboVMap(Class<K> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
         super();
-        this.writableKeyClass = keyClass.getName();
+        this.kClass = keyClass;
         this.valSerFunc = vSerializer;
         this.valDeSerFunc = vDeSerializer;
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
-    public WritableKTurboVMap(String dbName,Class<? extends Writable> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
+    public WritableKTurboVMap(String dbName,Class<K> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
         super(dbName);
-        this.writableKeyClass = keyClass.getName();
+        this.kClass = keyClass;
         this.valSerFunc = vSerializer;
         this.valDeSerFunc = vDeSerializer;
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
 
     }
     
-    public WritableKTurboVMap(String dbPath, String dbName,Class<? extends Writable> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
+    public WritableKTurboVMap(String dbPath, String dbName,Class<K> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
         super(dbPath, dbName);
-        this.writableKeyClass = keyClass.getName();
+        this.kClass = keyClass;
         this.valSerFunc = vSerializer;
         this.valDeSerFunc = vDeSerializer;
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
-    public WritableKTurboVMap(String dbPath, String dbName, int cacheSize,Class<? extends Writable> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
+    public WritableKTurboVMap(String dbPath, String dbName, int cacheSize,Class<K> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
         super(dbPath, dbName, cacheSize);
-        this.writableKeyClass = keyClass.getName();
+        this.kClass = keyClass;
         this.valSerFunc = vSerializer;
         this.valDeSerFunc = vDeSerializer;
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
     public WritableKTurboVMap(String dbPath, String dbName, int cacheSize,
-            int bloomFilterSize,Class<? extends Writable> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
+            int bloomFilterSize,Class<K> keyClass,TurboSerializer<V> vSerializer,TurboDeSerializer<V> vDeSerializer) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        this.writableKeyClass = keyClass.getName();
+        this.kClass = keyClass;
         this.valSerFunc = vSerializer;
         this.valDeSerFunc = vDeSerializer;
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     
     @Override
@@ -260,7 +248,7 @@ public class WritableKTurboVMap<K extends Writable,V> extends LargeCollection im
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
         this.serialize(stream);
-        stream.writeObject(this.writableKeyClass);
+        stream.writeObject(this.kClass);
         stream.writeObject(this.valSerFunc);
         stream.writeObject(this.valDeSerFunc);
     }
@@ -269,11 +257,11 @@ public class WritableKTurboVMap<K extends Writable,V> extends LargeCollection im
             ClassNotFoundException {
 
         this.deserialize(in);
-        this.writableKeyClass = (String)in.readObject();
+        this.kClass = (Class<K>)in.readObject();
         this.valSerFunc = (TurboSerializer<V> )in.readObject();
         this.valDeSerFunc = (TurboDeSerializer<? extends V> )in.readObject();
         this.keySerFunc  = new WritableSerDes.SerFunction();
-        this.keyDeSerFunc = getWritableDeSerFunction(this.writableKeyClass);
+        this.keyDeSerFunc = new WritableSerDes.DeSerFunction(this.kClass);
     }
     /* End of Serialization functions go here */
     
