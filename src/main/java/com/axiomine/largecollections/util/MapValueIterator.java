@@ -1,5 +1,7 @@
 package com.axiomine.largecollections.util;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -27,7 +29,7 @@ import com.google.common.base.Function;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public final class MapValueIterator<V> implements Iterator<V> {
+public final class MapValueIterator<V> implements Iterator<V>,Closeable {
 
     private DBIterator iter = null;
     private TurboDeSerializer<? extends V> valDeSerFunc = null;
@@ -49,7 +51,12 @@ public final class MapValueIterator<V> implements Iterator<V> {
     }
 
     public void remove() {
-        this.iter.remove();
+        throw new UnsupportedOperationException("remove");
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.iter.close();
     }
 
 }

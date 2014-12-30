@@ -43,12 +43,11 @@ public  class ValueCollection<V> implements Collection<V> {
     }
 
     public boolean contains(Object o) {
-        // TODO Auto-generated method stub
         return this.map.containsKey(o);
     }
 
     public Iterator<V> iterator() {
-        return new MapValueIterator(this.db,this.valDeSerFunc);
+        return new MapValueIterator<V>(this.db,this.valDeSerFunc);
     }
 
     public Object[] toArray() {
@@ -77,34 +76,11 @@ public  class ValueCollection<V> implements Collection<V> {
 
     public boolean removeAll(Collection<?> c) {
         throw new UnsupportedOperationException();
-        /*
-        boolean changed = false;
-        for(Object key:c){
-            V v = this.map.remove(key);
-            if(v!=null){
-                changed = true;
-            }
-        }
-        return changed;
-        */
     }
 
     /*Verify is deletes can be invoked by iterator*/
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
-        /*  
-        boolean changed = false;
-        Set s = this.map.keySet();
-        Iterator iter = s.iterator();
-        while(iter.hasNext()){
-            Object key = iter.next();
-            if(!c.contains(key)){
-                iter.remove();
-                changed = true;
-            }
-        }
-        return changed;
-        */
     }
 
     public void clear() {

@@ -1,7 +1,11 @@
 package com.axiomine.largecollections.util;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
@@ -26,14 +30,16 @@ import com.google.common.base.Function;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public final class MapKeyIterator<K> implements Iterator<K> {
-
+public final class MapKeyIterator<K> implements Iterator<K>, Closeable {
+    private LargeCollection lColl = null;
     private DBIterator iter = null;
     private TurboDeSerializer<? extends K> keyDeSerFunc = null;
-    protected MapKeyIterator(DB db,TurboDeSerializer<? extends K> keyDeSerFunc) {
+    private Entry<byte[], byte[]> lastEntry = null;
+    protected MapKeyIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc) {
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
-        this.iter =db.iterator(ro);
+        this.lColl = coll;
+        this.iter = coll.getDB().iterator(ro);
         this.keyDeSerFunc=keyDeSerFunc;
         this.iter.seekToFirst();
     }
@@ -46,12 +52,19 @@ public final class MapKeyIterator<K> implements Iterator<K> {
     public K next() {
         // TODO Auto-generated method stub
         Entry<byte[], byte[]> entry = this.iter.next();
+        lastEntry = entry;
         return this.keyDeSerFunc.apply(entry.getKey());
     }
 
     public void remove() {
-        // TODO Auto-generated method stub
-        this.iter.remove();
+        throw new UnsupportedOperationException("remove");
     }
+    
+    @Override
+    public void close() throws IOException {
+        this.iter.close();
+        
+    }
+
 
 }

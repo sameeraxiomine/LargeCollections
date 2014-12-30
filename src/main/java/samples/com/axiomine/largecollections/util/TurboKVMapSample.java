@@ -1,7 +1,10 @@
 package samples.com.axiomine.largecollections.util;
 
+import java.io.Closeable;
 import java.io.File;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -74,6 +77,19 @@ public class TurboKVMapSample {
             System.out.println("Open again");
             map.put(0,0);    
             System.out.println("Now put worked. Size of map should be 10. Size of the map ="+map.size());
+            
+            Set<Integer> keys = map.keySet();
+            Iterator<Integer> iter = keys.iterator();
+            try{
+                while(iter.hasNext()){
+                    iter.next();
+                }
+            }
+            finally{
+                //Always close and iterator after use. Otherwise you will not be able to call the clear function
+                ((Closeable)iter).close();    
+            }
+            
             
             System.out.println("Now Serialize the Map");
             File serFile = new File(System.getProperty("java.io.tmpdir")+"/x.ser");

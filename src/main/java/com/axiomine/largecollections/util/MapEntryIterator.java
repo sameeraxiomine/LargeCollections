@@ -15,6 +15,8 @@
  */
 package com.axiomine.largecollections.util;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -27,16 +29,16 @@ import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
 public final class MapEntryIterator<K, V> implements
-        Iterator<java.util.Map.Entry<K, V>> {
+        Iterator<java.util.Map.Entry<K, V>>, Closeable {
 
     private DBIterator iter = null;
     private TurboDeSerializer<? extends K> keyDeSerFunc = null;
     private TurboDeSerializer<? extends V> valDeSerFunc = null;
-    protected MapEntryIterator(DB db,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc) {
+    protected MapEntryIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc)  {
         try {
             this.keyDeSerFunc = keyDeSerFunc;
             this.valDeSerFunc = valDeSerFunc;
-            this.iter = db.iterator();
+            this.iter = coll.getDB().iterator();
             if (this.iter.hasPrev())
                 this.iter.seekToLast();
             this.iter.seekToFirst();
@@ -57,7 +59,13 @@ public final class MapEntryIterator<K, V> implements
     }
 
     public void remove() {
-        this.iter.remove();
+        throw new UnsupportedOperationException("remove");
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.iter.close();
+        
     }
 
 }

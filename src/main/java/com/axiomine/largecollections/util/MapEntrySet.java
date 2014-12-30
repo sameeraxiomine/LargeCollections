@@ -15,6 +15,8 @@ package com.axiomine.largecollections.util;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,13 +24,13 @@ import java.util.Map;
 import com.axiomine.largecollections.serdes.TurboDeSerializer;
 import com.google.common.base.Function;
 
-public class MapEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
+public class MapEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> implements Closeable {
     private MapEntryIterator<K, V> iterator = null;
-    private Map<K, V> map = null;
+    private LargeCollection lColl = null;
 
-    public MapEntrySet(Map map,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc) {
-        this.iterator = new MapEntryIterator(((IDb)map).getDB(),keyDeSerFunc,valDeSerFunc);
-        this.map = map;
+    public MapEntrySet(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc) {
+        this.iterator = new MapEntryIterator(coll,keyDeSerFunc,valDeSerFunc);
+        this.lColl = coll;
     }
 
     @Override
@@ -40,7 +42,14 @@ public class MapEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
     @Override
     public int size() {
         // TODO Auto-generated method stub
-        return this.map.size();
+        return this.lColl.size;
     }
+    
+    @Override
+    public void close() throws IOException {
+        this.iterator.close();
+        
+    }
+
 
 }

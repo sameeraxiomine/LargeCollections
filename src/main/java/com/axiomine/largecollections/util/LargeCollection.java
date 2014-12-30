@@ -75,7 +75,6 @@ public abstract class LargeCollection implements IDb  {
     
 
     public LargeCollection(){      
-        dbName = "f"+System.currentTimeMillis()+rnd.nextInt();
         this.open();
     }
 
@@ -132,6 +131,7 @@ public abstract class LargeCollection implements IDb  {
             db = factory.open(dbFile,options);       
             this.opened = true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             Throwables.propagate(ex);
         }
     }
@@ -228,11 +228,14 @@ public abstract class LargeCollection implements IDb  {
         try{
             if(this.db!=null){
                 this.db.close();
-                FileUtils.deleteQuietly(this.dbFile);
+                Thread.sleep(1000);
+                System.out.println(this.dbFile.getAbsolutePath());
+                FileUtils.deleteDirectory(this.dbFile);
             }
             this.size=0;
         }
         catch(Exception ex){
+            
             throw Throwables.propagate(ex);
         }
         this.initialize();
@@ -253,5 +256,8 @@ public abstract class LargeCollection implements IDb  {
         return this.bloomFilterSize;
     }
     
+    public BloomFilter getBloomFilter(){
+        return this.bloomFilter;
+    }
     public abstract void optimize();
 }
