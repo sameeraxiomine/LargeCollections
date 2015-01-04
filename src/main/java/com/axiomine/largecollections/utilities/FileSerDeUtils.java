@@ -41,6 +41,10 @@ public class FileSerDeUtils {
            
         }catch(Exception ex)
         {
+            throw Throwables.propagate(ex);
+           
+        }
+        finally{
             try{
                 if(fileIn!=null){
                     fileIn.close();
@@ -48,9 +52,9 @@ public class FileSerDeUtils {
             }
             catch(Exception ex2){
                 throw Throwables.propagate(ex2);
-            }
-           
+            }            
         }
+        
         return m;
     }
 
