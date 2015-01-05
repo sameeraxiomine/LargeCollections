@@ -37,8 +37,8 @@ import org.apache.hadoop.io.*;
 public class ArrayPrimitiveWritableTextMap extends LargeCollection implements   Map<ArrayPrimitiveWritable,Text>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboSerializer<ArrayPrimitiveWritable> keySerFunc  = new WritableSerDes.ArrayPrimitiveWritableSerFunction();
+    private transient TurboSerializer<Text> valSerFunc  = new WritableSerDes.TextSerFunction();    
     private transient TurboDeSerializer<ArrayPrimitiveWritable> keyDeSerFunc     = new WritableSerDes.ArrayPrimitiveWritableDeSerFunction();
     private transient TurboDeSerializer<Text> valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
     
@@ -228,8 +228,8 @@ public class ArrayPrimitiveWritableTextMap extends LargeCollection implements   
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDes.SerFunction();
-        valSerFunc  = new WritableSerDes.SerFunction();    
+        keySerFunc  = new WritableSerDes.ArrayPrimitiveWritableSerFunction();
+        valSerFunc  = new WritableSerDes.TextSerFunction();    
         keyDeSerFunc     = new WritableSerDes.ArrayPrimitiveWritableDeSerFunction();
         valDeSerFunc     = new WritableSerDes.TextDeSerFunction();
         this.deserialize(in);

@@ -37,8 +37,8 @@ import org.apache.hadoop.io.*;
 public class ShortWritableBooleanWritableMap extends LargeCollection implements   Map<ShortWritable,BooleanWritable>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
-    private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();    
+    private transient TurboSerializer<ShortWritable> keySerFunc  = new WritableSerDes.ShortWritableSerFunction();
+    private transient TurboSerializer<BooleanWritable> valSerFunc  = new WritableSerDes.BooleanWritableSerFunction();    
     private transient TurboDeSerializer<ShortWritable> keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
     private transient TurboDeSerializer<BooleanWritable> valDeSerFunc     = new WritableSerDes.BooleanWritableDeSerFunction();
     
@@ -228,8 +228,8 @@ public class ShortWritableBooleanWritableMap extends LargeCollection implements 
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDes.SerFunction();
-        valSerFunc  = new WritableSerDes.SerFunction();    
+        keySerFunc  = new WritableSerDes.ShortWritableSerFunction();
+        valSerFunc  = new WritableSerDes.BooleanWritableSerFunction();    
         keyDeSerFunc     = new WritableSerDes.ShortWritableDeSerFunction();
         valDeSerFunc     = new WritableSerDes.BooleanWritableDeSerFunction();
         this.deserialize(in);

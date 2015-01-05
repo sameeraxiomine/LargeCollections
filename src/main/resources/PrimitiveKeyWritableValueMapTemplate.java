@@ -25,6 +25,7 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 
+
 #CUSTOM_IMPORTS#
 import com.axiomine.largecollections.util.*;
 
@@ -32,7 +33,7 @@ import org.apache.hadoop.io.*;
 import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.kryo.serializers.*;
 
-public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
+public class #KCLS#List extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient TurboSerializer<#K#> keySerFunc       = new #KCLS#SerDes.SerFunction();
     private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();

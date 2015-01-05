@@ -33,7 +33,7 @@ public final class MapValueIterator<V> implements Iterator<V>,Closeable {
 
     private DBIterator iter = null;
     private TurboDeSerializer<? extends V> valDeSerFunc = null;
-    protected MapValueIterator(DB db,TurboDeSerializer<? extends V> valDeSerFunc) {
+    public MapValueIterator(DB db,TurboDeSerializer<? extends V> valDeSerFunc) {
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
         this.iter =db.iterator(ro);

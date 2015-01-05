@@ -36,7 +36,7 @@ import org.apache.hadoop.io.*;
 public class LongWritableDoubleMap extends LargeCollection implements   Map<LongWritable,Double>, Serializable{
     public static final long               serialVersionUID = 2l;
     
-    private transient TurboSerializer<Writable> keySerFunc  = new WritableSerDes.SerFunction();
+    private transient TurboSerializer<LongWritable> keySerFunc  = new WritableSerDes.LongWritableSerFunction();
     private transient TurboSerializer<Double> valSerFunc       = new DoubleSerDes.SerFunction();    
     private transient TurboDeSerializer<LongWritable> keyDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
     private transient TurboDeSerializer< Double> valDeSerFunc     = new DoubleSerDes.DeSerFunction();
@@ -227,7 +227,7 @@ public class LongWritableDoubleMap extends LargeCollection implements   Map<Long
     
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
-        keySerFunc  = new WritableSerDes.SerFunction();
+        keySerFunc  = new WritableSerDes.LongWritableSerFunction();
         valSerFunc       = new DoubleSerDes.SerFunction();    
         keyDeSerFunc     = new WritableSerDes.LongWritableDeSerFunction();
         valDeSerFunc     = new DoubleSerDes.DeSerFunction();

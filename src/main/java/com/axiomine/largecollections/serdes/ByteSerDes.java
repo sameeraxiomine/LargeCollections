@@ -1,6 +1,5 @@
 package com.axiomine.largecollections.serdes;
 
-import com.google.common.base.Function;
 
 public class ByteSerDes {
     public static class SerFunction implements TurboSerializer<Byte>{

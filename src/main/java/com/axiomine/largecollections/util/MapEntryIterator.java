@@ -34,7 +34,7 @@ public final class MapEntryIterator<K, V> implements
     private DBIterator iter = null;
     private TurboDeSerializer<? extends K> keyDeSerFunc = null;
     private TurboDeSerializer<? extends V> valDeSerFunc = null;
-    protected MapEntryIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc)  {
+    public MapEntryIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc,TurboDeSerializer<? extends V> valDeSerFunc)  {
         try {
             this.keyDeSerFunc = keyDeSerFunc;
             this.valDeSerFunc = valDeSerFunc;

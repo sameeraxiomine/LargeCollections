@@ -39,7 +39,7 @@ public class MyListIterator<T> implements ListIterator<T>,Closeable {
     int prevIndex = -1;
     int nextIndex = -1;
 
-    protected MyListIterator(LargeCollection coll,TurboSerializer<T> tSerFunc,TurboDeSerializer<T> tDeSerFunc) {
+    public MyListIterator(LargeCollection coll,TurboSerializer<T> tSerFunc,TurboDeSerializer<T> tDeSerFunc) {
 
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
@@ -53,7 +53,7 @@ public class MyListIterator<T> implements ListIterator<T>,Closeable {
         this.manageNextIndex(this.index);        
     }
 
-    protected MyListIterator(LargeCollection coll,TurboSerializer<T> tSerFunc,TurboDeSerializer<T> tDeSerFunc,int stIndex) {
+    public MyListIterator(LargeCollection coll,TurboSerializer<T> tSerFunc,TurboDeSerializer<T> tDeSerFunc,int stIndex) {
 
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
