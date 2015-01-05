@@ -91,10 +91,6 @@ public class BytesArraySet extends LargeCollection implements Set<byte[]>, Seria
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public <byte[]> byte[][] toArray(byte[][] a) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public boolean add(byte[] e) {
@@ -218,6 +214,11 @@ public class BytesArraySet extends LargeCollection implements Set<byte[]>, Seria
     public Iterator<byte[]> iterator() {
         // TODO Auto-generated method stub
         return new MapKeyIterator<byte[]>(this,this.tDeSerFunc);
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        throw new UnsupportedOperationException();
     }
 
 }
