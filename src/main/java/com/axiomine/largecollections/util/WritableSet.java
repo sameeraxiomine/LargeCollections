@@ -41,7 +41,7 @@ public class WritableSet<T extends Writable> extends LargeCollection implements 
     private transient TurboSerializer<Writable> tSerFunc  = new WritableSerDes.SerFunction();    
     private transient TurboDeSerializer<Writable> tDeSerFunc     = null;
     private Class<T> tClass = null;
-    private byte[] fixedVal = {1};
+    public static byte[] fixedVal = {1};
    
     public WritableSet(Class<T> tClass) {
         super();

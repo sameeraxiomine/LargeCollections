@@ -37,7 +37,7 @@ import com.google.common.base.Throwables;
 public class KryoSet<T> extends LargeCollection implements Set<T>, Serializable {
     private transient TurboSerializer<T> tSerFunc       = new KryoSerDes.SerFunction<T>();
     private transient TurboDeSerializer<T> tDeSerFunc     = new KryoSerDes.DeSerFunction<T>();    
-    private byte[] fixedVal = {1};
+    public static byte[] fixedVal = {1};
    
     public KryoSet() {
         super();

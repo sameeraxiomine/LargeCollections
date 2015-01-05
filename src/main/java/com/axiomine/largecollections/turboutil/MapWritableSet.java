@@ -1,4 +1,5 @@
-package com.axiomine.largecollections.util;
+package com.axiomine.largecollections.turboutil;
+
 
 /*
  * Copyright 2014 Sameer Wadkar
@@ -25,50 +26,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
-import com.axiomine.largecollections.serdes.BytesArraySerDes;
-import com.axiomine.largecollections.serdes.IntegerSerDes;
-import com.axiomine.largecollections.serdes.TurboDeSerializer;
-import com.axiomine.largecollections.serdes.TurboSerializer;
+import com.axiomine.largecollections.util.*;
+import com.axiomine.largecollections.serdes.*;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+import org.apache.hadoop.io.*;
 
-public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable {
-    private transient TurboSerializer<T> tSerFunc       =  null;
-    private transient TurboDeSerializer<T> tDeSerFunc       =  null;
-    public static byte[] fixedVal = {1};
+public class MapWritableSet extends LargeCollection implements Set<MapWritable>, Serializable {
+    private transient TurboSerializer<MapWritable> tSerFunc       =  new WritableSerDes.MapWritableSerFunction();    
+    private transient TurboDeSerializer<MapWritable> tDeSerFunc  = new WritableSerDes.MapWritableDeSerFunction();    
    
-    public TurboSet(TurboSerializer<T> tSerializer,TurboDeSerializer<T> tDeSerializer) {
+    public MapWritableSet() {
         super();
-        this.tSerFunc = tSerializer;
-        this.tDeSerFunc = tDeSerializer;
     }
     
-    public TurboSet(String dbName,TurboSerializer<T> tSerializer,TurboDeSerializer<T> tDeSerializer) {
+    public MapWritableSet(String dbName) {
         super(dbName);
-        this.tSerFunc = tSerializer;
-        this.tDeSerFunc = tDeSerializer;
     }
     
-    public TurboSet(String dbPath,String dbName,
-                     TurboSerializer<T> tSerializer,TurboDeSerializer<T> tDeSerializer) {
+    public MapWritableSet(String dbPath,String dbName) {
         super(dbPath, dbName);
-        this.tSerFunc = tSerializer;
-        this.tDeSerFunc = tDeSerializer;
     }
     
-    public TurboSet(String dbPath,String dbName,int cacheSize,
-            TurboSerializer<T> tSerializer,TurboDeSerializer<T> tDeSerializer) {
+    public MapWritableSet(String dbPath,String dbName,int cacheSize) {
         super(dbPath, dbName, cacheSize);
-        this.tSerFunc = tSerializer;
-        this.tDeSerFunc = tDeSerializer;
     }
     
-    public TurboSet(String dbPath,String dbName,int cacheSize,int bloomFilterSize, 
-                     TurboSerializer<T> tSerializer,TurboDeSerializer<T> tDeSerializer) {
+    public MapWritableSet(String dbPath,String dbName,int cacheSize,int bloomFilterSize) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
-        this.tSerFunc = tSerializer;
-        this.tDeSerFunc = tDeSerializer;
     }
 
 
@@ -92,8 +77,8 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
             else{
                 byte[] valBytes = null;
                 if (o != null) {
-                    T t = (T) o;
-                    byte[] keyBytes = this.tSerFunc.apply((T)o);
+                    MapWritable t = (MapWritable) o;
+                    byte[] keyBytes = this.tSerFunc.apply((MapWritable)o);
                     valBytes = db.get(keyBytes);
                 }
                 return valBytes != null;
@@ -108,12 +93,12 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <MapWritable> MapWritable[] toArray(MapWritable[] a) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean add(T e) {
+    public boolean add(MapWritable e) {
         if(this.contains(e)){
             return false;
         }
@@ -134,7 +119,7 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
             return false;
 
         if(this.contains(o)){
-            byte[] fullKeyArr = this.tSerFunc.apply((T)o);
+            byte[] fullKeyArr = this.tSerFunc.apply((MapWritable)o);
             db.delete(fullKeyArr);
             size--;
             return true;
@@ -155,10 +140,10 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends MapWritable> c) {
         boolean ret = false;
         for(Object o:c){
-            boolean rem = this.add((T)o);
+            boolean rem = this.add((MapWritable)o);
             ret = rem || ret;
         }
         return ret;
@@ -167,9 +152,9 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean retVal = false;
-        Iterator<T> iter = this.iterator();
+        Iterator<MapWritable> iter = this.iterator();
         while(iter.hasNext()){
-            T t = iter.next();
+            MapWritable t = iter.next();
             if(!c.contains(t)){
                 this.remove(t);
                 retVal=true;
@@ -205,9 +190,9 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<T, byte[]> iterator = new MapEntryIterator<T, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
+            MapEntryIterator<MapWritable, byte[]> iterator = new MapEntryIterator<MapWritable, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
             while(iterator.hasNext()){
-                Entry<T, byte[]> entry = iterator.next();
+                Entry<MapWritable, byte[]> entry = iterator.next();
                 this.bloomFilter.put(entry.getKey());
             }
         } catch (Exception ex) {
@@ -226,14 +211,14 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
     private void readObject(java.io.ObjectInputStream in) throws IOException,
             ClassNotFoundException {
         this.deserialize(in);
-        this.tSerFunc         = (TurboSerializer<T>)in.readObject();
-        this.tDeSerFunc       = (TurboDeSerializer<T>)in.readObject();
+        tSerFunc       =  new WritableSerDes.MapWritableSerFunction();    
+        tDeSerFunc  = new WritableSerDes.MapWritableDeSerFunction();    
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<MapWritable> iterator() {
         // TODO Auto-generated method stub
-        return new MapKeyIterator<T>(this,this.tDeSerFunc);
+        return new MapKeyIterator<MapWritable>(this,this.tDeSerFunc);
     }
 
 }

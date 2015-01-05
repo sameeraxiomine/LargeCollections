@@ -70,6 +70,7 @@ public class BytesArrayList extends LargeCollection implements List<byte[]>, Ser
     }
 
 
+
     @Override
     public boolean add(byte[] e) {
         if (e == null)
@@ -280,6 +281,5 @@ public class BytesArrayList extends LargeCollection implements List<byte[]>, Ser
     public <T> T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
     
 }

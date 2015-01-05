@@ -35,7 +35,7 @@ public final class MapKeyIterator<K> implements Iterator<K>, Closeable {
     private DBIterator iter = null;
     private TurboDeSerializer<? extends K> keyDeSerFunc = null;
     private Entry<byte[], byte[]> lastEntry = null;
-    protected MapKeyIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc) {
+    public MapKeyIterator(LargeCollection coll,TurboDeSerializer<? extends K> keyDeSerFunc) {
         ReadOptions ro = new ReadOptions();
         ro.fillCache(false);
         this.lColl = coll;

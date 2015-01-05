@@ -69,7 +69,6 @@ public class ByteList extends LargeCollection implements List<Byte>, Serializabl
         throw new UnsupportedOperationException();
     }
 
-    
     @Override
     public <Byte>  Byte[] toArray(Byte[] a) {
         throw new UnsupportedOperationException();
