@@ -93,10 +93,10 @@ public class MapWritableSet extends LargeCollection implements Set<MapWritable>,
     }
 
     @Override
-    public <MapWritable> MapWritable[] toArray(MapWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(MapWritable e) {
         if(this.contains(e)){

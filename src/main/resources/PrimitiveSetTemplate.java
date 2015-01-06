@@ -92,10 +92,10 @@ public class #CLASS_NAME# extends LargeCollection implements Set<#T#>, Serializa
     }
 
     @Override
-    public <#T#> #T#[] toArray(#T#[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(#T# e) {
         if(this.contains(e)){

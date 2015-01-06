@@ -73,7 +73,7 @@ public class MapWritableList extends LargeCollection implements List<MapWritable
     }
 
     @Override
-    public <MapWritable>  MapWritable[] toArray(MapWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

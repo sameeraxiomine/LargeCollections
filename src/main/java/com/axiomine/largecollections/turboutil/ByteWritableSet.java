@@ -93,10 +93,10 @@ public class ByteWritableSet extends LargeCollection implements Set<ByteWritable
     }
 
     @Override
-    public <ByteWritable> ByteWritable[] toArray(ByteWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(ByteWritable e) {
         if(this.contains(e)){

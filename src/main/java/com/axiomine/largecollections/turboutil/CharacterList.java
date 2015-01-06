@@ -70,10 +70,10 @@ public class CharacterList extends LargeCollection implements List<Character>, S
     }
 
     @Override
-    public <Character>  Character[] toArray(Character[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Character e) {
         if (e == null)

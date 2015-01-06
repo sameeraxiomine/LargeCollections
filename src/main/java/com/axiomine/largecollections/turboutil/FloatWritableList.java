@@ -73,7 +73,7 @@ public class FloatWritableList extends LargeCollection implements List<FloatWrit
     }
 
     @Override
-    public <FloatWritable>  FloatWritable[] toArray(FloatWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

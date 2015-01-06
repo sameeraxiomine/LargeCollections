@@ -70,10 +70,10 @@ public class ByteList extends LargeCollection implements List<Byte>, Serializabl
     }
 
     @Override
-    public <Byte>  Byte[] toArray(Byte[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Byte e) {
         if (e == null)

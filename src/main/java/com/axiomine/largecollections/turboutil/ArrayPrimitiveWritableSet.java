@@ -93,10 +93,10 @@ public class ArrayPrimitiveWritableSet extends LargeCollection implements Set<Ar
     }
 
     @Override
-    public <ArrayPrimitiveWritable> ArrayPrimitiveWritable[] toArray(ArrayPrimitiveWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(ArrayPrimitiveWritable e) {
         if(this.contains(e)){

@@ -73,7 +73,7 @@ public class TextList extends LargeCollection implements List<Text>, Serializabl
     }
 
     @Override
-    public <Text>  Text[] toArray(Text[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

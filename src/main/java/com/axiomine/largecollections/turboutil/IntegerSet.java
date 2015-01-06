@@ -92,10 +92,10 @@ public class IntegerSet extends LargeCollection implements Set<Integer>, Seriali
     }
 
     @Override
-    public <Integer> Integer[] toArray(Integer[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Integer e) {
         if(this.contains(e)){

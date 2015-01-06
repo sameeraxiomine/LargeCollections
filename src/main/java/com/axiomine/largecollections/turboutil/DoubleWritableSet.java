@@ -93,10 +93,10 @@ public class DoubleWritableSet extends LargeCollection implements Set<DoubleWrit
     }
 
     @Override
-    public <DoubleWritable> DoubleWritable[] toArray(DoubleWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(DoubleWritable e) {
         if(this.contains(e)){

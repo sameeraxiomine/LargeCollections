@@ -73,7 +73,7 @@ public class ByteWritableList extends LargeCollection implements List<ByteWritab
     }
 
     @Override
-    public <ByteWritable>  ByteWritable[] toArray(ByteWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

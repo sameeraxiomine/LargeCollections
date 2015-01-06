@@ -73,7 +73,7 @@ public class ShortWritableList extends LargeCollection implements List<ShortWrit
     }
 
     @Override
-    public <ShortWritable>  ShortWritable[] toArray(ShortWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

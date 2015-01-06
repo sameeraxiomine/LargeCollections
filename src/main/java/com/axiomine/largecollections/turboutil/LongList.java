@@ -70,10 +70,10 @@ public class LongList extends LargeCollection implements List<Long>, Serializabl
     }
 
     @Override
-    public <Long>  Long[] toArray(Long[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Long e) {
         if (e == null)

@@ -70,10 +70,10 @@ public class DoubleList extends LargeCollection implements List<Double>, Seriali
     }
 
     @Override
-    public <Double>  Double[] toArray(Double[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Double e) {
         if (e == null)

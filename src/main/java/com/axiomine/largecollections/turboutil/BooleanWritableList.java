@@ -73,7 +73,7 @@ public class BooleanWritableList extends LargeCollection implements List<Boolean
     }
 
     @Override
-    public <BooleanWritable>  BooleanWritable[] toArray(BooleanWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

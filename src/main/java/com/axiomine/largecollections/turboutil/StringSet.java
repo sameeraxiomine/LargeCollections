@@ -92,10 +92,10 @@ public class StringSet extends LargeCollection implements Set<String>, Serializa
     }
 
     @Override
-    public <String> String[] toArray(String[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(String e) {
         if(this.contains(e)){

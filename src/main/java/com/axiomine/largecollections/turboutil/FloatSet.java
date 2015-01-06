@@ -92,10 +92,10 @@ public class FloatSet extends LargeCollection implements Set<Float>, Serializabl
     }
 
     @Override
-    public <Float> Float[] toArray(Float[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Float e) {
         if(this.contains(e)){

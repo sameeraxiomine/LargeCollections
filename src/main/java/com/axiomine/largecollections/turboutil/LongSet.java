@@ -92,10 +92,10 @@ public class LongSet extends LargeCollection implements Set<Long>, Serializable 
     }
 
     @Override
-    public <Long> Long[] toArray(Long[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Long e) {
         if(this.contains(e)){

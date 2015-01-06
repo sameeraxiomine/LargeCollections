@@ -73,7 +73,7 @@ public class DoubleWritableList extends LargeCollection implements List<DoubleWr
     }
 
     @Override
-    public <DoubleWritable>  DoubleWritable[] toArray(DoubleWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

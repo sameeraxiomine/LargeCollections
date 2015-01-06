@@ -93,10 +93,10 @@ public class FloatWritableSet extends LargeCollection implements Set<FloatWritab
     }
 
     @Override
-    public <FloatWritable> FloatWritable[] toArray(FloatWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(FloatWritable e) {
         if(this.contains(e)){

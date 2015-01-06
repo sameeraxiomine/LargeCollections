@@ -92,10 +92,10 @@ public class ByteSet extends LargeCollection implements Set<Byte>, Serializable 
     }
 
     @Override
-    public <Byte> Byte[] toArray(Byte[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Byte e) {
         if(this.contains(e)){

@@ -73,7 +73,7 @@ public class IntWritableList extends LargeCollection implements List<IntWritable
     }
 
     @Override
-    public <IntWritable>  IntWritable[] toArray(IntWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

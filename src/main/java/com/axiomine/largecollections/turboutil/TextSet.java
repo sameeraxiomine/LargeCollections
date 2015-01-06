@@ -93,10 +93,10 @@ public class TextSet extends LargeCollection implements Set<Text>, Serializable 
     }
 
     @Override
-    public <Text> Text[] toArray(Text[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Text e) {
         if(this.contains(e)){

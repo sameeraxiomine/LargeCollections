@@ -93,10 +93,10 @@ public class BooleanWritableSet extends LargeCollection implements Set<BooleanWr
     }
 
     @Override
-    public <BooleanWritable> BooleanWritable[] toArray(BooleanWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(BooleanWritable e) {
         if(this.contains(e)){

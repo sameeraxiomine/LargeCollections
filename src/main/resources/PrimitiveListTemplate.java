@@ -70,10 +70,10 @@ public class #CLASS_NAME# extends LargeCollection implements List<#T#>, Serializ
     }
 
     @Override
-    public <#T#>  #T#[] toArray(#T#[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(#T# e) {
         if (e == null)

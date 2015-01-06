@@ -92,10 +92,10 @@ public class CharacterSet extends LargeCollection implements Set<Character>, Ser
     }
 
     @Override
-    public <Character> Character[] toArray(Character[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Character e) {
         if(this.contains(e)){

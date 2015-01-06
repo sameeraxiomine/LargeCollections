@@ -93,10 +93,10 @@ public class IntWritableSet extends LargeCollection implements Set<IntWritable>,
     }
 
     @Override
-    public <IntWritable> IntWritable[] toArray(IntWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(IntWritable e) {
         if(this.contains(e)){

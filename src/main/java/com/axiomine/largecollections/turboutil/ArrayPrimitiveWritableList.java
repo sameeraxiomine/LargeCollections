@@ -73,7 +73,7 @@ public class ArrayPrimitiveWritableList extends LargeCollection implements List<
     }
 
     @Override
-    public <ArrayPrimitiveWritable>  ArrayPrimitiveWritable[] toArray(ArrayPrimitiveWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
 

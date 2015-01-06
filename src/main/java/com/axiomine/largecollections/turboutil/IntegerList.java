@@ -70,10 +70,10 @@ public class IntegerList extends LargeCollection implements List<Integer>, Seria
     }
 
     @Override
-    public <Integer>  Integer[] toArray(Integer[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Integer e) {
         if (e == null)

@@ -93,10 +93,10 @@ public class ShortWritableSet extends LargeCollection implements Set<ShortWritab
     }
 
     @Override
-    public <ShortWritable> ShortWritable[] toArray(ShortWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(ShortWritable e) {
         if(this.contains(e)){

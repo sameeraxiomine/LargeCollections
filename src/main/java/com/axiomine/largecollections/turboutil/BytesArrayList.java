@@ -69,8 +69,11 @@ public class BytesArrayList extends LargeCollection implements List<byte[]>, Ser
         throw new UnsupportedOperationException();
     }
 
-
-
+    @Override
+    public <T>  T[] toArray(T[] a) {
+        throw new UnsupportedOperationException();
+    }
+    
     @Override
     public boolean add(byte[] e) {
         if (e == null)
@@ -276,10 +279,5 @@ public class BytesArrayList extends LargeCollection implements List<byte[]>, Ser
         tDeSerFunc       = new BytesArraySerDes.DeSerFunction();
     }
     /* End of Serialization functions go here */
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        throw new UnsupportedOperationException();
-    }
     
 }

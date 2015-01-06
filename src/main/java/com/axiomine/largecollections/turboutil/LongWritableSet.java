@@ -93,10 +93,10 @@ public class LongWritableSet extends LargeCollection implements Set<LongWritable
     }
 
     @Override
-    public <LongWritable> LongWritable[] toArray(LongWritable[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(LongWritable e) {
         if(this.contains(e)){

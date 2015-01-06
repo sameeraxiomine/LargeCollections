@@ -70,10 +70,10 @@ public class StringList extends LargeCollection implements List<String>, Seriali
     }
 
     @Override
-    public <String>  String[] toArray(String[] a) {
+    public <T>  T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(String e) {
         if (e == null)
