@@ -62,13 +62,24 @@ public class StringTextMap extends LargeCollection implements   Map<String,Text>
     
     @Override
     public void optimize() {
+        MapKeySet<String> keys = new MapKeySet<String>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<String, Text> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (String entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

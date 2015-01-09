@@ -64,13 +64,24 @@ public class ByteWritableDoubleMap extends LargeCollection implements   Map<Byte
     
     @Override
     public void optimize() {
+        MapKeySet<ByteWritable> keys = new MapKeySet<ByteWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<ByteWritable, Double> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (ByteWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

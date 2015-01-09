@@ -64,13 +64,24 @@ public class ArrayPrimitiveWritableStringMap extends LargeCollection implements 
     
     @Override
     public void optimize() {
+        MapKeySet<ArrayPrimitiveWritable> keys = new MapKeySet<ArrayPrimitiveWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<ArrayPrimitiveWritable, String> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (ArrayPrimitiveWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

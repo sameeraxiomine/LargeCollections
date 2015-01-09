@@ -62,13 +62,24 @@ public class LongTextMap extends LargeCollection implements   Map<Long,Text>, Se
     
     @Override
     public void optimize() {
+        MapKeySet<Long> keys = new MapKeySet<Long>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Long, Text> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Long entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

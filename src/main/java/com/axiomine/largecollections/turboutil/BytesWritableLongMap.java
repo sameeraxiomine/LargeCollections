@@ -64,13 +64,24 @@ public class BytesWritableLongMap extends LargeCollection implements   Map<Bytes
     
     @Override
     public void optimize() {
+        MapKeySet<BytesWritable> keys = new MapKeySet<BytesWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<BytesWritable, Long> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (BytesWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

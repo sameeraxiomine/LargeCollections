@@ -62,13 +62,24 @@ public class IntegerByteWritableMap extends LargeCollection implements   Map<Int
     
     @Override
     public void optimize() {
+        MapKeySet<Integer> keys = new MapKeySet<Integer>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Integer, ByteWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Integer entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

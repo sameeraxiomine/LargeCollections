@@ -64,13 +64,24 @@ public class ShortWritableIntegerMap extends LargeCollection implements   Map<Sh
     
     @Override
     public void optimize() {
+        MapKeySet<ShortWritable> keys = new MapKeySet<ShortWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<ShortWritable, Integer> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (ShortWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

@@ -62,13 +62,24 @@ public class FloatFloatWritableMap extends LargeCollection implements   Map<Floa
     
     @Override
     public void optimize() {
+        MapKeySet<Float> keys = new MapKeySet<Float>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Float, FloatWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Float entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

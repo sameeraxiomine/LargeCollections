@@ -64,13 +64,24 @@ public class FloatWritableByteMap extends LargeCollection implements   Map<Float
     
     @Override
     public void optimize() {
+        MapKeySet<FloatWritable> keys = new MapKeySet<FloatWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<FloatWritable, Byte> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (FloatWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

@@ -64,13 +64,24 @@ public class TextIntegerMap extends LargeCollection implements   Map<Text,Intege
     
     @Override
     public void optimize() {
+        MapKeySet<Text> keys = new MapKeySet<Text>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Text, Integer> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Text entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

@@ -25,7 +25,6 @@ import org.iq80.leveldb.WriteBatch;
 
 import com.google.common.base.Function;
 
-
 #CUSTOM_IMPORTS#
 import com.axiomine.largecollections.util.*;
 
@@ -33,7 +32,7 @@ import org.apache.hadoop.io.*;
 import com.axiomine.largecollections.serdes.*;
 import com.axiomine.largecollections.kryo.serializers.*;
 
-public class #KCLS#List extends LargeCollection implements   Map<#K#,#V#>, Serializable{
+public class #CLASS_NAME# extends LargeCollection implements   Map<#K#,#V#>, Serializable{
     public static final long               serialVersionUID = 2l;
     private transient TurboSerializer<#K#> keySerFunc       = new #KCLS#SerDes.SerFunction();
     private transient TurboSerializer<Writable> valSerFunc  = new WritableSerDes.SerFunction();
@@ -63,13 +62,24 @@ public class #KCLS#List extends LargeCollection implements   Map<#K#,#V#>, Seria
     
     @Override
     public void optimize() {
+        MapKeySet<#K#> keys = new MapKeySet<#K#>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<#K#, #V#> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (#K# entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

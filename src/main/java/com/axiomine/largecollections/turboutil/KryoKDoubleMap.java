@@ -64,13 +64,24 @@ public class KryoKDoubleMap<K> extends LargeCollection implements   Map<K,Double
     
     @Override
     public void optimize() {
+        MapKeySet<K> keys = new MapKeySet<K>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<K, Double> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (K entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

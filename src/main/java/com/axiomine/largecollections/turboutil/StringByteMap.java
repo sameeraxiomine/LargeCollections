@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,13 +65,24 @@ public class StringByteMap extends LargeCollection implements   Map<String,Byte>
     
     @Override
     public void optimize() {
+        MapKeySet<String> keys = new MapKeySet<String>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<String, Byte> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (String entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

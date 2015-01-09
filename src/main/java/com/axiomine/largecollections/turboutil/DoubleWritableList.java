@@ -14,6 +14,7 @@ import com.google.common.primitives.Ints;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
+import org.iq80.leveldb.DBIterator;
 
 public class DoubleWritableList extends LargeCollection implements List<DoubleWritable>, Serializable {
     public static final long               serialVersionUID = 2l;
@@ -255,10 +256,9 @@ public class DoubleWritableList extends LargeCollection implements List<DoubleWr
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<Integer, DoubleWritable> iterator = new MapEntryIterator(this, new WritableSerDes.DoubleWritableDeSerFunction(),tDeSerFunc);
+            DBIterator iterator = this.getDB().iterator();
             while(iterator.hasNext()){
-                Entry<Integer, DoubleWritable> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);

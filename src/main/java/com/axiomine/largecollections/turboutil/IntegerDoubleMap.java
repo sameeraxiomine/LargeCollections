@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,13 +65,24 @@ public class IntegerDoubleMap extends LargeCollection implements   Map<Integer,D
     
     @Override
     public void optimize() {
+        MapKeySet<Integer> keys = new MapKeySet<Integer>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Integer, Double> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Integer entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

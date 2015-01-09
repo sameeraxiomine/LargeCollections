@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,13 +65,24 @@ public class DoubleByteMap extends LargeCollection implements   Map<Double,Byte>
     
     @Override
     public void optimize() {
+        MapKeySet<Double> keys = new MapKeySet<Double>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Double, Byte> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Double entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

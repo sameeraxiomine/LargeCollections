@@ -62,13 +62,24 @@ public class DoubleByteWritableMap extends LargeCollection implements   Map<Doub
     
     @Override
     public void optimize() {
+        MapKeySet<Double> keys = new MapKeySet<Double>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Double, ByteWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Double entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

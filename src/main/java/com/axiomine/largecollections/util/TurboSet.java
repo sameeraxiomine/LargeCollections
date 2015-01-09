@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.iq80.leveldb.DBIterator;
+
 import com.axiomine.largecollections.serdes.BytesArraySerDes;
 import com.axiomine.largecollections.serdes.IntegerSerDes;
 import com.axiomine.largecollections.serdes.TurboDeSerializer;
@@ -203,16 +205,24 @@ public class TurboSet<T> extends LargeCollection implements Set<T>, Serializable
 
     @Override
     public void optimize() {
+        DBIterator iterator = this.getDB().iterator();
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<T, byte[]> iterator = new MapEntryIterator<T, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
-            while(iterator.hasNext()){
-                Entry<T, byte[]> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+            while (iterator.hasNext()) {
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next()
+                        .getKey()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        } finally {
+            try {
+                iterator.close();
+            } catch (Exception ex) {
+                throw Throwables.propagate(ex);
+            }
+            
         }
+
     }
     
     /* Serialization functions go here */

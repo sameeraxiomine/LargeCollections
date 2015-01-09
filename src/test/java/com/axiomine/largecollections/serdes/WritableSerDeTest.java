@@ -15,14 +15,16 @@ public class WritableSerDeTest {
         TurboSerializer<Writable> ser = new WritableSerDes.SerFunction();
         TurboDeSerializer<Writable> deser = new WritableSerDes.DeSerFunction(Text.class);
 
-        TurboDeSerializer<Text> deser2 = new WritableSerDes.TextDeSerFunction();
+        
         Text s = new Text("This is a test");
         byte[] sba = ser.apply(s);
         Writable ss = deser.apply(sba);
         Assert.assertEquals(s, ss);
 
         
-        ss = deser2.apply(sba);
+        TurboSerializer<Text> ser2 = new WritableSerDes.TextSerFunction();
+        TurboDeSerializer<Text> deser2 = new WritableSerDes.TextDeSerFunction();
+        ss = deser2.apply(ser2.apply(s));
         Assert.assertEquals(s, ss);
     }
     

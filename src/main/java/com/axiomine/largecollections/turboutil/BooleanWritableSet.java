@@ -26,11 +26,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.serdes.*;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
+
 import org.apache.hadoop.io.*;
+import org.iq80.leveldb.DBIterator;
 
 public class BooleanWritableSet extends LargeCollection implements Set<BooleanWritable>, Serializable {
     private transient TurboSerializer<BooleanWritable> tSerFunc       =  new WritableSerDes.BooleanWritableSerFunction();    
@@ -188,16 +191,25 @@ public class BooleanWritableSet extends LargeCollection implements Set<BooleanWr
 
     @Override
     public void optimize() {
+        DBIterator  iterator = this.getDB().iterator();
         try {
-            this.initializeBloomFilter();
-            MapEntryIterator<BooleanWritable, byte[]> iterator = new MapEntryIterator<BooleanWritable, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
+            this.initializeBloomFilter();            
             while(iterator.hasNext()){
-                Entry<BooleanWritable, byte[]> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
         }
+        finally{
+            try{
+                iterator.close();    
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }
+            
+        }
+
     }
     
     /* Serialization functions go here */

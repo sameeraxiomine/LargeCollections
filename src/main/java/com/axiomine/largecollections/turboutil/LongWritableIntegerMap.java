@@ -64,13 +64,24 @@ public class LongWritableIntegerMap extends LargeCollection implements   Map<Lon
     
     @Override
     public void optimize() {
+        MapKeySet<LongWritable> keys = new MapKeySet<LongWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<LongWritable, Integer> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (LongWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

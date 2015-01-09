@@ -13,6 +13,7 @@ import com.google.common.base.Throwables;
 import com.google.common.primitives.Ints;
 import com.axiomine.largecollections.util.*;
 
+import org.iq80.leveldb.DBIterator;
 public class #CLASS_NAME# extends LargeCollection implements List<#T#>, Serializable {
     public static final long               serialVersionUID = 2l;
     private transient TurboSerializer<#T#> tSerFunc       =  new #TCLS#SerDes.SerFunction();
@@ -250,17 +251,24 @@ public class #CLASS_NAME# extends LargeCollection implements List<#T#>, Serializ
 
     @Override
     public void optimize() {
+        DBIterator  iterator = this.getDB().iterator();
         try {
-            this.initializeBloomFilter();
-            MapEntryIterator<Integer, #T#> iterator = new MapEntryIterator(this, new #TCLS#SerDes.DeSerFunction(),tDeSerFunc);
+            this.initializeBloomFilter();            
             while(iterator.hasNext()){
-                Entry<Integer, #T#> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
         }
-        
+        finally{
+            try{
+                iterator.close();    
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }
+            
+        }
     }
     
     

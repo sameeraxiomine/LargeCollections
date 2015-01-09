@@ -64,13 +64,24 @@ public class BooleanWritableStringMap extends LargeCollection implements   Map<B
     
     @Override
     public void optimize() {
+        MapKeySet<BooleanWritable> keys = new MapKeySet<BooleanWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<BooleanWritable, String> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (BooleanWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

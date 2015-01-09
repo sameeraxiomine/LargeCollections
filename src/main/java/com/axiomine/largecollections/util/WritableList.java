@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.io.Writable;
+import org.iq80.leveldb.DBIterator;
 
 import com.axiomine.largecollections.serdes.IntegerSerDes;
 import com.axiomine.largecollections.serdes.KryoSerDes;
@@ -265,16 +266,25 @@ public class WritableList<T extends Writable> extends LargeCollection implements
 
     @Override
     public void optimize() {
+        DBIterator  iterator = this.getDB().iterator();
         try {
-            this.initializeBloomFilter();
-            MapEntryIterator<Integer, T> iterator = new MapEntryIterator(this, new IntegerSerDes.DeSerFunction(),tDeSerFunc);
+            this.initializeBloomFilter();            
             while(iterator.hasNext()){
-                Entry<Integer, T> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
         }
+        finally{
+            try{
+                iterator.close();    
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }
+            
+        }
+
         
     }
     

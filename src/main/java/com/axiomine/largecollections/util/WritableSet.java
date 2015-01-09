@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.hadoop.io.Writable;
+import org.iq80.leveldb.DBIterator;
 
 import com.axiomine.largecollections.serdes.BytesArraySerDes;
 import com.axiomine.largecollections.serdes.IntegerSerDes;
@@ -37,65 +38,65 @@ import com.axiomine.largecollections.serdes.WritableSerDes;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 
-public class WritableSet<T extends Writable> extends LargeCollection implements Set<Writable>, Serializable {
-    private transient TurboSerializer<Writable> tSerFunc  = new WritableSerDes.SerFunction();    
-    private transient TurboDeSerializer<Writable> tDeSerFunc     = null;
-    private Class<T> tClass = null;
-    public static byte[] fixedVal = {1};
-   
+public class WritableSet<T extends Writable> extends LargeCollection implements
+        Set<Writable>, Serializable {
+    private transient TurboSerializer<Writable>   tSerFunc   = new WritableSerDes.SerFunction();
+    private transient TurboDeSerializer<Writable> tDeSerFunc = null;
+    private Class<T>                              tClass     = null;
+    public static byte[]                          fixedVal   = { 1 };
+    
     public WritableSet(Class<T> tClass) {
         super();
         this.tClass = tClass;
         this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
     
-    public WritableSet(String dbName,Class<T> tClass) {
+    public WritableSet(String dbName, Class<T> tClass) {
         super(dbName);
         this.tClass = tClass;
         this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
     
-    public WritableSet(String dbPath,String dbName,Class<T> tClass) {
+    public WritableSet(String dbPath, String dbName, Class<T> tClass) {
         super(dbPath, dbName);
         this.tClass = tClass;
         this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
     
-    public WritableSet(String dbPath,String dbName,int cacheSize,Class<T> tClass) {
+    public WritableSet(String dbPath, String dbName, int cacheSize,
+            Class<T> tClass) {
         super(dbPath, dbName, cacheSize);
         this.tClass = tClass;
         this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
     
-    public WritableSet(String dbPath,String dbName,int cacheSize,int bloomFilterSize,Class<T> tClass) {
+    public WritableSet(String dbPath, String dbName, int cacheSize,
+            int bloomFilterSize, Class<T> tClass) {
         super(dbPath, dbName, cacheSize, bloomFilterSize);
         this.tClass = tClass;
         this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
-
-
+    
     @Override
     public int size() {
         return this.size;
     }
-
+    
     @Override
     public boolean isEmpty() {
-        return (this.size==0);
+        return (this.size == 0);
     }
-
+    
     @Override
     public boolean contains(Object o) {
         if (o != null) {
-            if(!this.bloomFilter.mightContain(o))
-            {
+            if (!this.bloomFilter.mightContain(o)) {
                 return false;
-            }
-            else{
+            } else {
                 byte[] valBytes = null;
                 if (o != null) {
                     T t = (T) o;
-                    byte[] keyBytes = this.tSerFunc.apply((T)o);
+                    byte[] keyBytes = this.tSerFunc.apply((T) o);
                     valBytes = db.get(keyBytes);
                 }
                 return valBytes != null;
@@ -103,23 +104,22 @@ public class WritableSet<T extends Writable> extends LargeCollection implements 
         }
         return false;
     }
-
+    
     @Override
     public Object[] toArray() {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public <T> T[] toArray(T[] a) {
         throw new UnsupportedOperationException();
     }
-
+    
     @Override
     public boolean add(Writable e) {
-        if(this.contains(e)){
+        if (this.contains(e)) {
             return false;
-        }
-        else{
+        } else {
             if (e == null)
                 return false;
             byte[] fullKeyArr = this.tSerFunc.apply(e);
@@ -129,91 +129,96 @@ public class WritableSet<T extends Writable> extends LargeCollection implements 
             return true;
         }
     }
-
+    
     @Override
     public boolean remove(Object o) {
         if (o == null)
             return false;
-
-        if(this.contains(o)){
-            byte[] fullKeyArr = this.tSerFunc.apply((T)o);
+        
+        if (this.contains(o)) {
+            byte[] fullKeyArr = this.tSerFunc.apply((T) o);
             db.delete(fullKeyArr);
             size--;
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-
+    
     @Override
     public boolean containsAll(Collection<?> c) {
-        for(Object o:c){
-            if(!this.contains(o)){
+        for (Object o : c) {
+            if (!this.contains(o)) {
                 return false;
             }
         }
         return true;
     }
-
+    
     @Override
     public boolean addAll(Collection<? extends Writable> c) {
         boolean ret = false;
-        for(Object o:c){
-            boolean rem = this.add((T)o);
+        for (Object o : c) {
+            boolean rem = this.add((T) o);
             ret = rem || ret;
         }
         return ret;
     }
-
+    
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean retVal = false;
         Iterator<Writable> iter = this.iterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             Writable t = iter.next();
-            if(!c.contains(t)){
+            if (!c.contains(t)) {
                 this.remove(t);
-                retVal=true;
+                retVal = true;
             }
         }
-        try{
-            ((Closeable) iter).close();    
-        }
-        catch(Exception ex){
+        try {
+            ((Closeable) iter).close();
+        } catch (Exception ex) {
             throw Throwables.propagate(ex);
         }
         
         return retVal;
     }
-
+    
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean ret = false;
-        for(Object o:c){
+        for (Object o : c) {
             boolean rem = this.remove(o);
             ret = rem || ret;
         }
         return ret;
     }
-
+    
     @Override
     public void clear() {
         this.clearDB();
         
     }
-
+    
     @Override
     public void optimize() {
+        DBIterator iterator = this.getDB().iterator();
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<Writable, byte[]> iterator = new MapEntryIterator<Writable, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
-            while(iterator.hasNext()){
-                Entry<Writable, byte[]> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+            while (iterator.hasNext()) {
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next()
+                        .getKey()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        } finally {
+            try {
+                iterator.close();
+            } catch (Exception ex) {
+                throw Throwables.propagate(ex);
+            }
+            
         }
     }
     
@@ -228,14 +233,14 @@ public class WritableSet<T extends Writable> extends LargeCollection implements 
             ClassNotFoundException {
         this.deserialize(in);
         this.tClass = (Class<T>) in.readObject();
-        this.tSerFunc       = new WritableSerDes.SerFunction();
-        this.tDeSerFunc     = new WritableSerDes.DeSerFunction(this.tClass);
+        this.tSerFunc = new WritableSerDes.SerFunction();
+        this.tDeSerFunc = new WritableSerDes.DeSerFunction(this.tClass);
     }
-
+    
     @Override
     public Iterator<Writable> iterator() {
         // TODO Auto-generated method stub
-        return new MapKeyIterator<Writable>(this,this.tDeSerFunc);
+        return new MapKeyIterator<Writable>(this, this.tDeSerFunc);
     }
-
+    
 }

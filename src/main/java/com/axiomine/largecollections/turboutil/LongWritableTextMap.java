@@ -65,13 +65,24 @@ public class LongWritableTextMap extends LargeCollection implements   Map<LongWr
     
     @Override
     public void optimize() {
+        MapKeySet<LongWritable> keys = new MapKeySet<LongWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<LongWritable, Text> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (LongWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

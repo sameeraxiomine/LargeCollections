@@ -65,13 +65,24 @@ public class DoubleWritableMapWritableMap extends LargeCollection implements   M
     
     @Override
     public void optimize() {
+        MapKeySet<DoubleWritable> keys = new MapKeySet<DoubleWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<DoubleWritable, MapWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (DoubleWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

@@ -15,6 +15,7 @@
  */
 package com.axiomine.largecollections.turboutil;
 import com.google.common.base.Throwables;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,13 +65,24 @@ public class CharacterBytesArrayMap extends LargeCollection implements   Map<Cha
     
     @Override
     public void optimize() {
+        MapKeySet<Character> keys = new MapKeySet<Character>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Character, byte[]> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Character entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

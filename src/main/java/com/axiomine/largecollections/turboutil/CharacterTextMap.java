@@ -62,13 +62,24 @@ public class CharacterTextMap extends LargeCollection implements   Map<Character
     
     @Override
     public void optimize() {
+        MapKeySet<Character> keys = new MapKeySet<Character>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Character, Text> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Character entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

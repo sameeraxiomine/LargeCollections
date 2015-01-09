@@ -62,13 +62,24 @@ public class BytesArrayIntWritableMap extends LargeCollection implements   Map<b
     
     @Override
     public void optimize() {
+        MapKeySet<byte[]> keys = new MapKeySet<byte[]>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<byte[], IntWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (byte[] entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

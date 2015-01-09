@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
+import org.iq80.leveldb.DBIterator;
+
 import com.axiomine.largecollections.util.*;
 import com.axiomine.largecollections.serdes.*;
 import com.google.common.base.Function;
@@ -187,16 +190,24 @@ public class CharacterSet extends LargeCollection implements Set<Character>, Ser
 
     @Override
     public void optimize() {
+        DBIterator iterator = this.getDB().iterator();
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<Character, byte[]> iterator = new MapEntryIterator<Character, byte[]>(this, tDeSerFunc,new BytesArraySerDes.DeSerFunction());
-            while(iterator.hasNext()){
-                Entry<Character, byte[]> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+            while (iterator.hasNext()) {
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next()
+                        .getKey()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        } finally {
+            try {
+                iterator.close();
+            } catch (Exception ex) {
+                throw Throwables.propagate(ex);
+            }
+            
         }
+
     }
     
     /* Serialization functions go here */

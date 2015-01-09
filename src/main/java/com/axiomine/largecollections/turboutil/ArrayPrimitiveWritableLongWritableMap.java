@@ -65,13 +65,24 @@ public class ArrayPrimitiveWritableLongWritableMap extends LargeCollection imple
     
     @Override
     public void optimize() {
+        MapKeySet<ArrayPrimitiveWritable> keys = new MapKeySet<ArrayPrimitiveWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<ArrayPrimitiveWritable, LongWritable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (ArrayPrimitiveWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

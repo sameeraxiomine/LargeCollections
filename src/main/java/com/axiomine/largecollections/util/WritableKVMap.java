@@ -90,13 +90,24 @@ public class WritableKVMap<K extends Writable,V extends Writable> extends LargeC
     
     @Override
     public void optimize() {
+        MapKeySet<Writable> keys = new MapKeySet<Writable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<Writable, Writable> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (Writable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     

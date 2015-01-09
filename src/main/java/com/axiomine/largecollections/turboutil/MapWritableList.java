@@ -14,6 +14,7 @@ import com.google.common.primitives.Ints;
 import com.axiomine.largecollections.util.*;
 
 import org.apache.hadoop.io.*;
+import org.iq80.leveldb.DBIterator;
 
 public class MapWritableList extends LargeCollection implements List<MapWritable>, Serializable {
     public static final long               serialVersionUID = 2l;
@@ -255,10 +256,9 @@ public class MapWritableList extends LargeCollection implements List<MapWritable
     public void optimize() {
         try {
             this.initializeBloomFilter();
-            MapEntryIterator<Integer, MapWritable> iterator = new MapEntryIterator(this, new WritableSerDes.MapWritableDeSerFunction(),tDeSerFunc);
+            DBIterator iterator = this.getDB().iterator();
             while(iterator.hasNext()){
-                Entry<Integer, MapWritable> entry = iterator.next();
-                this.bloomFilter.put(entry.getKey());
+                this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);

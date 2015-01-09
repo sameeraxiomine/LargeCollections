@@ -64,13 +64,24 @@ public class IntWritableCharacterMap extends LargeCollection implements   Map<In
     
     @Override
     public void optimize() {
+        MapKeySet<IntWritable> keys = new MapKeySet<IntWritable>(this, keyDeSerFunc);
         try {
             this.initializeBloomFilter();
-            for (Entry<IntWritable, Character> entry : this.entrySet()) {
-                this.bloomFilter.put(entry.getKey());
+            for (IntWritable entry : keys) {
+                this.bloomFilter.put(entry);
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            if(keys!=null){
+                try{
+                    keys.close();
+                }
+                catch(Exception ex){
+                    throw Throwables.propagate(ex);
+                }                
+            }
         }
     }
     
