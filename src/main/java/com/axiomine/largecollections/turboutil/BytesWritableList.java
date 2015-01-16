@@ -254,14 +254,22 @@ public class BytesWritableList extends LargeCollection implements List<BytesWrit
 
     @Override
     public void optimize() {
+        DBIterator iterator = this.getDB().iterator();
         try {
-            this.initializeBloomFilter();
-            DBIterator iterator = this.getDB().iterator();
+            this.initializeBloomFilter();            
             while(iterator.hasNext()){
                 this.bloomFilter.put(tDeSerFunc.apply(iterator.next().getValue()));
             }
         } catch (Exception ex) {
             throw Throwables.propagate(ex);
+        }
+        finally{
+            try{
+                iterator.close();    
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }            
         }
         
     }
