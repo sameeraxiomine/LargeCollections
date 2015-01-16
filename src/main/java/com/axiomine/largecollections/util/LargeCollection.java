@@ -75,10 +75,20 @@ public abstract class LargeCollection implements IDb  {
     
 
     public LargeCollection(){      
+        //Override path here
+        if(!StringUtils.isBlank(System.getProperty(OVERRIDE_DB_PATH))){
+            System.out.println("Overriding DBPath from System Property="+System.getProperty(OVERRIDE_DB_PATH));
+            this.dbPath=System.getProperty(OVERRIDE_DB_PATH);
+        }
         this.open();
     }
 
     public LargeCollection(String dbName){
+        //Override path here
+        if(!StringUtils.isBlank(System.getProperty(OVERRIDE_DB_PATH))){
+            System.out.println("Overriding DBPath from System Property="+System.getProperty(OVERRIDE_DB_PATH));
+            this.dbPath=System.getProperty(OVERRIDE_DB_PATH);
+        }
         this.dbName=dbName;
         this.open();
 
