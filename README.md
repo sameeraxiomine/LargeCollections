@@ -29,6 +29,14 @@ You should use LargeCollections in the following situations
 
 You you find yourself wishing you could use an in-process MongoDB instance, you should consider using LargeCollections. It is designed to be an in-process persistent Map which allows you to store a few million entries.
 
+Some of the usecases where the use of LargeCollections will be appropriate are:
+
+
+1. When using Text Mining algorithms typically you need a Document-Term matrix. The size of this matrix explodes when the number of documents increases. Hence sampling is used to build models. However using LargeCollections you can store your Document-Term matrix for millions of documents. For the cost of slight performance degradation you will produce models on a single machine (without incurring the complexity of distributed implementations) which utilize large amounts of data. It is well known in the Machine Learning business that "More Data trumps better Models". LargeCollections allows you to use more data without incurring the complexitiy of distributed implementations.
+
+2. In MapReduce it is preferable to use Map-Side joins over Map-Reduce joins. But Map-Side need one side of the data to be accessible in all Mappers. Several techniques have evolved to handle this problem (See Merge-Join in Pig). However, if one side of your data is relatively small (300MB- 1 GB) in size, you can safely have a LargeCollections instance in each of your Mapper's. This will allow you to perform joins in the Mapper.
+
+3. You can use LargeCollections if you need access to cached dataset in your Mapper's or Reducers. This can save you considerable complexity in designing your MapReduce programs
 
 # Usage #
 The best way to learn how to use the API is to follow the samples contained in the `samples` package. Alternatively the comprehensive list of unit test cases also demonstrate how to use the library.
