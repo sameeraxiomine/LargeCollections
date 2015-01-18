@@ -1,19 +1,17 @@
 # LargeCollections #
 
-LargeCollections supports java.util.Map implementation which is backed by LevelDB. This allows your collections to grow very large as it does not use the JVM heap memory.
+LargeCollections supports java.util.Map, java.util.List and java.util.Set implementations which are backed by LevelDB. This allows your collections to grow very large as it does not use the JVM heap memory.
 
-Currently only the java.util.Map is supported. The support is complete, in that it supports the underlying iterators as well.
-
-The Javadoc for this project can be found [here](http://axiomineopensource.github.io/largecollections/ "here").
+The [Javadoc](http://sameeraxiomine.github.io/largecollections/javadocs "LargeCollections JavaDoc") for this project should be browsed for more information.
 
 #Key Design Principles#
-The underlying java.util.Map implementations are backed by [https://github.com/google/leveldb](https://github.com/google/leveldb "LevelDB"). LevelDB is a fast key-value storage library written at Google that provides an ordered mapping from byte array keys to byte array values.
+The underlying java.util.Map(java.util.List and java.util.Set) implementations are backed by [https://github.com/google/leveldb](https://github.com/google/leveldb "LevelDB"). LevelDB is a fast key-value storage library written at Google that provides an ordered mapping from byte array keys to byte array values.
 
 While LargeCollections supports any Serializable/Externalizable/Writable/Kryo-Serializable Key and Value classes, the underlying implementations stores everything as byte-array key value store (similar to HBase). Thus every key/value instance needs to be converted to a byte array to write to the LevelDB backing store and convert back from byte array to a Java instance.
 
 To support the conversions from object to byte-array and back, every java.util.Map sub-class provided by LargeCollections library needs to have Serializer-Deserializer (SerDes) pair, one each for Key and Value class. 
 
-These SerDes pair is implements the following standard Interfaces
+These SerDes pair implement the following standard Interfaces
 
 1. `com.axiomine.largecollections.serdes.TurboSerializer<T>` 
 2. `com.axiomine.largecollections.serdes.TurboDeSerializer<T>` 
@@ -23,7 +21,7 @@ These SerDes pair is implements the following standard Interfaces
 
 You should use LargeCollections in the following situations
 
-1. The size of your Map is larger than over 100-200 MB. It is well known fact about Java that despite the availability of Heap Memory, the JVM gets slower as the size of objects gets larger. The situation gets worse when these objects are long-lived which is typical of caches as the GC is kicked off more often.
+1. The size of your Map is larger than over 100-200 MB. It is well known fact about Java that despite the availability of Heap Memory, the JVM gets slower as the size of objects gets larger. The situation gets worse when these objects are long-lived which is typical of caches as major  GC is initiated more often.
 
 2. The size of your Key-Value store is not so large as to justify a NoSQL store like HBase or Cassandra
 
@@ -49,6 +47,15 @@ For examples of how to use the library classes in the `com.axiomine.largecollect
 	samples.com.axiomine.largecollections.util.TurboKWritableVMapSample
     samples.com.axiomine.largecollections.util.WritableKTurboVMapSample
 
+    samples.com.axiomine.largecollections.util.TurboSetSample
+	samples.com.axiomine.largecollections.util.KryoSetSample
+	samples.com.axiomine.largecollections.util.WritableSetSample
+
+    samples.com.axiomine.largecollections.util.TurboListSample
+	samples.com.axiomine.largecollections.util.KryoListSample
+	samples.com.axiomine.largecollections.util.WritableListSample
+
+
 For examples of how to use the library classes in the `com.axiomine.largecollections.turboutil` package see the source code for the classes below
 
     samples.com.axiomine.largecollections.turboutil.IntegerIntegerMapSample
@@ -68,7 +75,7 @@ The classes in `com.axiomine.largecollections.turboutil` are helper classes prov
     Character
     String
      
-The classes in `com.axiomine.largecollections.turboutil` are helper classes provided to handle Writable types as follows
+The classes in `com.axiomine.largecollections.turboutil` are helper classes provided to handle the following Writable types
     IntWritable
     LongWritable
     FloatWritable
@@ -88,23 +95,51 @@ The classes in `com.axiomine.largecollections.turboutil` also support combinatio
      IntegerIntWritableMap
      IntWritableKryoVMap
      KryoKIntWritableMap
+
+
+----------
     
-## Map Attributes ##
-We provide implementations of java.util.Map. Each of these Map implementations has the following attributes
+## Some points to remember ##
+
+>`java.util.Map` implementations are complete. Most of the methods from the >java.util.Map are implemented with the exception of `containsValue` which will >through an exception if invoked.
+
+>`java.util.Set` implementations are complete. Most of the methods from the >java.util.Set are implemented with the exception of `toArray` methods which will >through an exception if invoked.
+
+>`java.util.List` implementations have significant number of caveats. These are 
+
+> 1.  List implementation for the purpose of "write once and read many" semantics. 
+> 2.  You can update values for a specific index but you cannot insert values at a >specified index using the `public void add(int index, T element)`
+> 3.  You cannot remove from the list using the `remove` method.The list of methods >not supported are
+ 
+    	 	public Object[] toArray()
+    	 	public <TT[] toArray(T[] a) 
+    	 	public boolean remove(Object o)
+    	 	public boolean addAll(int index, Collection<? extends Tc) 
+    	 	public boolean retainAll(Collection<?c)
+    	 	public void add(int index, T element)
+    	 	public List<TsubList(int fromIndex, int toIndex)
+	 	
+>4.The other key limitation is in the implementation of the `contains` and >`containsAll` methods. Both of them are implemented using bloom filters. Hence they >are heuristic in nature and their actual implementation follow the semantics of >`mightContain` or `mightContainsAll` implementation. When using List if you expect >to invoke those methods frequently provide larger than expected values for >collection properties `bloomFilterSize` and provide a low value for the System >property `override.bf.fpp` such as 0.01(See the next section on Collection >Attributes). Doing this will increase the in-memory size of your Lists but will >increase the accuracy of `contains` and `containsAll` invocations.     
+
+----------
 
 
-1. `dbPath` - This is a folder where the LevelDB named cache is created. Default value is the folder provided by the java System property `java.io.tmpdir`
+## Collection Attributes ##
+We provide implementations of `java.util.Map`, `java.util.List` and `java.util.Set`. Each of these Map implementations has the following attributes
+
+
+1. `dbPath` - This is a folder where the LevelDB named cache is created. Default value is the folder provided by the java System property `java.io.tmpdir`. However it can be overridden by providing a path in a custom System Property - `override.dbpath`: for example, you can pass this in the command line as follows `-Doverride.dbpath="c:/mydb/"`
 
 2. `dbName` - The name of LevelDB Cache. Each Map should have a unique LevelDB backing database. The default value of this attribute is a value which is randomly generated. You can override it with your own user-defined name
 
 3. `cacheSize` - LevelDB uses an internal cache to improve its response time. This parameter is specified in MB. Its default value is `25`.
 
-4. `bloomFilterSize` - Internally we use bloom filter to make swift determination of if a key is contained in the underlying LevelDB database. BloomFilters need to know at the outset the approximate number of elements they will contain. Underestimating this size will lead to more false positives and consequently degrade your performance as the LevelDB will be checked for a key even when the key does not exist. Default value is `10000000` (10 million)
+4. `bloomFilterSize` - Internally we use bloom filter to make swift determination of if a key is contained in the underlying LevelDB database. BloomFilters need to know at the outset the approximate number of elements they will contain. Underestimating this size will lead to more false positives and consequently degrade your performance as the LevelDB will be checked for a key even when the key does not exist. Default value is `10000000` (10 million). By default the bloom filter supports 3% for false positives. This default cannot be overridden. It can be overridden at the JVM level by configuring the system property `override.bf.fpp`: for example, you can pass this in the command line as follows `-Doverride.bf.fpp="0.01"`
  
-## Map Constructors ##
+## Collection Constructors ##
 The constructors supported for each of the Map's are as follows-
 
-1. () - All default values Map attributes mentioned above. Note that the dbName is a randomly generated attribute for each map.
+1. () - All default values Map attributes mentioned above. Note that the dbName is a randomly generated attribute for each map. The `dbPath` can be overridden via the system property `override.dbpath`. If the `override.dbpath` is not provided the name of the value of the  `dbPath` defaults to `java.io.tmpdir`. The other attributes take on their default values.
 
 2. (dbName) - Override the dbName attribute above. Other attributes take on default values
 
@@ -219,6 +254,15 @@ There 8 main types of Maps provided are -
 
 8.	KryoKWritableV<K,V extends Writable> - This is implementation where the SerDes used for the Key is a Kryo SerDes and the one used for Value is a Writable SerDes.the package `com.axiomine.largecollections.turboutil` has various pre-created versions of this Map. Examples are `KryoKIntWritableMap`, `KryoKTextMap`, etc.
 
+## List and Set Types Supported ##
+Similar to Map, the following List and Set classes are supported
+
+1.  TurboList<E>
+2.  KryoList<E>
+3.  TurboSet<E>
+4.  KryoSet<E>
+
+
 ##Serializing the LargeCollection Map to disk##
 
 The Map implementations can be serialized like any other java.util.Map instance. Only the meta-data is serialized. The actual data is stored in the LevelDB instance which is not serialized. When the Map instance is deserialized, only the underlying meta-data is deserialized which effectively leads to the correct LevelDB database being pointed to. 
@@ -281,6 +325,8 @@ We provide the following SerDe (Serialization/Deserialization) classes out of th
 
 11. `com.axiomine.largeCollections.serdes.KryoSerDes`
 
+12. `com.axiomine.largeCollections.serdes.WritableSerDes`
+
 At this point let us examine a sample Serdes class, `StringSerdes`
 
     package com.axiomine.largecollections.serdes;
@@ -312,17 +358,36 @@ At this point let us examine a sample Serdes class, `StringSerdes`
 	    }    
     }
 
+###Note:`com.axiomine.largecollections.serdes.WritableSerDes`##
+When using `com.axiomine.largecollections.serdes.WritableSerDes` be mindful of using the correct Serializer and DeSerializer pairs. For example the following pairs must be used together
 
-#What's coming#
+1. `SerFunction implements TurboSerializer<Writable>` & `DeSerFunction implements TurboDeSerializer<Writable>` 
+2. `TextSerFunction implements TurboSerializer<Text>` & `TextDeSerFunction implements TurboDeSerializer<Text>` 
+3. `ArrayPrimitiveWritableSerFunction implements TurboSerializer<ArrayPrimitiveWritable>` & `ArrayPrimitiveWritableDeSerFunction implements TurboDeSerializer<ArrayPrimitiveWritable>` 
+4. `BooleanWritableSerFunction implements TurboSerializer<BooleanWritable>` & `BooleanWritableDeSerFunction implements TurboDeSerializer<BooleanWritable>` 
+5. `BytesWritableSerFunction implements TurboSerializer<BytesWritable>` & `BytesWritableDeSerFunction implements TurboDeSerializer<BytesWritable>` 
+6. `DoubleWritableSerFunction implements TurboSerializer<DoubleWritable>` & `DoubleWritableDeSerFunction implements TurboDeSerializer<DoubleWritable>` 
+7. `FloatWritableSerFunction implements TurboSerializer<FloatWritable>` & `FloatWritableDeSerFunction implements TurboDeSerializer<FloatWritable>` 
+8. `IntWritableSerFunction implements TurboSerializer<IntWritable>` & `IntWritableDeSerFunction implements TurboDeSerializer<IntWritable>` 
+7. `LongWritableSerFunction implements TurboSerializer<LongWritable>` & `LongWritableDeSerFunction implements TurboDeSerializer<LongWritable>` 
+8. `MapWritableSerFunction implements TurboSerializer<MapWritable>` & `MapWritableDeSerFunction implements TurboDeSerializer<MapWritable>` 
+9. `ShortWritableSerFunction implements TurboSerializer<ShortWritable>` & `ShortWritableDeSerFunction implements TurboDeSerializer<ShortWritable>` 
 
-In the next few weeks we will add the following implementations
 
-1. `java.util.List` with most functions implemented. The function which will not be implemented is the ability to insert records in the middle of the list. Records cannot be deleted but can be replaced.
-2. `java.util.Set `
+The pairs from 2 through 9 are specialized version of the one in 1 and much faster. Use them if possible.
 
+#Performance Considerations"
 
-We will be adding more documentation in the coming days.
+We tested `KryoKVMap<Integer,Integer>` for the following. 
 
+1. 10 Million Puts - Total time 106487 milliseconds
+2. 10 Million Sequential Gets - Total time 252885
+3. 10 Million Random Gets - Total time 234790
+
+The specifications of the machine used were-
+Windows 7 64 bit, 8GB RAM, Intel dual core i7-3612 QM CPU @2.10 GHz 2.10 GHz 
+
+You performance will vary based on the type of machine used. But you should expect performance to be of the same order as above.
 
 #License#
 

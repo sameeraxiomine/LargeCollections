@@ -54,7 +54,7 @@ public final class MapEntryIterator<K, V> implements
 
     public java.util.Map.Entry<K, V> next() {
         Entry<byte[], byte[]> entry = this.iter.next();
-        return new SimpleEntry(this.keyDeSerFunc.apply(entry.getKey()),
+        return new SimpleEntry<K,V>(this.keyDeSerFunc.apply(entry.getKey()),
                                this.valDeSerFunc.apply(entry.getValue()));
     }
 

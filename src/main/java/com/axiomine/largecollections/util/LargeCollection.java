@@ -23,6 +23,7 @@ public abstract class LargeCollection implements IDb  {
     public static final Random rnd = new Random();
     public static String OVERRIDE_DB_PATH="override.dbpath";
     public static String OVERRIDE_DB_NAME="override.dbname";
+    public static String OVERRIDE_BF_FPP="override.bf.fpp";
     
     public static int DEFAULT_CACHE_SIZE = 25;
     public static int DEFAULT_BLOOM_FILTER_SIZE = 10000000;
@@ -69,8 +70,24 @@ public abstract class LargeCollection implements IDb  {
             public void funnel(Object obj, PrimitiveSink into) {
                 into.putInt(obj.hashCode());                  
               }
-            };  
-        this.bloomFilter = BloomFilter.create(myFunnel, this.bloomFilterSize);
+            }; 
+        float defaultFalsePositives = 0.03f;
+        if(!StringUtils.isBlank(System.getProperty(LargeCollection.OVERRIDE_BF_FPP))){
+            String fpp = System.getProperty(LargeCollection.OVERRIDE_BF_FPP);
+            try{
+                float f = Float.parseFloat(fpp);
+                if(f<=0 || f>0.2){
+                    throw new RuntimeException("Bloom filter false postives probability range should be between 0 (excluded) and 0.2 (included), provided value = "+f);
+                }
+                else{
+                    defaultFalsePositives = f;
+                }
+            }
+            catch(Exception ex){
+                throw Throwables.propagate(ex);
+            }
+        }
+        this.bloomFilter = BloomFilter.create(myFunnel, this.bloomFilterSize,defaultFalsePositives);
     }
     
 
