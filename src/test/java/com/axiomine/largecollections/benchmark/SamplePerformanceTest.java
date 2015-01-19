@@ -22,7 +22,7 @@ public class SamplePerformanceTest {
     
     @Test
     public void primitivePerformanceTest() {
-        int size = 10000000;
+        int size = 1000;
         KryoKVMap<Integer,Integer> map = new KryoKVMap<Integer,Integer>();
         long ts = System.currentTimeMillis();
         for(int i=0;i<size;i++){

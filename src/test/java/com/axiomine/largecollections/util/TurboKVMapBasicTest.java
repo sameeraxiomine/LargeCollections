@@ -41,10 +41,10 @@ public class TurboKVMapBasicTest {
     public void test00BasicTest() {
         TurboKVMap<Integer,Integer> map = null;
         try {
-            TurboSerializer<Integer> kser =  new com.axiomine.largecollections.serdes.IntegerSerDes2.SerFunction();
-            TurboSerializer<Integer> vser =  new com.axiomine.largecollections.serdes.IntegerSerDes2.SerFunction();
-            TurboDeSerializer<Integer> kdeser = new com.axiomine.largecollections.serdes.IntegerSerDes2.DeSerFunction();
-            TurboDeSerializer<Integer> vdeser = new com.axiomine.largecollections.serdes.IntegerSerDes2.DeSerFunction();
+            TurboSerializer<Integer> kser =  new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+            TurboSerializer<Integer> vser =  new com.axiomine.largecollections.serdes.IntegerSerDes.SerFunction();
+            TurboDeSerializer<Integer> kdeser = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
+            TurboDeSerializer<Integer> vdeser = new com.axiomine.largecollections.serdes.IntegerSerDes.DeSerFunction();
             map = new TurboKVMap<Integer,Integer>(dbPath, "cacheMap",kser,vser,kdeser,vdeser);
             Assert.assertTrue(map.isEmpty());
             for (int i = 0; i < 10; i++) {
