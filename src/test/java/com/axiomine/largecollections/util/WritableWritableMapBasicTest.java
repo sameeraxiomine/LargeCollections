@@ -128,9 +128,9 @@ public class WritableWritableMapBasicTest {
             Assert.assertFalse(b);
             
             System.out.println("First Serialize");
-            FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
+            FileSerDeUtils.serializeToFile(map,new File("/tmp/x.ser"));
             
-            map = (WritableKVMap) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (WritableKVMap) FileSerDeUtils.deserializeFromFile(new File("/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(new IntWritable(0),new IntWritable(0));    
