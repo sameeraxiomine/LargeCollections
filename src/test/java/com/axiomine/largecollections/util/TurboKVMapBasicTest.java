@@ -139,9 +139,9 @@ public class TurboKVMapBasicTest {
             Assert.assertFalse(b);
             
             System.out.println("First Serialize");
-            FileSerDeUtils.serializeToFile(map,new File("c:/tmp/x.ser"));
+            FileSerDeUtils.serializeToFile(map,new File("/tmp/x.ser"));
             
-            map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("c:/tmp/x.ser"));
+            map = (TurboKVMap<Integer,Integer>) FileSerDeUtils.deserializeFromFile(new File("/tmp/x.ser"));
             map.clear();
             System.out.println(map.size());
             map.put(0,0);    
